@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.hepi.hepi_sv.myBatis.SelectMapper">
+
+    <select id="selectUser">
+        SELECT NAME
+             , ID
+             , PWD
+             , PHONE
+             , GYM_ID
+        FROM user
+       WHERE ID = #{USER_ID, jdbcType=CHAR}
+    </select>
+
+    <select id="selectGym">
+        SELECT ID
+             , NAME
+        FROM gym
+        WHERE ID = (select GYM_ID from user where id = #{USER_ID, jdbcType=CHAR})
+    </select>
+
+    <select id="selectEventProduct">
+        SELECT ID
+             , NAME
+             , PRICE
+             , `EXPLAIN`
+             , EVENT
+             , MAIN_IMAGE
+             , -1 AS MY_AMOUNT
+             , AMOUNT
+             , (select UNIT_DATA from product_unit where UNIT = UNIT_ID ) as UNIT
+             , DISCOUNT
+        FROM product
+       WHERE EVENT = 1
+    </select>
+
+    <select id="selectMyProduct">
+        SELECT ID
+             , NAME
+             , PRICE
+             , `EXPLAIN`
+             , EVENT
+             , MAIN_IMAGE
+             , MY_AMOUNT
+             , AMOUNT
+             , (select UNIT_DATA from product_unit where UNIT = UNIT_ID ) as UNIT
+             , DISCOUNT
+        FROM product p, user_pocket up
+        where up.USER_ID = #{USER_ID, jdbcType=CHAR}
+          and up.PRODUCT_ID = p.ID
+    </select>
+
+    <select id="selectCartProduct">
+        SELECT ID
+             , NAME
+             , PRICE
+             , `EXPLAIN`
+             , EVENT
+             , MAIN_IMAGE
+             , -1 AS MY_AMOUNT
+             , AMOUNT
+             , (select UNIT_DATA from product_unit where UNIT = UNIT_ID ) as UNIT
+             , DISCOUNT
+        FROM product p, user_cart uc
+        where uc.USER_ID = #{USER_ID, jdbcType=CHAR}
+          and uc.PRODUCT_ID = p.ID;
+    </select>
+
+    <select id="selectChatting">
+        SELECT ch.`TIME`
+             , ch.GYM_ID
+             , ch.USER_ID
+             , u.NAME
+             , ch.MESSAGE
+        FROM chatting ch, user u
+        where ch.GYM_ID = #{GYM_ID, jdbcType=INTEGER}
+          and ch.USER_ID = u.ID
+    order by `TIME` desc
+        limit 20
+    </select>
+
+    <select id="selectEventImage">
+        SELECT ID
+             , URL
+        FROM event_image
+    </select>
+
+    <select id="checkPhone">
+        SELECT *
+        FROM user
+        WHERE PHONE = #{PHONE}
+    </select>
+
+
+</mapper>
+

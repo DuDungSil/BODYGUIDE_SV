@@ -1,0 +1,158 @@
+2024-11-11 00:44:07 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - Starting HepiSvApplication using Java 17.0.11 with PID 41120 (D:\workspace\HEPI_SV\HEPI_SV\target\classes started by oms9931 in D:\workspace\HEPI_SV\HEPI_SV)
+2024-11-11 00:44:07 [main] DEBUG org.hepi.hepi_sv.HepiSvApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-11-11 00:44:07 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-11 00:44:07 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-11-11 00:44:07 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-11 00:44:07 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JPA - Could not safely identify store assignment for repository candidate interface org.hepi.hepi_sv.auth.reoisitory.redis.TokenRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: jakarta.persistence.Entity, jakarta.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
+2024-11-11 00:44:08 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 97 ms. Found 1 JPA repository interface.
+2024-11-11 00:44:08 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-11-11 00:44:08 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-11-11 00:44:08 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.hepi.hepi_sv.user.repository.jpa.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-11-11 00:44:08 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 1 Redis repository interface.
+2024-11-11 00:44:08 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 3573 (https)
+2024-11-11 00:44:08 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-3573"]
+2024-11-11 00:44:08 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-11 00:44:08 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-11-11 00:44:08 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-11 00:44:08 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1819 ms
+2024-11-11 00:44:09 [main] DEBUG o.h.h.a.f.TokenAuthenticationFilter - Filter 'tokenAuthenticationFilter' configured for use
+2024-11-11 00:44:10 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-11 00:44:10 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-11-11 00:44:10 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-11 00:44:10 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-11 00:44:10 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-11 00:44:10 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3c62c81f
+2024-11-11 00:44:10 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-11 00:44:11 [main] INFO  o.h.m.i.EntityInstantiatorPojoStandard - HHH000182: No default (no-argument) constructor for class: org.hepi.hepi_sv.user.entity.UserProfile (class must be instantiated by Interceptor)
+2024-11-11 00:44:11 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-11 00:44:11 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-11 00:44:11 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-11-11 00:44:12 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-11 00:44:12 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2024-11-11 00:44:12 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@112dfb03, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5d186b14, org.springframework.security.web.context.SecurityContextHolderFilter@287c4e96, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@59632e3c, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@3200f6e5, org.hepi.hepi_sv.auth.filter.TokenExceptionFilter@37b117dd, org.hepi.hepi_sv.auth.filter.TokenAuthenticationFilter@b340615, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@51b4ab43, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7ebd31df, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@388b4f68, org.springframework.security.web.session.SessionManagementFilter@47f74d8f, org.springframework.security.web.access.ExceptionTranslationFilter@7ce00985, org.springframework.security.web.access.intercept.AuthorizationFilter@1d8deb33]
+2024-11-11 00:44:12 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Mvc [pattern='/error']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-11-11 00:44:12 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will not secure Mvc [pattern='/error']
+2024-11-11 00:44:12 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Mvc [pattern='/favicon.ico']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-11-11 00:44:12 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will not secure Mvc [pattern='/favicon.ico']
+2024-11-11 00:44:13 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-3573"]
+2024-11-11 00:44:13 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-3573], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\osm99\.keystore] using alias [mysslkey] with trust store [null]
+2024-11-11 00:44:13 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 3573 (https) with context path ''
+2024-11-11 00:44:13 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - Started HepiSvApplication in 6.865 seconds (process running for 7.243)
+2024-11-11 00:44:13 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - ==================== START HEPI SERVER ====================
+2024-11-11 00:44:15 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-11-11 00:44:15 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-11-11 00:44:15 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2024-11-11 00:44:24 [https-jsse-nio-3573-exec-9] DEBUG o.s.s.o.c.w.OAuth2LoginAuthenticationFilter - Set SecurityContextHolder to OAuth2AuthenticationToken [Principal=PrincipalDetails[user=org.hepi.hepi_sv.user.entity.Users@7d0d142b, attributes={id=3781086130, connected_at=2024-11-06T08:10:26Z}, attributeKey=id], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=1250980F712D6EA7DB07ECCD9DBAF1F5], Granted Authorities=[ROLE_USER]]
+2024-11-11 00:44:25 [https-jsse-nio-3573-exec-6] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:55487 
+Request URL: https://localhost:3573/auth/success 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+upgrade-insecure-requests: 1
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+sec-fetch-site: none
+sec-fetch-mode: navigate
+sec-fetch-user: ?1
+sec-fetch-dest: document
+sec-ch-ua: "Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+cookie: JSESSIONID=1C17ABD4E48626093EAC1CFA54963841
+
+2024-11-11 00:44:25 [https-jsse-nio-3573-exec-6] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+[Headers]: 
+client-ip: 0:0:0:0:0:0:0:1:55487
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Sun, 10 Nov 2024 15:44:24 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+[Content]: 
+null
+
+2024-11-11 00:46:03 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - Starting HepiSvApplication using Java 17.0.11 with PID 40572 (D:\workspace\HEPI_SV\HEPI_SV\target\classes started by oms9931 in D:\workspace\HEPI_SV\HEPI_SV)
+2024-11-11 00:46:03 [main] DEBUG org.hepi.hepi_sv.HepiSvApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-11-11 00:46:03 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - No active profile set, falling back to 1 default profile: "default"
+2024-11-11 00:46:04 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-11-11 00:46:04 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-11 00:46:04 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JPA - Could not safely identify store assignment for repository candidate interface org.hepi.hepi_sv.auth.reoisitory.redis.TokenRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: jakarta.persistence.Entity, jakarta.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
+2024-11-11 00:46:04 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 100 ms. Found 1 JPA repository interface.
+2024-11-11 00:46:04 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-11-11 00:46:04 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-11-11 00:46:04 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.hepi.hepi_sv.user.repository.jpa.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-11-11 00:46:04 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 11 ms. Found 1 Redis repository interface.
+2024-11-11 00:46:05 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 3573 (https)
+2024-11-11 00:46:05 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-3573"]
+2024-11-11 00:46:05 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-11-11 00:46:05 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-11-11 00:46:05 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-11-11 00:46:05 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1814 ms
+2024-11-11 00:46:06 [main] DEBUG o.h.h.a.f.TokenAuthenticationFilter - Filter 'tokenAuthenticationFilter' configured for use
+2024-11-11 00:46:06 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-11 00:46:06 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-11-11 00:46:06 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-11-11 00:46:06 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-11 00:46:06 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-11-11 00:46:07 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@13552290
+2024-11-11 00:46:07 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-11-11 00:46:07 [main] INFO  o.h.m.i.EntityInstantiatorPojoStandard - HHH000182: No default (no-argument) constructor for class: org.hepi.hepi_sv.user.entity.UserProfile (class must be instantiated by Interceptor)
+2024-11-11 00:46:07 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-11 00:46:07 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-11 00:46:07 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-11-11 00:46:08 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-11 00:46:09 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+2024-11-11 00:46:09 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@52478bf5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@50cbe633, org.springframework.security.web.context.SecurityContextHolderFilter@2fa1f38b, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@26a8eaaa, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@79200f8, org.hepi.hepi_sv.auth.filter.TokenExceptionFilter@57e1bc88, org.hepi.hepi_sv.auth.filter.TokenAuthenticationFilter@663cf5d7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6a64be00, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1740a7b0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@66ac3957, org.springframework.security.web.session.SessionManagementFilter@6d512521, org.springframework.security.web.access.ExceptionTranslationFilter@74cad6d, org.springframework.security.web.access.intercept.AuthorizationFilter@476a0071]
+2024-11-11 00:46:09 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Mvc [pattern='/error']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-11-11 00:46:09 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will not secure Mvc [pattern='/error']
+2024-11-11 00:46:09 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Mvc [pattern='/favicon.ico']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-11-11 00:46:09 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will not secure Mvc [pattern='/favicon.ico']
+2024-11-11 00:46:10 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-3573"]
+2024-11-11 00:46:10 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-3573], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\osm99\.keystore] using alias [mysslkey] with trust store [null]
+2024-11-11 00:46:10 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 3573 (https) with context path ''
+2024-11-11 00:46:10 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - Started HepiSvApplication in 7.015 seconds (process running for 7.411)
+2024-11-11 00:46:10 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - ==================== START HEPI SERVER ====================
+2024-11-11 00:46:11 [https-jsse-nio-3573-exec-10] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-11-11 00:46:11 [https-jsse-nio-3573-exec-10] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-11-11 00:46:11 [https-jsse-nio-3573-exec-10] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2024-11-11 00:46:11 [https-jsse-nio-3573-exec-4] DEBUG o.s.s.o.c.w.OAuth2LoginAuthenticationFilter - Set SecurityContextHolder to OAuth2AuthenticationToken [Principal=PrincipalDetails[user=org.hepi.hepi_sv.user.entity.Users@254328ba, attributes={id=3781086130, connected_at=2024-11-06T08:10:26Z}, attributeKey=id], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=B4EA3D1EC2F9018C8A9427F63B21ED1D], Granted Authorities=[ROLE_USER]]
+2024-11-11 00:46:12 [https-jsse-nio-3573-exec-2] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:55802 
+Request URL: https://localhost:3573/auth/success 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+upgrade-insecure-requests: 1
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+sec-fetch-site: none
+sec-fetch-mode: navigate
+sec-fetch-user: ?1
+sec-fetch-dest: document
+sec-ch-ua: "Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+cookie: JSESSIONID=AC985CA16E794D6D08414280450F2DF7
+
+2024-11-11 00:46:12 [https-jsse-nio-3573-exec-2] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+[Headers]: 
+client-ip: 0:0:0:0:0:0:0:1:55802
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Sun, 10 Nov 2024 15:46:11 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+[Content]: 
+null
+
