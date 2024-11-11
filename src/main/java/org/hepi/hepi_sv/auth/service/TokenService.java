@@ -2,8 +2,7 @@ package org.hepi.hepi_sv.auth.service;
 
 import org.hepi.hepi_sv.auth.entity.Token;
 import org.hepi.hepi_sv.auth.exception.TokenException;
-import org.hepi.hepi_sv.auth.reoisitory.redis.TokenRepository;
-
+import org.hepi.hepi_sv.auth.repository.redis.TokenRepository;
 import static org.hepi.hepi_sv.common.errorHandler.CustomErrorCode.TOKEN_EXPIRED;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,7 @@ public class TokenService {
 
     private final TokenRepository tokenRepository;
 
+    // 레디스의 리프레시 토큰 제거
     public void deleteRefreshToken(String memberKey) {
         tokenRepository.deleteById(memberKey);
     }

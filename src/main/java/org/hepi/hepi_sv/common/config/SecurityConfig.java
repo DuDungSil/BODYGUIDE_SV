@@ -59,7 +59,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(
                                         new AntPathRequestMatcher("/"),
-                                        new AntPathRequestMatcher("/auth/success")
+                                        new AntPathRequestMatcher("/auth/success"),
+                                        new AntPathRequestMatcher("/web/**")
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -72,10 +73,10 @@ public class SecurityConfig {
                                 .failureHandler(oAuth2FailureHandler) // 로그인 실패 시 핸들러
                 )
                 
-                // jwt 관련 설정
+                // 필터 설정
                 .addFilterBefore(tokenAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new TokenExceptionFilter(), tokenAuthenticationFilter.getClass()) // 토큰 예외 핸들링
+                .addFilterBefore(new TokenExceptionFilter(), tokenAuthenticationFilter.getClass()) 
 
                 // 인증 예외 핸들링
                 .exceptionHandling((exceptions) -> exceptions

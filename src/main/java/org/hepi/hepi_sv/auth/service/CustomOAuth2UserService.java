@@ -38,7 +38,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(provider, oAuth2UserAttributes);
 
         // 5. 회원가입 및 로그인
-        Users user = userRegistrationService.registerOrLoadUser(oAuth2UserInfo);
+        Users user = userRegistrationService.loadUser(oAuth2UserInfo);
 
         // 6. OAuth2User로 반환 
         return new PrincipalDetails(user, oAuth2UserAttributes, userNameAttributeName);

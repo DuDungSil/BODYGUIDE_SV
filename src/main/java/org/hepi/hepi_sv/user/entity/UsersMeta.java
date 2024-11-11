@@ -3,7 +3,10 @@ package org.hepi.hepi_sv.user.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,20 +25,29 @@ import lombok.Setter;
 public class UsersMeta {
     
     @Id
-    private int meta_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "meta_id", updatable = false, nullable = false)
+    private Long metaId;
 
-    private UUID user_id;
+    @Column(name = "user_id", updatable = false, nullable = false)
+    private UUID userId;
 
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "source")
     private String source;
-    
-    private LocalDateTime created_at;
 
-    private LocalDateTime last_updated_at;
+    @Column(name = "last_updated_at")
+    private LocalDateTime lastUpdatedAt;
 
-    private LocalDateTime last_login_at;
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
 
-    private Boolean is_delete;
+    @Column(name = "is_delete")
+    private Boolean isDelete;
 
-    private LocalDateTime deleted_at;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
     
 }

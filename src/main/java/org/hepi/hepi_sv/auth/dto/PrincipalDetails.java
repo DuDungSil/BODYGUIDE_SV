@@ -3,6 +3,7 @@ package org.hepi.hepi_sv.auth.dto;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
 import org.hepi.hepi_sv.user.entity.Users;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,10 @@ public record PrincipalDetails(
     @Override
     public String getName() {
         return attributes.get(attributeKey).toString();
+    }
+
+    public UUID getUserId() {
+        return user.getUser_id();
     }
 
     @Override

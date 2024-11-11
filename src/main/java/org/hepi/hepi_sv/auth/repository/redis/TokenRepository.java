@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.auth.reoisitory.redis;
+package org.hepi.hepi_sv.auth.repository.redis;
 
 import java.util.Optional;
 

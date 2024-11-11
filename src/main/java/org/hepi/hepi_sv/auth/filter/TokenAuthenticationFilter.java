@@ -23,10 +23,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
 
-    // 각 요청마다 한번씩 실행 : 토큰추출 -> 토근 검증 and 재발급 -> 다음 필터로 요청 전달
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException, java.io.IOException {
+                
         String accessToken = resolveToken(request);
 
         // accessToken 검증

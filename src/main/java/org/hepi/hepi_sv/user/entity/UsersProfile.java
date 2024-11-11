@@ -3,7 +3,10 @@ package org.hepi.hepi_sv.user.entity;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,24 +25,35 @@ import lombok.Setter;
 public class UsersProfile {
 
     @Id
-    private int profile_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "profile_id", updatable = false, nullable = false)
+    private Long profileId;
 
-    private UUID user_id;
+    @Column(name = "user_id", updatable = false, nullable = false)
+    private UUID userId;
 
+    @Column(name = "nickname")
     private String nickname;
 
+    @Column(name = "gender")
     private String gender;
 
+    @Column(name = "age")
     private int age;
 
+    @Column(name = "height")
     private double height;
     
+    @Column(name = "weight")
     private double weight;
 
-    private LocalDate birth_date;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
-    private String profile_img;
+    @Column(name = "profile_img")
+    private String profileImg;
 
-    private String intro_text;
+    @Column(name = "intro_text")
+    private String introText;
 
 }
