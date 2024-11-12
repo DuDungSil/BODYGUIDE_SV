@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TokenRepository extends CrudRepository<Token, String> {
 
-    // 액세스 토큰으로 리프레시 토큰 찾기?
     Optional<Token> findByAccessToken(String accessToken);
+    
 }

@@ -25,7 +25,7 @@ import lombok.Setter;
 public class UsersProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "profile_id", updatable = false, nullable = false)
     private Long profileId;
 

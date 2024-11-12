@@ -52,7 +52,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-
+ 
     // 요청에서 JWT 토큰을 추출
     private String resolveToken(HttpServletRequest request) {
         String token = request.getHeader(AUTHORIZATION);

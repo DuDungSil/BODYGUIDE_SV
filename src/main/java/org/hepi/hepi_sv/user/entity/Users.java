@@ -27,8 +27,8 @@ public class Users{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(columnDefinition = "BINARY(16)") 
-    private UUID user_id;
+    @Column(name = "user_id", columnDefinition = "BINARY(16)", updatable = false, nullable = false) 
+    private UUID userId;
 
     @Enumerated(EnumType.STRING) // Enum을 문자열로 저장
     @Column(name = "role")

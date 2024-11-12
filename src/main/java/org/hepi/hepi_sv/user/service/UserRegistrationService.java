@@ -1,6 +1,11 @@
 package org.hepi.hepi_sv.user.service;
 
+import static org.hepi.hepi_sv.common.errorHandler.CustomErrorCode.USER_NOT_FOUND;
+
+import java.util.UUID;
+
 import org.hepi.hepi_sv.auth.dto.OAuth2UserInfo;
+import org.hepi.hepi_sv.user.Exception.UserException;
 import org.hepi.hepi_sv.user.entity.Users;
 import org.hepi.hepi_sv.user.repository.jpa.UsersRepository;
 import org.springframework.stereotype.Service;
@@ -13,10 +18,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserRegistrationService {
 
-    private final UsersRepository userRepository;
+    private final UsersRepository usersRepository;
     private final UserProfileService userProfileService;
     private final UserMetaService userMetaService;
+    private final UserProviderTokenService userProviderTokenService;
     
+    public Users getUsers(UUID userId) {
+        return usersRepository.findByUserId(userId)
+        .orElseThrow(() -> new UserException(USER_NOT_FOUND));
+    }
+
     // 유저 정보 로드
     public Users loadUser(OAuth2UserInfo oAuth2UserInfo) {
         // 유저가 존재하는지 확인
@@ -25,7 +36,7 @@ public class UserRegistrationService {
         String providerId = oAuth2UserInfo.providerId();
     
         // 유저가 존재할 경우 로드, 없으면 회원가입
-        return userRepository.findByProviderAndProviderId(provider, providerId)
+        return usersRepository.findByProviderAndProviderId(provider, providerId)
                 .orElseGet(() -> registUser(oAuth2UserInfo));
     }
     
@@ -35,16 +46,17 @@ public class UserRegistrationService {
         // 프로필, 메타도 같이 생성 ( 트랜잭션 처리 )
 
         Users user = oAuth2UserInfo.toEntity();
-        user = userRepository.save(user);
+        user = usersRepository.save(user);
 
-        userProfileService.createUserProfile(user.getUser_id());
-        userMetaService.createUsersMeta(user.getUser_id());
+        userProfileService.createUserProfile(user.getUserId());
+        userMetaService.createUsersMeta(user.getUserId());
+        userProviderTokenService.createUserProviderToken(user.getUserId());
 
         return user;
     }
 
     // 유저삭제
-    private void deletionUser() {
+    public void deletionUser() {
         // 메타에 삭제 표시
     }
 

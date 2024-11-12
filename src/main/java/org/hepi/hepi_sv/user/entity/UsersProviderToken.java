@@ -1,6 +1,5 @@
 package org.hepi.hepi_sv.user.entity;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -16,38 +15,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "USERS_META")
+@Table(name = "USERS_PROVIDER_TOKEN")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsersMeta {
+public class UsersProviderToken {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "meta_id", updatable = false, nullable = false)
-    private Long metaId;
+    @Column(name = "token_id", updatable = false, nullable = false)
+    private Long tokenId;
 
     @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
 
-    @Column(name = "created_at", updatable = false, nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "refresh_token")
+    private String refreshToken;
 
-    @Column(name = "source")
-    private String source;
-
-    @Column(name = "last_updated_at")
-    private LocalDateTime lastUpdatedAt;
-
-    @Column(name = "last_login_at")
-    private LocalDateTime lastLoginAt;
-
-    @Column(name = "is_delete")
-    private Boolean isDelete;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-    
 }

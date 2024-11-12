@@ -17,14 +17,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    // @ExceptionHandler(CustomException.class)
+    // protected ResponseEntity<ErrorResponse> handleCustomException(CustomException ex) {
+    //     return handleExceptionInternal(ex.getErrorCode());
+    // }
+
     /*
      * Developer Custom Exception: 직접 정의한 RestApiException 에러 클래스에 대한 예외 처리
      */
-    @ExceptionHandler(RestApiException.class)
-    protected ResponseEntity<ErrorResponse> handleCustomException(RestApiException ex) {
-        ErrorCode errorCode = ex.getErrorCode();
-        return handleExceptionInternal(errorCode);
-    };
+    // @ExceptionHandler(RestApiException.class)
+    // protected ResponseEntity<ErrorResponse> handleRestApiException(RestApiException ex) {
+    //     ErrorCode errorCode = ex.getErrorCode();
+    //     return handleExceptionInternal(errorCode);
+    // };
 
     // 인증 오류
     @ExceptionHandler(AuthException.class)
@@ -42,7 +47,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
     }
 
-    private ResponseEntity<ErrorResponse> handleExceptionInternal(ErrorCode errorCode) {
+    private ResponseEntity<ErrorResponse> handleRestApiException(ErrorCode errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus().value())
                 .body(new ErrorResponse(errorCode));

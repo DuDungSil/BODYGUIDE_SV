@@ -21,10 +21,6 @@ public record PrincipalDetails(
         return attributes.get(attributeKey).toString();
     }
 
-    public UUID getUserId() {
-        return user.getUser_id();
-    }
-
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;
@@ -43,7 +39,7 @@ public record PrincipalDetails(
 
     @Override
     public String getUsername() {
-        return user.getName();
+        return user.getUserId().toString();
     }
 
     @Override
