@@ -1,48 +1,174 @@
 package org.hepi.hepi_sv.web.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hepi.hepi_sv.common.util.ClientIpExtraction;
+import org.hepi.hepi_sv.exercise.dto.BodyPart;
+import org.hepi.hepi_sv.exercise.dto.ExerciseProfile;
+import org.hepi.hepi_sv.exercise.dto.PurposeRecommend;
 import org.hepi.hepi_sv.exercise.service.ExerciseAnalysisService;
-import org.hepi.hepi_sv.nutrition.entity.NutrientProfile;
+import org.hepi.hepi_sv.exercise.service.ExerciseMetaService;
+import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
+import org.hepi.hepi_sv.nutrition.service.NutrientRecommendService;
 import org.hepi.hepi_sv.product.entity.ShopProduct;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
-import org.hepi.hepi_sv.web.dto.exercise.BodyPart;
 import org.hepi.hepi_sv.web.dto.exercise.ExerciseAbility;
-import org.hepi.hepi_sv.web.dto.exercise.ExerciseRequest;
-import org.hepi.hepi_sv.web.dto.exercise.ExerciseResult;
-import org.hepi.hepi_sv.web.dto.exercise.PurposeRecommend;
-import org.hepi.hepi_sv.web.repository.mybatis.WebDataMapper;
+import org.hepi.hepi_sv.web.dto.exercise.WebExerciseRequest;
+import org.hepi.hepi_sv.web.dto.exercise.WebExerciseResult;
+import org.hepi.hepi_sv.web.entity.WebExerAnalysisData;
+import org.hepi.hepi_sv.web.entity.WebExerInputData;
+import org.hepi.hepi_sv.web.repository.WebExerAnalysisDataRepository;
+import org.hepi.hepi_sv.web.repository.WebExerInputDataRepository;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class WebExerciseService {
 
+    private final ClientIpExtraction clientIpExtraction;
     private final ExerciseAnalysisService exerciseAnalysisService;
+    private final ExerciseMetaService exerciseMetaService;
+    private final NutrientRecommendService nutrientRecommendService;
     private final ProductRecommendService productRecommendService;
-    private final WebDataMapper webDataMapper;
-    private final ObjectMapper objectMapper;
+    private final WebExerInputDataRepository webExerInputDataRepository;
+    private final WebExerAnalysisDataRepository webExerAnalysisDataRepository;
 
-    public WebExerciseService(ExerciseAnalysisService exerciseAnalysisService, ProductRecommendService productRecommendService, WebDataMapper webDataMapper, ObjectMapper objectMapper) {
-        this.exerciseAnalysisService = exerciseAnalysisService;
-        this.productRecommendService = productRecommendService;
-        this.webDataMapper = webDataMapper;
-        this.objectMapper = objectMapper;
-    }
+    @Transactional
+    private void recordUserExerData(WebExerciseRequest request, WebExerciseResult result,
+            HttpServletRequest servletRequest) {
 
-    private void recordUserExerData(ExerciseRequest request, ExerciseResult result, HttpServletRequest servletRequest) {
-
-        String clientIp = getClientIp(servletRequest);
+        String clientIp = clientIpExtraction.getClientIp(servletRequest);
         String userAgent = servletRequest.getHeader("User-Agent");
 
-        webDataMapper.insertExerRequest(request, clientIp, userAgent);
-        webDataMapper.insertExerResult(result, request.getId());
+        WebExerInputData inputData = WebExerInputData.builder()
+                .gender(request.getSex())
+                .age(request.getAge())
+                .height(request.getHeight())
+                .weight(request.getWeight())
+                .benchWeight(request.getBench().getWeight())
+                .benchReps(request.getBench().getReps())
+                .squatWeight(request.getSquat().getWeight())
+                .squatReps(request.getSquat().getReps())
+                .deadWeight(request.getDead().getWeight())
+                .deadReps(request.getDead().getReps())
+                .overheadWeight(request.getOverhead().getWeight())
+                .overheadReps(request.getOverhead().getReps())
+                .pushupReps(request.getPushup().getReps())
+                .pullupReps(request.getPullup().getReps())
+                .supplePurpose(request.getSupplePurpose())
+                .clientIp(clientIp)
+                .userAgent(userAgent)
+                .recordAt(LocalDateTime.now())
+                .build();
+
+        WebExerInputData savedinputData = webExerInputDataRepository.save(inputData);
+
+        WebExerAnalysisData analysisData = WebExerAnalysisData.builder()
+                .id(savedinputData.getId())
+                .totalScore(result.getTotalScore())
+                .bigThree(result.getBigThree())
+                .benchScore(result.getAbility().getBench().getScore())
+                .bench1RM(result.getAbility().getBench().getStrength())
+                .squatScore(result.getAbility().getSquat().getScore())
+                .squat1RM(result.getAbility().getSquat().getStrength())
+                .deadScore(result.getAbility().getDead().getScore())
+                .dead1RM(result.getAbility().getDead().getStrength())
+                .overheadScore(result.getAbility().getOverhead().getScore())
+                .overhead1RM(result.getAbility().getOverhead().getStrength())
+                .pushupScore(result.getAbility().getPushup().getScore())
+                .pullupScore(result.getAbility().getPullup().getScore())
+                .build();
+
+        webExerAnalysisDataRepository.save(analysisData);
+    }
+
+    // 상대적으로 낮은 부위
+    public List<BodyPart> getWeekBodyPartList(ExerciseAbility ability) {
+        ExerciseProfile[] profiles = new ExerciseProfile[6];
+
+        profiles[0] = ability.getBench();
+        profiles[1] = ability.getSquat();
+        profiles[2] = ability.getDead();
+        profiles[3] = ability.getOverhead();
+        profiles[4] = ability.getPushup();
+        profiles[5] = ability.getPullup();
+
+        // 점수 기준으로 정렬하여 가장 낮은 점수 두 가지 찾기
+        List<ExerciseProfile> sortedProfiles = Arrays.asList(profiles);
+        sortedProfiles.sort(Comparator.comparingDouble(ExerciseProfile::getScore));
+
+        List<BodyPart> list = new ArrayList<>();
+        Set<String> addedParts = new HashSet<>();  // 중복 방지를 위한 Set
+
+        // 가장 낮은 점수 두 가지 프로필 추가
+        for (int i = 0; i < 2; i++) {
+            ExerciseProfile profile = sortedProfiles.get(i);
+            if (!addedParts.contains(profile.getPart())) {  // 이미 추가된 부위인지 확인
+                BodyPart part = new BodyPart();
+
+                // db 쿼리 키 : part
+                String strength = exerciseMetaService.getStrengthByMuscleGroup(profile.getPart());
+                List<String> details = exerciseMetaService.getDetailMuscleByMuscleGroup(profile.getPart());
+
+                part.setStrength(strength);
+                part.setDetails(details);
+
+                list.add(part);
+                addedParts.add(profile.getPart());  // 추가된 부위를 기록
+            }
+        }
+
+        // 점수가 40보다 낮은 모든 부위 추가 (중복되지 않도록)
+        for (ExerciseProfile profile : profiles) {
+            if (profile.getScore() < 40 && !addedParts.contains(profile.getPart())) {
+                BodyPart part = new BodyPart();
+
+                // db 쿼리 키 : part
+                String strength = exerciseMetaService.getStrengthByMuscleGroup(profile.getPart());
+                List<String> details = exerciseMetaService.getDetailMuscleByMuscleGroup(profile.getPart());
+
+                part.setStrength(strength);
+                part.setDetails(details);
+
+                list.add(part);
+                addedParts.add(profile.getPart());  // 추가된 부위를 기록
+            }
+        }
+
+        return list;
+    }
+
+    // 운동 목적에 따른 추천
+    public List<PurposeRecommend> getRecommendNutirientForPurpose(String[] purposes) {
+
+        List<PurposeRecommend> list = new ArrayList<>();
+
+        for (String purpose : purposes) {
+
+            PurposeRecommend recommend = new PurposeRecommend();
+
+            // db 쿼리 키 : purpose
+            List<NutrientProfile> profiles = nutrientRecommendService.getRecommendNutirientForPurpose(purpose);
+
+            recommend.setPurpose(purpose);
+            recommend.setProfiles(profiles);
+
+            list.add(recommend);
+        }
+
+        return list;
     }
 
     private List<ShopProduct> getRecommendSupplementByNutrientProfiles(List<NutrientProfile> profiles) {
@@ -95,7 +221,7 @@ public class WebExerciseService {
             return list;
     }
 
-    public String getExerciseAnalysis(ExerciseRequest request, HttpServletRequest servletRequest) {
+    public WebExerciseResult getExerciseAnalysis(WebExerciseRequest request, HttpServletRequest servletRequest) {
         ExerciseAbility ability = new ExerciseAbility();
         ability.setBench(exerciseAnalysisService.analyzeExercise("벤치 프레스", request.getSex(), request.getWeight(),
                 request.getBench().getWeight(), request.getBench().getReps()));
@@ -118,21 +244,20 @@ public class WebExerciseService {
         int bigThree = (int) (ability.getBench().getStrength() + ability.getSquat().getStrength()
                 + ability.getDead().getStrength());
 
-        List<BodyPart> parts = exerciseAnalysisService.getWeekBodyPartList(ability);
+        List<BodyPart> parts = getWeekBodyPartList(ability);
 
-        List<NutrientProfile> profiles = exerciseAnalysisService.getRecommendNutirientForLevel(totalScore);
-        List<PurposeRecommend> recommends = exerciseAnalysisService
-                        .getRecommendNutirientForPurpose(request.getSupplePurpose());
+        List<NutrientProfile> profiles = nutrientRecommendService.getRecommendNutirientForLevel(totalScore);
+        List<PurposeRecommend> recommends = getRecommendNutirientForPurpose(request.getSupplePurpose());
                 
         List<ShopProduct> levelProducts = getRecommendSupplementByNutrientProfiles(profiles);
         List<ShopProduct> purposeProducts = getRecommendSupplementByPurposeRecommends(recommends);
 
-        ExerciseResult result = new ExerciseResult();
+        WebExerciseResult result = new WebExerciseResult();
         result.setAbility(ability);
-        result.setTotalScore(totalScore);
+        result.setTotalScore((double)totalScore);
         result.setTotalLevel(totalLevel);
         result.setTopPercent((int) topPercent);
-        result.setBigThree(bigThree);
+        result.setBigThree((double)bigThree);
         result.setParts(parts);
         result.setLevelRecommends(profiles);
         result.setPurposeRecommends(recommends);
@@ -142,46 +267,7 @@ public class WebExerciseService {
         // DB 인서트
         recordUserExerData(request, result, servletRequest);
 
-        return convertResultToJson(result);
+        return result;
     }
 
-    private String convertResultToJson(ExerciseResult result) {
-            try {
-                    return objectMapper.writeValueAsString(result);
-            } catch (Exception e) {
-                    throw new RuntimeException("Error converting result to JSON", e);
-            }
-    }
-    
-    public String getClientIp(HttpServletRequest request) {
-        String clientIp = null;
-    
-        // 가장 흔히 사용되는 헤더들을 순차적으로 검사
-        String[] headers = {
-            "X-Forwarded-For",
-            "X-Real-IP",
-            "CF-Connecting-IP",        // Cloudflare
-            "True-Client-IP",          // Akamai
-            "X-Client-IP",
-            "X-Cluster-Client-IP",
-            "Forwarded-For",
-            "Forwarded"
-        };
-    
-        for (String header : headers) {
-            clientIp = request.getHeader(header);
-            if (clientIp != null && !clientIp.isEmpty() && !"unknown".equalsIgnoreCase(clientIp)) {
-                // 여러 개의 IP가 포함된 경우, 첫 번째 IP가 클라이언트 IP임
-                clientIp = clientIp.split(",")[0].trim();
-                return clientIp;
-            }
-        }
-    
-        // 헤더에서 찾지 못했을 때 fallback
-        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getRemoteAddr();
-        }
-    
-        return clientIp;
-    }
 }

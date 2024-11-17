@@ -2,33 +2,36 @@ package org.hepi.hepi_sv.exercise.service;
 
 import java.util.List;
 
-import org.hepi.hepi_sv.exercise.repository.mybatis.ExerciseMapper;
+import org.hepi.hepi_sv.exercise.repository.ExerciseQueryRepository;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class ExerciseMetaService {
 
-    private final ExerciseMapper exerciseMapper;
-    private final ObjectMapper objectMapper;
+    private final ExerciseQueryRepository exerciseQueryRepository;
 
-    public ExerciseMetaService(ExerciseMapper exerciseMapper, ObjectMapper objectMapper) {
-        this.exerciseMapper = exerciseMapper;
-        this.objectMapper = objectMapper;
+    // 운동 목적 가져오기
+    public List<String> getExercisePurpose() {
+        List<String> list = exerciseQueryRepository.findAllPurposes();
+
+        return list;
     }
 
-    public String getExercisePurpose() {
-        List<String> list = exerciseMapper.selectTags();
-
-        return convertResultToJson(list);
+    // 근육 그룹 관련 힘 가져오기
+    public String getStrengthByMuscleGroup(String muscleGroup) {
+        String strength = exerciseQueryRepository.findStrengthByMuscleGroupName(muscleGroup);
+                
+        return strength;
     }
 
-    private String convertResultToJson(List<String> result) {
-        try {
-            return objectMapper.writeValueAsString(result);
-        } catch (Exception e) {
-            throw new RuntimeException("Error converting result to JSON", e);
-        }
+    // 근육 그룹 관련 세부 근육 가져오기
+    public List<String> getDetailMuscleByMuscleGroup(String muscleGroup) {
+        List<String> details = exerciseQueryRepository.findMuscleDetailsByMuscleGroupName(muscleGroup);
+
+        return details;
     }
+
 }

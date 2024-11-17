@@ -1,48 +1,95 @@
 package org.hepi.hepi_sv.web.service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import org.hepi.hepi_sv.common.util.ClientIpExtraction;
+import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
 import org.hepi.hepi_sv.nutrition.service.NutritionAnalysisService;
+import org.hepi.hepi_sv.nutrition.service.SourceRecommendService;
 import org.hepi.hepi_sv.product.entity.ShopProduct;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
-import org.hepi.hepi_sv.web.dto.nutrition.NutrientComposition;
-import org.hepi.hepi_sv.web.dto.nutrition.NutrientRequest;
-import org.hepi.hepi_sv.web.dto.nutrition.NutrientResult;
 import org.hepi.hepi_sv.web.dto.nutrition.RecommendProduct;
-import org.hepi.hepi_sv.web.dto.nutrition.RecommendSource;
-import org.hepi.hepi_sv.web.repository.mybatis.WebDataMapper;
+import org.hepi.hepi_sv.web.dto.nutrition.RecommendSourceDto;
+import org.hepi.hepi_sv.web.dto.nutrition.WebNutrientRequest;
+import org.hepi.hepi_sv.web.dto.nutrition.WebNutrientResult;
+import org.hepi.hepi_sv.web.entity.WebNutriAnalysisData;
+import org.hepi.hepi_sv.web.entity.WebNutriInputData;
+import org.hepi.hepi_sv.web.repository.WebNutriAnalysisDataRepository;
+import org.hepi.hepi_sv.web.repository.WebNutriInputDataRepository;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class WebNutritionService {
 
+    private final ClientIpExtraction clientIpExtraction;
     private final NutritionAnalysisService nutrientAnalysisService;
+    private final SourceRecommendService sourceRecommendService;
     private final ProductRecommendService productRecommendService;
-    private final WebDataMapper webDataMapper;
-    private final ObjectMapper objectMapper;
+    private final WebNutriInputDataRepository webNutriInputDataRepository;
+    private final WebNutriAnalysisDataRepository webNutriAnalysisDataRepository;
 
-    public WebNutritionService(NutritionAnalysisService nutrientAnalysisService, ProductRecommendService productRecommendService, WebDataMapper webDataMapper, ObjectMapper objectMapper) {
-        this.nutrientAnalysisService = nutrientAnalysisService;
-        this.productRecommendService = productRecommendService;
-        this.webDataMapper = webDataMapper;
-        this.objectMapper = objectMapper;
-    }
-
-    private void recordUserNutriData(NutrientRequest request, NutrientResult result,
+    @Transactional
+    private void recordUserNutriData(WebNutrientRequest request, WebNutrientResult result,
             HttpServletRequest servletRequest) {
 
-        String clientIp = getClientIp(servletRequest);
+        String clientIp = clientIpExtraction.getClientIp(servletRequest);
         String userAgent = servletRequest.getHeader("User-Agent");
 
-        webDataMapper.insertNutriRequest(request, clientIp, userAgent);
-        webDataMapper.insertNutriResult(result, request.getId());
+        WebNutriInputData inputData = WebNutriInputData.builder()
+                .gender(request.getSex())
+                .age(request.getAge())
+                .height(request.getHeight())
+                .weight(request.getWeight())
+                .sleep(request.getSleep())
+                .wakeup(request.getWakeup())
+                .pa(request.getPA())
+                .dietGoal(request.getDietGoal())
+                .dietType(request.getDietType())
+                .clientIp(clientIp)
+                .userAgent(userAgent)
+                .recordAt(LocalDateTime.now())
+                .build();
+
+        WebNutriInputData savedinputData = webNutriInputDataRepository.save(inputData);
+
+        WebNutriAnalysisData analysisData = WebNutriAnalysisData.builder()
+                .id(savedinputData.getId())
+                .bmi(result.getBMI())
+                .bmr(result.getBMR())
+                .tdee(result.getTDEE())
+                .targetCalory(result.getTargetCalory())
+                .build();
+
+        webNutriAnalysisDataRepository.save(analysisData);
     }
     
+    // 추천 급원 DB에서 가져오기
+    public RecommendSourceDto getRecommendSource(String dietType) {
+
+        RecommendSourceDto sources = new RecommendSourceDto();
+
+        if (!dietType.equals("비건")) {
+            dietType = "일반";
+        }
+
+        List<String> carbohydrate = sourceRecommendService.getRecommendSource("탄수화물", "일반");
+        List<String> protein = sourceRecommendService.getRecommendSource("단백질", dietType);
+        List<String> fat = sourceRecommendService.getRecommendSource("지방", "일반");
+
+        sources.setCarbohydrate(carbohydrate);
+        sources.setProtein(protein);
+        sources.setFat(fat);
+
+        return sources;
+    }
+
     // 3대영양소에 따른 음식 추천
     private RecommendProduct getRecommendFoodByMajorNutrient(String dietType) {
         RecommendProduct products = new RecommendProduct();
@@ -66,22 +113,25 @@ public class WebNutritionService {
         return products;
     }
 
-    public String getNutritionAnalysis(NutrientRequest request, HttpServletRequest servletRequest) {
-        double BMI = Math.round(nutrientAnalysisService.calculateBMI(request.getHeight(), request.getWeight()) * 100) / 100.0;
-        double BMR = nutrientAnalysisService.calculateBMR(request.getSex(), request.getHeight(), request.getWeight(), request.getAge());
+    public WebNutrientResult getNutritionAnalysis(WebNutrientRequest request, HttpServletRequest servletRequest) {
+        double BMI = Math.round(nutrientAnalysisService.calculateBMI(request.getHeight(), request.getWeight()) * 100)
+                / 100.0;
+        double BMR = nutrientAnalysisService.calculateBMR(request.getSex(), request.getHeight(), request.getWeight(),
+                request.getAge());
         double TDEE = nutrientAnalysisService.calculateTDEE(BMR, request.getPA());
         double targetCalory = nutrientAnalysisService.calculateTargetCalory(TDEE, request.getDietGoal());
-        NutrientComposition composition = nutrientAnalysisService.getNutrientComposition(targetCalory, request.getDietType());
+        MealNutrientComposition composition = nutrientAnalysisService.getMealNutrientComposition(targetCalory,
+                request.getDietType());
         List<String> mealTimes = nutrientAnalysisService.recommendMealTimes(request.getWakeup(), request.getSleep());
-        RecommendSource recommendSource = nutrientAnalysisService.getRecommendSource(request.getDietType());
+        RecommendSourceDto recommendSource = getRecommendSource(request.getDietType());
 
         RecommendProduct recommendProduct = getRecommendFoodByMajorNutrient(request.getDietType());
 
-        NutrientResult result = new NutrientResult();
+        WebNutrientResult result = new WebNutrientResult();
         result.setBMI(BMI);
-        result.setBMR((int) BMR);
-        result.setTDEE((int) TDEE);
-        result.setTargetCalory((int) targetCalory);
+        result.setBMR(Math.floor(BMR));
+        result.setTDEE(Math.floor(TDEE));
+        result.setTargetCalory(Math.floor(targetCalory));
         result.setDietGoal(request.getDietGoal());
         result.setComposition(composition);
         result.setWakeup(request.getWakeup());
@@ -93,46 +143,7 @@ public class WebNutritionService {
         // 데이터베이스에 기록
         recordUserNutriData(request, result, servletRequest);
 
-        return convertResultToJson(result);
+        return result;
     }
-
-    private String convertResultToJson(NutrientResult result) {
-        try {
-            return objectMapper.writeValueAsString(result);
-        } catch (Exception e) {
-            throw new RuntimeException("Error converting result to JSON", e);
-        }
-    }
-
-    public String getClientIp(HttpServletRequest request) {
-        String clientIp = null;
     
-        // 가장 흔히 사용되는 헤더들을 순차적으로 검사
-        String[] headers = {
-            "X-Forwarded-For",
-            "X-Real-IP",
-            "CF-Connecting-IP",        // Cloudflare
-            "True-Client-IP",          // Akamai
-            "X-Client-IP",
-            "X-Cluster-Client-IP",
-            "Forwarded-For",
-            "Forwarded"
-        };
-    
-        for (String header : headers) {
-            clientIp = request.getHeader(header);
-            if (clientIp != null && !clientIp.isEmpty() && !"unknown".equalsIgnoreCase(clientIp)) {
-                // 여러 개의 IP가 포함된 경우, 첫 번째 IP가 클라이언트 IP임
-                clientIp = clientIp.split(",")[0].trim();
-                return clientIp;
-            }
-        }
-    
-        // 헤더에서 찾지 못했을 때 fallback
-        if (clientIp == null || clientIp.isEmpty() || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getRemoteAddr();
-        }
-    
-        return clientIp;
-    }
 }

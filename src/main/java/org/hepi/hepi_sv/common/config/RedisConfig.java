@@ -8,8 +8,12 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+@EnableRedisRepositories(
+    basePackages = "org.hepi.hepi_sv.common.redis.repository" // Redis 전용 리포지토리 위치
+)
 @EnableCaching
 @Configuration
 public class RedisConfig {

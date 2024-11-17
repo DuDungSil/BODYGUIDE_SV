@@ -1,5 +1,6 @@
 package org.hepi.hepi_sv.common.config;
 
+import org.hepi.hepi_sv.auth.client.CustomAccessTokenResponseClient;
 import org.hepi.hepi_sv.auth.filter.TokenAuthenticationFilter;
 import org.hepi.hepi_sv.auth.filter.TokenExceptionFilter;
 import org.hepi.hepi_sv.auth.handler.CustomAccessDeniedHandler;
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class SecurityConfig {
 
+private final CustomAccessTokenResponseClient accessTokenResponseClient;
     private final CustomOAuth2UserService oAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final OAuth2FailureHandler oAuth2FailureHandler;
@@ -60,6 +62,7 @@ public class SecurityConfig {
                         request.requestMatchers(
                                         new AntPathRequestMatcher("/"),
                                         new AntPathRequestMatcher("/auth/success"),
+                                        new AntPathRequestMatcher("/auth/refresh"),             
                                         new AntPathRequestMatcher("/web/**")
                                 ).permitAll()
                                 .anyRequest().authenticated()
@@ -68,7 +71,8 @@ public class SecurityConfig {
                 // oauth2 설정
                 .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점
                         // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때의 설정을 담당
-                        oauth.userInfoEndpoint(c -> c.userService(oAuth2UserService))
+                        oauth.tokenEndpoint(token -> token.accessTokenResponseClient(accessTokenResponseClient))
+                                .userInfoEndpoint(info -> info.userService(oAuth2UserService))
                                 .successHandler(oAuth2SuccessHandler) // 로그인 성공 시 핸들러
                                 .failureHandler(oAuth2FailureHandler) // 로그인 실패 시 핸들러
                 )

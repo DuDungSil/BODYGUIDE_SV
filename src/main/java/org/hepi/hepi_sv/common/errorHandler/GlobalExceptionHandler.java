@@ -1,7 +1,7 @@
 package org.hepi.hepi_sv.common.errorHandler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hepi.hepi_sv.auth.exception.TokenException;
+import org.hepi.hepi_sv.user.Exception.UserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,46 +10,48 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import jakarta.security.auth.message.AuthException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 전역 예외 처리 핸들러
 
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
-    // @ExceptionHandler(CustomException.class)
-    // protected ResponseEntity<ErrorResponse> handleCustomException(CustomException ex) {
-    //     return handleExceptionInternal(ex.getErrorCode());
-    // }
-
-    /*
-     * Developer Custom Exception: 직접 정의한 RestApiException 에러 클래스에 대한 예외 처리
-     */
-    // @ExceptionHandler(RestApiException.class)
-    // protected ResponseEntity<ErrorResponse> handleRestApiException(RestApiException ex) {
-    //     ErrorCode errorCode = ex.getErrorCode();
-    //     return handleExceptionInternal(errorCode);
-    // };
-
     // 인증 오류
     @ExceptionHandler(AuthException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<String> handleAuthException(AuthException ex) {
-        logger.error("Authentication error", ex);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증 오류가 발생했습니다.");
+    public ResponseEntity<ErrorResponse> handleAuthException(CustomException ex) {
+        log.error("Authentication error", ex);
+        ErrorCode errorCode = ex.getErrorCode();
+        ErrorResponse response = new ErrorResponse(errorCode);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    // 토큰 오류
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<ErrorResponse> handleTokenException(CustomException ex) {
+        log.error("Token error", ex);
+        ErrorCode errorCode = ex.getErrorCode();
+        ErrorResponse response = new ErrorResponse(errorCode);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    // 유저 오류
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<ErrorResponse> handleUserException(CustomException ex) {
+        log.error("User error", ex);
+        ErrorCode errorCode = ex.getErrorCode();
+        ErrorResponse response = new ErrorResponse(errorCode);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     // 기본 예외 처리
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> handleGlobalException(Exception ex) {
-        logger.error("Error occurred", ex); 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
+        log.error("Internal Server error", ex);
+        ErrorResponse response = new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    private ResponseEntity<ErrorResponse> handleRestApiException(ErrorCode errorCode) {
-        return ResponseEntity
-                .status(errorCode.getHttpStatus().value())
-                .body(new ErrorResponse(errorCode));
-    }
 }
+

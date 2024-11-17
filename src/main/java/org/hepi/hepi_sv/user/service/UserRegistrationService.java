@@ -1,10 +1,9 @@
 package org.hepi.hepi_sv.user.service;
 
-import static org.hepi.hepi_sv.common.errorHandler.CustomErrorCode.USER_NOT_FOUND;
-
 import java.util.UUID;
 
 import org.hepi.hepi_sv.auth.dto.OAuth2UserInfo;
+import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.USER_NOT_FOUND;
 import org.hepi.hepi_sv.user.Exception.UserException;
 import org.hepi.hepi_sv.user.entity.Users;
 import org.hepi.hepi_sv.user.repository.jpa.UsersRepository;

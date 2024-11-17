@@ -11,4 +11,43 @@
         WHERE NUTRIENT_TYPE = #{NUTRIENT_TYPE} and DIET_TYPE = #{DIET_TYPE}
     </select>
     
+        <resultMap id="NutrientProfileMap" type="org.hepi.hepi_sv.nutrition.entity.NutrientProfile">
+        <result column="NUTRITION_NAME" property="name" />
+        <result column="NUTRITION_FUNCTION" property="function" />
+        <result column="NUTRITION_INTAKE" property="RDI" />
+        <result column="NUTRITION_SIDE_EFFECT" property="sideEffect" />
+        <result column="NUTRITION_PRECAUTION" property="precaution" />
+        <result column="NUTRITION_TIMING" property="timing" />
+        <result column="NUTRITION_SUMMARY" property="summary" />
+        <result column="MENTION" property="mention" />
+    </resultMap>
+
+    <select id="selectNutrientProfilesByLevel" resultMap="NutrientProfileMap">
+        SELECT t2.NUTRITION_NAME
+               , t2.NUTRITION_FUNCTION
+               , t2.NUTRITION_INTAKE
+               , t2.NUTRITION_SIDE_EFFECT
+               , t2.NUTRITION_PRECAUTION
+               , t2.NUTRITION_TIMING
+               , t2.NUTRITION_SUMMARY
+               , t1.MENTION
+        FROM NUTRITION_INFO t2
+        INNER JOIN LEVEL_RECOMMEND_NUTRITION t1 ON t1.NUTRITION_NAME = t2.NUTRITION_NAME
+        WHERE t1.LVL &lt;= #{LEVEL, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectNutrientProfilesByPurpose" resultMap="NutrientProfileMap">
+        SELECT t2.NUTRITION_NAME
+               , t2.NUTRITION_FUNCTION
+               , t2.NUTRITION_INTAKE
+               , t2.NUTRITION_SIDE_EFFECT
+               , t2.NUTRITION_PRECAUTION
+               , t2.NUTRITION_TIMING
+               , t2.NUTRITION_SUMMARY
+        FROM NUTRITION_INFO t2
+        WHERE NUTRITION_NAME IN (SELECT NUTRITION
+                    FROM EXERCISE_PURPOSE_NUTRITION_REL
+                    WHERE PURPOSE = #{PURPOSE})
+    </select>
+    
 </mapper>

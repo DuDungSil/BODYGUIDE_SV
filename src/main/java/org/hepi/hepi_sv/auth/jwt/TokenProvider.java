@@ -1,17 +1,15 @@
 package org.hepi.hepi_sv.auth.jwt;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
-import org.hepi.hepi_sv.auth.entity.Token;
 import org.hepi.hepi_sv.auth.exception.TokenException;
-import org.hepi.hepi_sv.auth.service.TokenService;
-import static org.hepi.hepi_sv.common.errorHandler.CustomErrorCode.INVALID_JWT_SIGNATURE;
-import static org.hepi.hepi_sv.common.errorHandler.CustomErrorCode.INVALID_TOKEN;
+import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.INVALID_JWT_SIGNATURE;
+import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.INVALID_TOKEN;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,13 +27,15 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class TokenProvider {
 
     @Value("${jwt.key}")
-    private String key; // 문자열 키 (환경 변수 또는 properties 파일에서 가져옴)
+    private String key;
 
     private SecretKey secretKey;
 
@@ -43,85 +43,91 @@ public class TokenProvider {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L * 24 * 7; // 7일
     private static final String KEY_ROLE = "role";
 
-    private final TokenService tokenService;
-
     @PostConstruct
     public void init() {
-        // Base64로 인코딩된 key를 SecretKey로 변환하여 초기화
+        if (key.getBytes().length < 64) {
+            throw new IllegalArgumentException("JWT Secret Key is too short. It must be at least 64 bytes long.");
+        }
         this.secretKey = Keys.hmacShaKeyFor(key.getBytes());
     }
 
-    // 액세스 토큰 생성
     public String generateAccessToken(Authentication authentication) {
-        return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
+        return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME, "ACCESS");
     }
 
-    // 리프레시 토큰 생성 후 레디스 저장
-    public void generateRefreshToken(Authentication authentication, String accessToken) {
-        String refreshToken = generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME);
-        tokenService.saveOrUpdate(authentication.getName(), refreshToken, accessToken);
+    public String generateRefreshToken(Authentication authentication) {
+        return generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME, "REFRESH");
     }
 
-    private String generateToken(Authentication authentication, long expireTime) {
+    private String generateToken(Authentication authentication, long expireTime, String tokenType) {
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expireTime);
 
-        // 토큰에 포함될 정보
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining());
+                .collect(Collectors.joining(","));
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(KEY_ROLE, authorities)
+                .claim("type", tokenType)
                 .setIssuedAt(now)
                 .setExpiration(expiredDate)
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    // 토큰을 사용해 인증 객체 생성
     public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
-        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
+        validateTokenType(claims, "ACCESS");
 
+        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
         User principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    // 클레임의 권한 정보를 추출해서 리스트로 변환
     private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
-        return Collections.singletonList(new SimpleGrantedAuthority(
-                claims.get(KEY_ROLE).toString()));
+        return Arrays.stream(claims.get(KEY_ROLE).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
-    // 액세스 토큰 만료 시 리프레시토큰 검증 후 재발급
-    public String reissueAccessToken(String accessToken) {
-        if (StringUtils.hasText(accessToken)) {
-            Token token = tokenService.findByAccessTokenOrThrow(accessToken);
-            String refreshToken = token.getRefreshToken();
+    public String reissueAccessToken(String refreshToken) {
+        Claims claims = parseClaims(refreshToken);
+        validateTokenType(claims, "REFRESH");
 
-            // 검증
-            if (validateToken(refreshToken)) {
-                String reissueAccessToken = generateAccessToken(getAuthentication(refreshToken));
-                tokenService.updateToken(reissueAccessToken, token);
-                return reissueAccessToken;
-            }
-        }
-        return null;
+        Authentication authentication = getAuthentication(refreshToken);
+        return generateAccessToken(authentication);
     }
 
-    // 토큰 검증
+    public String reissueRefreshToken(String refreshToken) {
+        Claims claims = parseClaims(refreshToken);
+        validateTokenType(claims, "REFRESH");
+
+        Authentication authentication = getAuthentication(refreshToken);
+        return generateRefreshToken(authentication);
+    }
+
     public boolean validateToken(String token) {
         if (!StringUtils.hasText(token)) {
             return false;
         }
-
-        Claims claims = parseClaims(token);
-        return claims.getExpiration().after(new Date());
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getExpiration().after(new Date());
+        } catch (ExpiredJwtException e) {
+            log.error("Token expired: {}", e.getMessage());
+            return false;
+        } catch (Exception e) {
+            log.error("Token validation failed: {}", e.getMessage());
+            return false;
+        }
     }
 
-    // 클레임 정보 파싱
     private Claims parseClaims(String token) {
         try {
             return Jwts.parserBuilder()
@@ -135,6 +141,15 @@ public class TokenProvider {
             throw new TokenException(INVALID_TOKEN);
         } catch (SecurityException e) {
             throw new TokenException(INVALID_JWT_SIGNATURE);
+        } catch (Exception e) {
+            throw new TokenException(INVALID_TOKEN);
+        }
+    }
+
+    private void validateTokenType(Claims claims, String expectedType) {
+        String tokenType = claims.get("type", String.class);
+        if (!expectedType.equals(tokenType)) {
+            throw new TokenException(INVALID_TOKEN);
         }
     }
 }

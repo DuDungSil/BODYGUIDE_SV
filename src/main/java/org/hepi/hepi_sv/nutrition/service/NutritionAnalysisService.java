@@ -4,25 +4,17 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import org.hepi.hepi_sv.nutrition.repository.mybatis.NutritionMapper;
-import org.hepi.hepi_sv.product.entity.ShopProduct;
-import org.hepi.hepi_sv.web.dto.nutrition.NutrientComposition;
-import org.hepi.hepi_sv.web.dto.nutrition.NutrientInfo;
-import org.hepi.hepi_sv.web.dto.nutrition.RecommendProduct;
-import org.hepi.hepi_sv.web.dto.nutrition.RecommendSource;
+import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
+import org.hepi.hepi_sv.nutrition.dto.MealMacroDetails;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class NutritionAnalysisService {
-
-    private final NutritionMapper nutritionMapper;
-
-    public NutritionAnalysisService(NutritionMapper nutritionMapper) {
-        this.nutritionMapper = nutritionMapper;
-    }
 
     public double calculateBMI(double height, double weight) {
         
@@ -34,7 +26,7 @@ public class NutritionAnalysisService {
 
     public double calculateBMR(String sex, double height, double weight, int age){
         double BMR;
-        if(sex.equals("남")){
+        if(sex.equals("M")){
             BMR = 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * age);
         }
         else{
@@ -71,11 +63,11 @@ public class NutritionAnalysisService {
     } 
 
     // 탄수화물, 단백질, 불포화지방, 포화지방 함량 계산
-    public NutrientComposition getNutrientComposition(double targetCalory, String dietType) {
-        NutrientInfo carbohydrate = new NutrientInfo();
-        NutrientInfo protein = new NutrientInfo();
-        NutrientInfo unFat = new NutrientInfo();
-        NutrientInfo satFat = new NutrientInfo();
+    public MealNutrientComposition getMealNutrientComposition(double targetCalory, String dietType) {
+        MealMacroDetails carbohydrate = new MealMacroDetails();
+        MealMacroDetails protein = new MealMacroDetails();
+        MealMacroDetails unFat = new MealMacroDetails();
+        MealMacroDetails satFat = new MealMacroDetails();
 
         // 탄수화물, 단백질, 불포화지방, 포화지방
         List<Integer> Ratios = new ArrayList<>(4);
@@ -105,7 +97,7 @@ public class NutritionAnalysisService {
         satFat.setCalory(Math.round(targetCalory * satFat.getRatio() / 100));
         satFat.setGram(Math.round(satFat.getCalory() / 9));
 
-        NutrientComposition composition = new NutrientComposition(carbohydrate, protein, unFat, satFat);
+        MealNutrientComposition composition = new MealNutrientComposition(carbohydrate, protein, unFat, satFat);
 
         return composition;
     }
@@ -155,27 +147,6 @@ public class NutritionAnalysisService {
 
         return mealTimes;
     }
-
-    // 추천 급원 DB에서 가져오기
-    public RecommendSource getRecommendSource(String dietType) {
-
-        RecommendSource sources = new RecommendSource();
-
-        if(!dietType.equals("비건")){
-            dietType = "일반";
-        }
-
-        // db 쿼리 키 : dietType, nutrienttype
-        List<String> carbohydrate = nutritionMapper.selectRecommendSource("탄수화물", "일반");
-        List<String> protein = nutritionMapper.selectRecommendSource("단백질", dietType);
-        List<String> fat = nutritionMapper.selectRecommendSource("지방", "일반");
-
-        sources.setCarbohydrate(carbohydrate);
-        sources.setProtein(protein);
-        sources.setFat(fat);
-
-        return sources;
-    }
-
+    
 }
 

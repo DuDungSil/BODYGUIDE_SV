@@ -1,5 +1,6 @@
 package org.hepi.hepi_sv.user.service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hepi.hepi_sv.user.entity.UsersProviderToken;
@@ -43,6 +44,7 @@ public class UserProviderTokenService {
                 .orElseThrow(() -> new RuntimeException("User provider token not found with user_id: " + userId));
 
         usersProviderToken.setRefreshToken(newRefreshToken);
+        // usersProviderToken.setExpiresAt(expiresAt);
         usersProviderTokenRepository.save(usersProviderToken);
     }
 
@@ -52,6 +54,7 @@ public class UserProviderTokenService {
                 .orElseThrow(() -> new RuntimeException("User provider token not found with user_id: " + userId));
 
         usersProviderToken.setRefreshToken(null);
+        usersProviderToken.setExpiresAt(null);
         usersProviderTokenRepository.save(usersProviderToken);
     }
 

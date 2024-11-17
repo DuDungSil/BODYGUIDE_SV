@@ -1,6 +1,6 @@
 package org.hepi.hepi_sv.auth.dto;
 
-import static org.hepi.hepi_sv.common.errorHandler.CustomErrorCode.ILLEGAL_REGISTRATION_PROVIDER;
+import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.ILLEGAL_REGISTRATION_PROVIDER;
 
 import java.util.Map;
 

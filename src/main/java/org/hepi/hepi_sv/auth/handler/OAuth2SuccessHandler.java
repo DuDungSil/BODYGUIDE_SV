@@ -1,10 +1,18 @@
 package org.hepi.hepi_sv.auth.handler;
 
-import org.hepi.hepi_sv.auth.jwt.TokenProvider;
+import java.util.UUID;
+
+import org.hepi.hepi_sv.auth.dto.TokenResponseDTO;
+import org.hepi.hepi_sv.auth.service.TokenService;
+import org.hepi.hepi_sv.user.service.UserProviderTokenService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.ServletException;
@@ -16,21 +24,47 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     
-    private final TokenProvider tokenProvider;
-    private static final String URI = "/auth/success";
+    private final TokenService tokenService;
+    private final UserProviderTokenService userProviderTokenService;
+    private final OAuth2AuthorizedClientService authorizedClientService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException, java.io.IOException {
-        // accessToken, refreshToken 발급
-        String accessToken = tokenProvider.generateAccessToken(authentication);
-        tokenProvider.generateRefreshToken(authentication, accessToken);
-        
-        // 토큰 전달을 위한 redirect
-        String redirectUrl = UriComponentsBuilder.fromUriString(URI)
-                .queryParam("accessToken", accessToken)
-                .build().toUriString();
+                
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
 
-        response.sendRedirect(redirectUrl);
+            // 사용자 ID 추출 (OAuth2AuthenticationToken의 이름 또는 속성에서 가져오기)
+            String userIdString = authToken.getName(); // 일반적으로 OAuth2 인증의 "sub" (사용자 고유 ID)
+            UUID userId = UUID.fromString(userIdString);
+
+            // 클라이언트 ID와 사용자를 기반으로 OAuth2AuthorizedClient 가져오기
+            OAuth2AuthorizedClient authorizedClient =
+                    authorizedClientService.loadAuthorizedClient(
+                            authToken.getAuthorizedClientRegistrationId(),
+                            authToken.getName()
+                    );
+
+            // 리프레시 토큰 가져오기
+            String providerRefreshToken = authorizedClient.getRefreshToken().getTokenValue();
+
+            // 필요 시 DB 저장
+            userProviderTokenService.updateRefreshToken(userId, providerRefreshToken);
+
+            // TokenResponseDTO 생성
+            TokenResponseDTO tokenResponse = tokenService.generateTokenResponse(authentication);
+
+            // JSON 응답 설정
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            // 객체를 JSON으로 변환 후 응답
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(response.getWriter(), tokenResponse);
+            
+        } else {
+            throw new IllegalArgumentException("Authentication is not OAuth2AuthenticationToken");
+        }
     }
 }

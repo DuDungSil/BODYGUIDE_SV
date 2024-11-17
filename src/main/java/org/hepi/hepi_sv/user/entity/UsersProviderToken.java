@@ -1,5 +1,6 @@
 package org.hepi.hepi_sv.user.entity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "USERS_PROVIDER_TOKEN")
+@Table(name = "USERS_SOCIAL_TOKEN")
 @Getter
 @Setter
 @Builder
@@ -30,6 +31,9 @@ public class UsersProviderToken {
 
     @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
+
+    @Column(name = "expires_at")
+    private LocalDateTime expiresAt;
 
     @Column(name = "refresh_token")
     private String refreshToken;
