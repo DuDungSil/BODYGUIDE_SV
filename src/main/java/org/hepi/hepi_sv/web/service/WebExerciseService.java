@@ -11,16 +11,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.hepi.hepi_sv.common.util.ClientIpExtraction;
-import org.hepi.hepi_sv.exercise.dto.BodyPart;
 import org.hepi.hepi_sv.exercise.dto.ExerciseProfile;
-import org.hepi.hepi_sv.exercise.dto.PurposeRecommend;
 import org.hepi.hepi_sv.exercise.service.ExerciseAnalysisService;
 import org.hepi.hepi_sv.exercise.service.ExerciseMetaService;
 import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
 import org.hepi.hepi_sv.nutrition.service.NutrientRecommendService;
 import org.hepi.hepi_sv.product.entity.ShopProduct;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
+import org.hepi.hepi_sv.web.dto.exercise.BodyPart;
 import org.hepi.hepi_sv.web.dto.exercise.ExerciseAbility;
+import org.hepi.hepi_sv.web.dto.exercise.PurposeRecommend;
 import org.hepi.hepi_sv.web.dto.exercise.WebExerciseRequest;
 import org.hepi.hepi_sv.web.dto.exercise.WebExerciseResult;
 import org.hepi.hepi_sv.web.entity.WebExerAnalysisData;

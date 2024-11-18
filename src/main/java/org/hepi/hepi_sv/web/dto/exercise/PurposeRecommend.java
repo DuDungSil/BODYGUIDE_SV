@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.exercise.dto;
+package org.hepi.hepi_sv.web.dto.exercise;
 
 import java.util.List;
 

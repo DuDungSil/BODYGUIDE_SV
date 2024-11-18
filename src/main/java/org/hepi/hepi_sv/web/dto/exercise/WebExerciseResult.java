@@ -2,8 +2,6 @@ package org.hepi.hepi_sv.web.dto.exercise;
 
 import java.util.List;
 
-import org.hepi.hepi_sv.exercise.dto.BodyPart;
-import org.hepi.hepi_sv.exercise.dto.PurposeRecommend;
 import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
 import org.hepi.hepi_sv.product.entity.ShopProduct;
 
