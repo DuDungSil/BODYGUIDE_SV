@@ -2,12 +2,8 @@ package org.hepi.hepi_sv.user.controller;
 
 import java.util.UUID;
 
-import org.hepi.hepi_sv.auth.dto.PrincipalDetails;
-import org.hepi.hepi_sv.common.errorHandler.GlobalExceptionHandler;
 import org.hepi.hepi_sv.user.dto.UserProfileDTO;
 import org.hepi.hepi_sv.user.service.UserProfileService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;

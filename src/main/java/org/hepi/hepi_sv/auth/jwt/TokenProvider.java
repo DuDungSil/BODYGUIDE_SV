@@ -59,7 +59,7 @@ public class TokenProvider {
         return generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME, "REFRESH");
     }
 
-    private String generateToken(Authentication authentication, long expireTime, String tokenType) {
+    public String generateToken(Authentication authentication, long expireTime, String tokenType) {
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expireTime);
 

@@ -62,7 +62,8 @@ private final CustomAccessTokenResponseClient accessTokenResponseClient;
                         request.requestMatchers(
                                         new AntPathRequestMatcher("/"),
                                         new AntPathRequestMatcher("/auth/success"),
-                                        new AntPathRequestMatcher("/auth/refresh"),             
+                                        new AntPathRequestMatcher("/auth/refresh"),
+                                        new AntPathRequestMatcher("/auth/test"),                        
                                         new AntPathRequestMatcher("/web/**")
                                 ).permitAll()
                                 .anyRequest().authenticated()

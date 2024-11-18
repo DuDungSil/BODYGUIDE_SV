@@ -44,8 +44,8 @@ public class UsersMeta {
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 
-    @Column(name = "is_delete")
-    private Boolean isDelete;
+    @Column(name = "is_delete", nullable = false)
+    private Boolean isDelete = false;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

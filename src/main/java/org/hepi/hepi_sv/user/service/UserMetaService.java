@@ -28,6 +28,7 @@ public class UserMetaService {
                 .createdAt(dateTime)
                 .lastLoginAt(dateTime)
                 .lastUpdatedAt(dateTime)
+                .isDelete(false)
                 .build();
 
         usersMetaRepository.save(usersMeta);
