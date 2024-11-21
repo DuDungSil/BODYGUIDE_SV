@@ -12,7 +12,7 @@ public class HepiSvApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(HepiSvApplication.class, args);
-        logger.info("==================== START HEPI SERVER ====================");
+        logger.info("==================== START BODYGUIDE SERVER ====================");
     }
 
 }
