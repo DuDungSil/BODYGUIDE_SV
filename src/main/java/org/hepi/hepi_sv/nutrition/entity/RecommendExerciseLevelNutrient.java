@@ -12,12 +12,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "LEVEL_RECOMMEND_NUTRITION")
-public class LevelRecommendNutrition {
+@Table(name = "RECOMMEND_EXERCISE_LEVEL_NUTRIENT")
+public class RecommendExerciseLevelNutrient {
     
     @Id
-    @Column(name = "nutrition_name")
-    private String nutritionName;
+    @Column(name = "recommend_id")
+    private int id;
+
+    @Column(name = "nutrient_id")
+    private int nutrientId;
 
     @Column(name = "lvl")
     private int lvl;

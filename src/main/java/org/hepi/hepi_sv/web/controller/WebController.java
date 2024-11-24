@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/web")
@@ -34,12 +36,14 @@ public class WebController {
     @PostMapping("/nutrient")
     public ResponseEntity<WebNutrientResult> nutrient(@RequestBody WebNutrientRequest request, HttpServletRequest servletRequest) {
         WebNutrientResult result = webNutritionService.getNutritionAnalysis(request, servletRequest);
+        log.debug(result.toString());
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/exercise")
     public ResponseEntity<WebExerciseResult> exercise(@RequestBody WebExerciseRequest request, HttpServletRequest servletRequest) {
         WebExerciseResult result = webExerciseService.getExerciseAnalysis(request, servletRequest);
+        log.debug(result.toString());
         return ResponseEntity.ok(result);
     }
 

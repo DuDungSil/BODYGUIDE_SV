@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 public class ExercisePurpose {
     
     @Id
-    @Column(name = "purpose_id")
-    private Long purposeId;
+    @Column(name = "purpose_id", columnDefinition = "SMALLINT")
+    private int purposeId;
 
     @Column(name = "purpose")
     private String purpose;

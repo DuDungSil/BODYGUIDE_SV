@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "muscle_group")
+@Table(name = "MUSCLE_GROUP")
 public class MuscleGroup {
     
     @Id
-    @Column(name = "group_id")
-    private long groupId;
+    @Column(name = "group_id", columnDefinition = "TINYINT")
+    private int groupId;
 
     @Column(name = "group_name")
     private String groupName;

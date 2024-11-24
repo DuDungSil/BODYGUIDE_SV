@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class NutrientProfile {
+    int id;
     String name;
     String function;
     @JsonProperty("RDI")

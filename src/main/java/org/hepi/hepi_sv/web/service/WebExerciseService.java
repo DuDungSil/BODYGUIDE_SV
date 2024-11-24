@@ -6,7 +6,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,9 +18,9 @@ import org.hepi.hepi_sv.exercise.service.ExerciseAnalysisService;
 import org.hepi.hepi_sv.exercise.service.ExerciseMetaService;
 import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
 import org.hepi.hepi_sv.nutrition.service.NutrientRecommendService;
-import org.hepi.hepi_sv.product.entity.ShopProduct;
+import org.hepi.hepi_sv.product.dto.ShopProductDTO;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
-import org.hepi.hepi_sv.web.dto.exercise.BodyPart;
+import org.hepi.hepi_sv.web.dto.exercise.WebMuscleDTO;
 import org.hepi.hepi_sv.web.dto.exercise.ExerciseAbility;
 import org.hepi.hepi_sv.web.dto.exercise.PurposeRecommend;
 import org.hepi.hepi_sv.web.dto.exercise.WebExerciseRequest;
@@ -95,59 +97,48 @@ public class WebExerciseService {
     }
 
     // 상대적으로 낮은 부위
-    public List<BodyPart> getWeekBodyPartList(ExerciseAbility ability) {
-        ExerciseProfile[] profiles = new ExerciseProfile[6];
-
-        profiles[0] = ability.getBench();
-        profiles[1] = ability.getSquat();
-        profiles[2] = ability.getDead();
-        profiles[3] = ability.getOverhead();
-        profiles[4] = ability.getPushup();
-        profiles[5] = ability.getPullup();
-
-        // 점수 기준으로 정렬하여 가장 낮은 점수 두 가지 찾기
-        List<ExerciseProfile> sortedProfiles = Arrays.asList(profiles);
-        sortedProfiles.sort(Comparator.comparingDouble(ExerciseProfile::getScore));
-
-        List<BodyPart> list = new ArrayList<>();
-        Set<String> addedParts = new HashSet<>();  // 중복 방지를 위한 Set
-
-        // 가장 낮은 점수 두 가지 프로필 추가
-        for (int i = 0; i < 2; i++) {
-            ExerciseProfile profile = sortedProfiles.get(i);
-            if (!addedParts.contains(profile.getPart())) {  // 이미 추가된 부위인지 확인
-                BodyPart part = new BodyPart();
-
-                // db 쿼리 키 : part
-                String strength = exerciseMetaService.getStrengthByMuscleGroup(profile.getPart());
-                List<String> details = exerciseMetaService.getDetailMuscleByMuscleGroup(profile.getPart());
-
-                part.setStrength(strength);
-                part.setDetails(details);
-
-                list.add(part);
-                addedParts.add(profile.getPart());  // 추가된 부위를 기록
-            }
+    public List<WebMuscleDTO> getWeekBodyPartList(ExerciseAbility ability) {
+        // 1. 모든 운동 프로필 수집
+        List<ExerciseProfile> profiles = Arrays.asList(
+            ability.getBench(),
+            ability.getSquat(),
+            ability.getDead(),
+            ability.getOverhead(),
+            ability.getPushup(),
+            ability.getPullup()
+        );
+    
+        // 2. 점수 기준 정렬
+        profiles.sort(Comparator.comparingDouble(ExerciseProfile::getScore));
+    
+        // 3. 상위 두 가지와 점수 40 미만 부위 식별 (중복 제거)
+        Set<String> targetMuscleGroups = new LinkedHashSet<>();
+        for (int i = 0; i < Math.min(2, profiles.size()); i++) {
+            targetMuscleGroups.add(profiles.get(i).getMuscle());
         }
-
-        // 점수가 40보다 낮은 모든 부위 추가 (중복되지 않도록)
         for (ExerciseProfile profile : profiles) {
-            if (profile.getScore() < 40 && !addedParts.contains(profile.getPart())) {
-                BodyPart part = new BodyPart();
-
-                // db 쿼리 키 : part
-                String strength = exerciseMetaService.getStrengthByMuscleGroup(profile.getPart());
-                List<String> details = exerciseMetaService.getDetailMuscleByMuscleGroup(profile.getPart());
-
-                part.setStrength(strength);
-                part.setDetails(details);
-
-                list.add(part);
-                addedParts.add(profile.getPart());  // 추가된 부위를 기록
+            if (profile.getScore() < 40) {
+                targetMuscleGroups.add(profile.getMuscle());
             }
         }
-
-        return list;
+    
+        // 4. 식별된 근육 그룹에 대해 쿼리 수행 (기존 쿼리 활용)
+        List<WebMuscleDTO> result = new ArrayList<>();
+        for (String muscleGroup : targetMuscleGroups) {
+            // 4-1. Strength 가져오기
+            String strength = exerciseMetaService.getStrengthByMuscleGroup(muscleGroup);
+    
+            // 4-2. 세부 근육 부위 가져오기
+            List<String> details = exerciseMetaService.getDetailMuscleByMuscleGroup(muscleGroup);
+    
+            // 4-3. DTO 생성 및 결과에 추가
+            WebMuscleDTO dto = new WebMuscleDTO();
+            dto.setStrength(strength);
+            dto.setDetails(details);
+            result.add(dto);
+        }
+    
+        return result;
     }
 
     // 운동 목적에 따른 추천
@@ -171,22 +162,22 @@ public class WebExerciseService {
         return list;
     }
 
-    private List<ShopProduct> getRecommendSupplementByNutrientProfiles(List<NutrientProfile> profiles) {
+    private List<ShopProductDTO> getRecommendSupplementByNutrientProfiles(List<NutrientProfile> profiles) {
 
-        List<ShopProduct> list = new ArrayList<>();
+        List<ShopProductDTO> list = new ArrayList<>();
 
-        List<String> nutrition_list = new ArrayList<>();
+        List<Integer> nutritientId_list = new ArrayList<>();
         for (NutrientProfile profile : profiles) {
-            nutrition_list.add(profile.getName());
+            nutritientId_list.add(profile.getId());
         }
 
-        nutrition_list.stream().distinct().collect(Collectors.toList());
+        nutritientId_list.stream().distinct().collect(Collectors.toList());
 
-        for (String nutrition : nutrition_list) {
+        for (int nutritionId : nutritientId_list) {
 
-            List<ShopProduct> shopProducts = productRecommendService.getRecommendSupplementByNutrition(nutrition);
+            List<ShopProductDTO> shopProducts = productRecommendService.getRecommendSupplementByNutrition(nutritionId);
 
-            for (ShopProduct shopProduct : shopProducts) {
+            for (ShopProductDTO shopProduct : shopProducts) {
                 list.add(shopProduct);
             }
         }
@@ -196,22 +187,22 @@ public class WebExerciseService {
         return list;
     }
 
-    private List<ShopProduct> getRecommendSupplementByPurposeRecommends(List<PurposeRecommend> recommends) {
+    private List<ShopProductDTO> getRecommendSupplementByPurposeRecommends(List<PurposeRecommend> recommends) {
         
-            List<ShopProduct> list = new ArrayList<>();
+            List<ShopProductDTO> list = new ArrayList<>();
 
-            List<String> nutrition_list = new ArrayList<>();
+            List<Integer> nutrient_list = new ArrayList<>();
             for (PurposeRecommend recommend : recommends) {
                 for (NutrientProfile profile : recommend.getProfiles()) {
-                    nutrition_list.add(profile.getName());
+                    nutrient_list.add(profile.getId());
                 }
             }
     
-            nutrition_list.stream().distinct().collect(Collectors.toList());
+            nutrient_list.stream().distinct().collect(Collectors.toList());
     
-            for (String nutrition : nutrition_list) {
-                List<ShopProduct> shopProducts = productRecommendService.getRecommendSupplementByNutrition(nutrition);
-                for (ShopProduct shopProduct : shopProducts) {
+            for (int nutrient : nutrient_list) {
+                List<ShopProductDTO> shopProducts = productRecommendService.getRecommendSupplementByNutrition(nutrient);
+                for (ShopProductDTO shopProduct : shopProducts) {
                     list.add(shopProduct);
                 }
             }
@@ -223,17 +214,19 @@ public class WebExerciseService {
 
     public WebExerciseResult getExerciseAnalysis(WebExerciseRequest request, HttpServletRequest servletRequest) {
         ExerciseAbility ability = new ExerciseAbility();
-        ability.setBench(exerciseAnalysisService.analyzeExercise("벤치 프레스", request.getSex(), request.getWeight(),
+        ability.setBench(exerciseAnalysisService.analyzeExercise(120, request.getSex(), request.getWeight(),
                 request.getBench().getWeight(), request.getBench().getReps()));
-        ability.setSquat(exerciseAnalysisService.analyzeExercise("스쿼트", request.getSex(), request.getWeight(),
+        ability.setSquat(exerciseAnalysisService.analyzeExercise(251, request.getSex(), request.getWeight(),
                 request.getSquat().getWeight(), request.getSquat().getReps()));
-        ability.setDead(exerciseAnalysisService.analyzeExercise("데드리프트", request.getSex(), request.getWeight(),
+        ability.setDead(exerciseAnalysisService.analyzeExercise(1, request.getSex(), request.getWeight(),
                 request.getDead().getWeight(), request.getDead().getReps()));
-        ability.setOverhead(exerciseAnalysisService.analyzeExercise("오버헤드 프레스", request.getSex(), request.getWeight(),
+        ability.getDead().setMuscle("코어"); // 현재 전신
+        ability.setOverhead(exerciseAnalysisService.analyzeExercise(150, request.getSex(), request.getWeight(),
                 request.getOverhead().getWeight(), request.getOverhead().getReps()));
-        ability.setPushup(exerciseAnalysisService.analyzeExercise("푸쉬업", request.getSex(), request.getWeight(),
+        ability.setPushup(exerciseAnalysisService.analyzeExercise(132, request.getSex(), request.getWeight(),
                 request.getPushup().getWeight(), request.getPushup().getReps()));
-        ability.setPullup(exerciseAnalysisService.analyzeExercise("풀업", request.getSex(), request.getWeight(),
+        ability.getPushup().setMuscle("팔"); // 현재 가슴       
+        ability.setPullup(exerciseAnalysisService.analyzeExercise(90, request.getSex(), request.getWeight(),
                 request.getPullup().getWeight(), request.getPullup().getReps()));
 
         int totalScore = (int) ((ability.getBench().getScore() + ability.getSquat().getScore()
@@ -244,13 +237,13 @@ public class WebExerciseService {
         int bigThree = (int) (ability.getBench().getStrength() + ability.getSquat().getStrength()
                 + ability.getDead().getStrength());
 
-        List<BodyPart> parts = getWeekBodyPartList(ability);
+        List<WebMuscleDTO> muscleDTOs = getWeekBodyPartList(ability);
 
         List<NutrientProfile> profiles = nutrientRecommendService.getRecommendNutirientForLevel(totalScore);
         List<PurposeRecommend> recommends = getRecommendNutirientForPurpose(request.getSupplePurpose());
                 
-        List<ShopProduct> levelProducts = getRecommendSupplementByNutrientProfiles(profiles);
-        List<ShopProduct> purposeProducts = getRecommendSupplementByPurposeRecommends(recommends);
+        List<ShopProductDTO> levelProducts = getRecommendSupplementByNutrientProfiles(profiles);
+        List<ShopProductDTO> purposeProducts = getRecommendSupplementByPurposeRecommends(recommends);
 
         WebExerciseResult result = new WebExerciseResult();
         result.setAbility(ability);
@@ -258,14 +251,14 @@ public class WebExerciseService {
         result.setTotalLevel(totalLevel);
         result.setTopPercent((int) topPercent);
         result.setBigThree((double)bigThree);
-        result.setParts(parts);
+        result.setParts(muscleDTOs);
         result.setLevelRecommends(profiles);
         result.setPurposeRecommends(recommends);
         result.setLevelProducts(levelProducts);
         result.setPuporseProducts(purposeProducts);
 
         // DB 인서트
-        recordUserExerData(request, result, servletRequest);
+        //recordUserExerData(request, result, servletRequest);
 
         return result;
     }

@@ -2,10 +2,11 @@ package org.hepi.hepi_sv.nutrition.repository;
 
 import java.util.List;
 
+import org.hepi.hepi_sv.exercise.entity.QExercisePurpose;
 import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
-import org.hepi.hepi_sv.nutrition.entity.QLevelRecommendNutrition;
-import org.hepi.hepi_sv.nutrition.entity.QNutritionInfo;
-import org.hepi.hepi_sv.nutrition.entity.QPurposeRecommendNutrition;
+import org.hepi.hepi_sv.nutrition.entity.QNutrientInfo;
+import org.hepi.hepi_sv.nutrition.entity.QRecommendExerciseLevelNutrient;
+import org.hepi.hepi_sv.nutrition.entity.QRecommendExercisePurposeNutrient;
 import org.hepi.hepi_sv.nutrition.entity.QRecommendSource;
 import org.springframework.stereotype.Repository;
 
@@ -21,66 +22,71 @@ public class NutritionQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     // 급원 추천
-    public List<String> selectSourceByNutrientAndDiet(String nutrientType, String dietType) {
+    public List<String> selectSourceByNutrientAndDiet(int nutrientTypeId, int dietTypeId) {
         QRecommendSource recommendSource = QRecommendSource.recommendSource;
 
         return queryFactory
                 .select(recommendSource.source)
                 .from(recommendSource)
                 .where(
-                        recommendSource.nutrientType.eq(nutrientType),
-                        recommendSource.dietType.eq(dietType))
+                        recommendSource.nutrientTypeId.eq(nutrientTypeId),
+                        recommendSource.dietTypeId.eq(dietTypeId))
                 .fetch();
     }
 
     // 영양성분 추천 ( 운동 수준 )
     public List<NutrientProfile> selectNutrientProfilesByLevel(int level) {
-        QNutritionInfo nutritionInfo = QNutritionInfo.nutritionInfo;
-        QLevelRecommendNutrition levelRecommendNutrition = QLevelRecommendNutrition.levelRecommendNutrition;
+        QNutrientInfo nutrientInfo = QNutrientInfo.nutrientInfo;
+        QRecommendExerciseLevelNutrient recommendExerciseLevelNutrient = QRecommendExerciseLevelNutrient.recommendExerciseLevelNutrient;
 
         return queryFactory
                 .select(Projections.bean(
                         NutrientProfile.class,
-                        nutritionInfo.nutritionName.as("name"),
-                        nutritionInfo.nutritionFunction.as("function"),
-                        nutritionInfo.nutritionIntake.as("RDI"), // 권장 섭취량
-                        nutritionInfo.nutritionSideEffect.as("sideEffect"),
-                        nutritionInfo.nutritionPrecaution.as("precaution"),
-                        nutritionInfo.nutritionTiming.as("timing"),
-                        nutritionInfo.nutritionSummary.as("summary"),
-                        levelRecommendNutrition.mention.as("mention")
+                        nutrientInfo.id.as("id"),    
+                        nutrientInfo.name.as("name"),
+                        nutrientInfo.function.as("function"),
+                        nutrientInfo.intake.as("RDI"), // 권장 섭취량
+                        nutrientInfo.sideEffect.as("sideEffect"),
+                        nutrientInfo.precaution.as("precaution"),
+                        nutrientInfo.timing.as("timing"),
+                        nutrientInfo.summary.as("summary"),
+                        recommendExerciseLevelNutrient.mention.as("mention")
                 )
                 )
-                .from(nutritionInfo)
-                .innerJoin(levelRecommendNutrition)
-                .on(nutritionInfo.nutritionName.eq(levelRecommendNutrition.nutritionName))
-                .where(levelRecommendNutrition.lvl.loe(level)) // LVL <= #{LEVEL}
+                .from(nutrientInfo)
+                .innerJoin(recommendExerciseLevelNutrient)
+                .on(nutrientInfo.id.eq(recommendExerciseLevelNutrient.nutrientId))
+                .where(recommendExerciseLevelNutrient.lvl.loe(level)) // LVL <= #{LEVEL}
                 .fetch();
     }
 
     // 영양성분 추천 ( 운동 목적 )
     public List<NutrientProfile> selectNutrientProfilesByPurpose(String purpose) {
-        QNutritionInfo nutritionInfo = QNutritionInfo.nutritionInfo;
-        QPurposeRecommendNutrition purposeRecommendNutrition = QPurposeRecommendNutrition.purposeRecommendNutrition;
+        QNutrientInfo nutrientInfo = QNutrientInfo.nutrientInfo;
+        QExercisePurpose exercisePurpose = QExercisePurpose.exercisePurpose;
+        QRecommendExercisePurposeNutrient recommendExercisePurposeNutrient = QRecommendExercisePurposeNutrient.recommendExercisePurposeNutrient;
 
         return queryFactory
                 .select(Projections.bean(
                         NutrientProfile.class,
-                        nutritionInfo.nutritionName.as("name"),
-                        nutritionInfo.nutritionFunction.as("function"),
-                        nutritionInfo.nutritionIntake.as("RDI"), // 권장 섭취량
-                        nutritionInfo.nutritionSideEffect.as("sideEffect"),
-                        nutritionInfo.nutritionPrecaution.as("precaution"),
-                        nutritionInfo.nutritionTiming.as("timing"),
-                        nutritionInfo.nutritionSummary.as("summary")
+                        nutrientInfo.id.as("id"),   
+                        nutrientInfo.name.as("name"),
+                        nutrientInfo.function.as("function"),
+                        nutrientInfo.intake.as("RDI"), // 권장 섭취량
+                        nutrientInfo.sideEffect.as("sideEffect"),
+                        nutrientInfo.precaution.as("precaution"),
+                        nutrientInfo.timing.as("timing"),
+                        nutrientInfo.summary.as("summary")
                 ))
-                .from(nutritionInfo)
+                .from(nutrientInfo)
                 .where(
-                        nutritionInfo.nutritionName.in(
+                        nutrientInfo.id.in(
                                 queryFactory
-                                        .select(purposeRecommendNutrition.nutrition)
-                                        .from(purposeRecommendNutrition)
-                                        .where(purposeRecommendNutrition.purpose.eq(purpose))
+                                        .select(recommendExercisePurposeNutrient.nutrientId)
+                                        .from(recommendExercisePurposeNutrient)
+                                        .innerJoin(exercisePurpose)
+                                        .on(recommendExercisePurposeNutrient.purposeId.eq(exercisePurpose.purposeId))
+                                        .where(exercisePurpose.purpose.eq(purpose))
                         )
                 )
                 .fetch();

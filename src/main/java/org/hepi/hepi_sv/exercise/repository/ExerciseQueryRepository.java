@@ -2,10 +2,10 @@ package org.hepi.hepi_sv.exercise.repository;
 
 import java.util.List;
 
-import org.hepi.hepi_sv.exercise.entity.QBodyPart;
 import org.hepi.hepi_sv.exercise.entity.QExercise;
 import org.hepi.hepi_sv.exercise.entity.QExercisePurpose;
 import org.hepi.hepi_sv.exercise.entity.QExerciseThreshold;
+import org.hepi.hepi_sv.exercise.entity.QMuscle;
 import org.hepi.hepi_sv.exercise.entity.QMuscleGroup;
 import org.hepi.hepi_sv.exercise.entity.QMuscleGroupDetail;
 import org.springframework.stereotype.Repository;
@@ -30,15 +30,17 @@ public class ExerciseQueryRepository {
                 .fetch();
     }
 
-    // 운동 점수 임계점 가져오기
-    public List<Double> findThresholds(String exerName, String gender) {
+    // 운동 이름으로 운동 점수 임계점 가져오기
+    public List<Double> findThresholds(int exerciseId, String gender) {
+        QExercise exercise = QExercise.exercise;
         QExerciseThreshold exerciseThreshold = QExerciseThreshold.exerciseThreshold;
 
         return queryFactory
                 .select(exerciseThreshold.threshold)
                 .from(exerciseThreshold)
+                .join(exercise).on(exercise.exerId.eq(exerciseId))
                 .where(
-                        exerciseThreshold.exerName.eq(exerName),
+                        exerciseThreshold.exerId.eq(exercise.exerId),
                         exerciseThreshold.gender.eq(gender),
                         exerciseThreshold.rank.loe(7) // RANK <= 7
                 )
@@ -47,29 +49,31 @@ public class ExerciseQueryRepository {
     }
 
     // 운동 임계점 유형 가져오기
-    public int findThresholdTypeByExerName(String exerName) {
+    public int findThresholdTypeByExerName(int exerciseId) {
         QExercise exercise = QExercise.exercise;
 
         return queryFactory
                 .select(exercise.thresholdType)
                 .from(exercise)
-                .where(exercise.exerName.eq(exerName)) // WHERE EXER_NAME = #{EXER_NAME}
+                .where(exercise.exerId.eq(exerciseId)) // WHERE EXER_NAME = #{EXER_NAME}
                 .fetchOne(); // 단일 결과를 반환
     }
 
-    // 운동 근육 그룹 가져오기
-    public String findMuscleGroupByExerName(String exerName) {
+    // 운동 id로 운동 근육 그룹 이름 가져오기
+    public String findMuscleGroupIdNameByExerName(int exerciseId) {
         QExercise exercise = QExercise.exercise;
-        QBodyPart bodyPart = QBodyPart.bodyPart;
+        QMuscle muscle = QMuscle.muscle;
+        QMuscleGroup muscleGroup = QMuscleGroup.muscleGroup;
 
-        return queryFactory
-                .select(bodyPart.muscleGroup)
+        return queryFactory.select(muscleGroup.groupName)
                 .from(exercise)
-                .join(bodyPart).on(exercise.bodyPart.eq(bodyPart.partName)) // JOIN 조건
-                .fetchOne(); // 단일 결과를 반환
+                .join(muscle).on(exercise.muscleId.eq(muscle.muscleId))
+                .join(muscleGroup).on(muscle.muscleGroupId.eq(muscleGroup.groupId))
+                .where(exercise.exerId.eq(exerciseId))
+                .fetchOne();
     }
 
-    // 운동 근육 그룹의 관련 strength 가져오기
+    // 운동 근육 그룹 이름으로 관련 strength 가져오기
     public String findStrengthByMuscleGroupName(String muscleGroupName) {
         QMuscleGroup muscleGroup = QMuscleGroup.muscleGroup;
 
@@ -80,15 +84,15 @@ public class ExerciseQueryRepository {
                 .fetchOne(); // 단일 결과를 반환
     }
 
-    // 운동 근육 그룹의 관련 세부 근육 부위 가져오기
+    // 운동 근육 그룹 이름으로 관련 세부 근육 부위 가져오기
     public List<String> findMuscleDetailsByMuscleGroupName(String muscleGroupName) {
+        QMuscleGroup muscleGroup = QMuscleGroup.muscleGroup;
         QMuscleGroupDetail muscleGroupDetail = QMuscleGroupDetail.muscleGroupDetail;
 
-        return queryFactory
-                .select(muscleGroupDetail.detailMuscle)
-                .from(muscleGroupDetail)
-                .where(muscleGroupDetail.groupName.eq(muscleGroupName)) 
-                .fetch(); 
+        return queryFactory.select(muscleGroupDetail.detailMuscle)
+                .from(muscleGroup)
+                .join(muscleGroupDetail).on(muscleGroup.groupId.eq(muscleGroupDetail.groupId))
+                .where(muscleGroup.groupName.eq(muscleGroupName))
+                .fetch();
     }
-
 }

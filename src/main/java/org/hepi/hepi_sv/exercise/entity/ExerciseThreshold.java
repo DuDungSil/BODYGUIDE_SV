@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "exercise_threshold")
+@Table(name = "EXERCISE_THRESHOLD")
 public class ExerciseThreshold {
     
     @Id
     @Column(name = "threshold_id")
-    private long thresholdId;
+    private int thresholdId;
 
-    @Column(name = "exer_name")
-    private String exerName;
+    @Column(name = "exer_id", columnDefinition = "SMALLINT")
+    private int exerId;
 
     @Column(name = "gender")
     private String gender;

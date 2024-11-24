@@ -16,13 +16,16 @@ import lombok.NoArgsConstructor;
 public class RecommendSource {
     
     @Id
+    @Column(name = "recommend_id")
+    private int id;
+
     @Column(name = "source")
     private String source;
 
-    @Column(name = "nutrient_type")
-    private String nutrientType;
+    @Column(name = "nutrient_type", columnDefinition = "TINYINT")
+    private int nutrientTypeId;
 
-    @Column(name = "diet_type")
-    private String dietType;
+    @Column(name = "diet_type", columnDefinition = "TINYINT")
+    private int dietTypeId;
 
 }

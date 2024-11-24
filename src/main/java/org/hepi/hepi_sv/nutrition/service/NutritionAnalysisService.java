@@ -5,9 +5,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
 import org.hepi.hepi_sv.nutrition.dto.MealMacroDetails;
+import org.hepi.hepi_sv.nutrition.entity.DietType;
+import org.hepi.hepi_sv.nutrition.repository.DietTypeRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class NutritionAnalysisService {
+
+    private final DietTypeRepository dietTypeRepository;
 
     public double calculateBMI(double height, double weight) {
         
@@ -62,38 +67,29 @@ public class NutritionAnalysisService {
         return dietGoal_calory;
     } 
 
-    // 탄수화물, 단백질, 불포화지방, 포화지방 함량 계산
-    public MealNutrientComposition getMealNutrientComposition(double targetCalory, String dietType) {
+    // 목표 칼로리와 식단 유형에 따라 탄수화물, 단백질, 불포화지방, 포화지방 함량 계산
+    public MealNutrientComposition getMealNutrientComposition(double targetCalory, int dietType) {
         MealMacroDetails carbohydrate = new MealMacroDetails();
         MealMacroDetails protein = new MealMacroDetails();
         MealMacroDetails unFat = new MealMacroDetails();
         MealMacroDetails satFat = new MealMacroDetails();
 
-        // 탄수화물, 단백질, 불포화지방, 포화지방
-        List<Integer> Ratios = new ArrayList<>(4);
+        // 탄수화물, 단백질, 불포화지방, 포화지방 비율 db에서 가져오기
+        DietType dietTypeEntity = dietTypeRepository.findById((long) dietType).orElseThrow(() -> new IllegalArgumentException("DietType not found for id: " + dietType));
 
-        switch (dietType) {
-            case "일반적", "비건" -> Ratios = List.of(50, 30, 12, 8);
-            case "저탄수화물" -> Ratios = List.of(20, 40, 25, 15);
-            case "고탄수화물" -> Ratios = List.of(60, 30, 15, 5);
-            case "저지방" -> Ratios = List.of(50, 35, 10, 5);
-            default -> {
-            }
-        }
-
-        carbohydrate.setRatio(Ratios.get(0));
+        carbohydrate.setRatio(dietTypeEntity.getCarbohydrate());
         carbohydrate.setCalory(Math.round(targetCalory * carbohydrate.getRatio() / 100));
         carbohydrate.setGram(Math.round(carbohydrate.getCalory() * 0.25));
 
-        protein.setRatio(Ratios.get(1));
+        protein.setRatio(dietTypeEntity.getProtein());
         protein.setCalory(Math.round(targetCalory * protein.getRatio() / 100));
         protein.setGram(Math.round(protein.getCalory() * 0.25));
 
-        unFat.setRatio(Ratios.get(2));
+        unFat.setRatio(dietTypeEntity.getUnFat());
         unFat.setCalory(Math.round(targetCalory * unFat.getRatio() / 100));
         unFat.setGram(Math.round(unFat.getCalory() / 9));
 
-        satFat.setRatio(Ratios.get(3));
+        satFat.setRatio(dietTypeEntity.getSatFat());
         satFat.setCalory(Math.round(targetCalory * satFat.getRatio() / 100));
         satFat.setGram(Math.round(satFat.getCalory() / 9));
 

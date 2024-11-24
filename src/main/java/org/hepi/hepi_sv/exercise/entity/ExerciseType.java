@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "exercise_type")
+@Table(name = "EXERCISE_TYPE")
 public class ExerciseType {
     
     @Id
-    @Column(name = "type_id")
+    @Column(name = "type_id", columnDefinition = "TINYINT")
     private long typeId;
 
     @Column(name = "type")

@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "EXERCISE_PURPOSE_NUTRITION_REL")
-public class PurposeRecommendNutrition {
+@Table(name = "RECOMMEND_EXERCISE_PURPOSE_NUTRIENT")
+public class RecommendExercisePurposeNutrient {
     
     @Id
-    @Column(name = "rel_id")
-    private String rel_id;
+    @Column(name = "recommend_id")
+    private int id;
 
-    @Column(name = "purpose")
-    private String purpose;
+    @Column(name = "purpose_id", columnDefinition = "SMALLINT")
+    private int purposeId;
 
-    @Column(name = "nutrition")
-    private String nutrition;
+    @Column(name = "nutrient_id")
+    private int nutrientId;
 
 }

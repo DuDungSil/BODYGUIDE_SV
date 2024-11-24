@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "exercise")
+@Table(name = "EXERCISE")
 public class Exercise {
     
     @Id
-    @Column(name = "exer_id")
-    private long exerId;
+    @Column(name = "exer_id", columnDefinition = "SMALLINT")
+    private int exerId;
 
     @Column(name = "exer_name")
     private String exerName;
@@ -25,13 +25,13 @@ public class Exercise {
     @Column(name = "exer_name_kr")
     private String exerNameKr;
 
-    @Column(name = "exer_type")
-    private String exerType;
+    @Column(name = "exer_type", columnDefinition = "TINYINT")
+    private int exerType;
 
-    @Column(name = "body_part")
-    private String bodyPart;
+    @Column(name = "muscle_id", columnDefinition = "SMALLINT")
+    private int muscleId;
 
-    @Column(name = "threshold_type")
+    @Column(name = "threshold_type", columnDefinition = "TINYINT")
     private int thresholdType;
 
 }

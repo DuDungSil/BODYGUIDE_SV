@@ -14,9 +14,9 @@ public class SourceRecommendService {
     private final NutritionQueryRepository nutritionQueryRepository;
 
     // 추천 급원 DB에서 가져오기
-    public List<String> getRecommendSource(String nutrientType, String dietType) {
+    public List<String> getRecommendSource(int nutrientTypeId, int dietTypeId) {
         
-        List<String> sources = nutritionQueryRepository.selectSourceByNutrientAndDiet(nutrientType, dietType);
+        List<String> sources = nutritionQueryRepository.selectSourceByNutrientAndDiet(nutrientTypeId, dietTypeId);
 
         return sources;
     }

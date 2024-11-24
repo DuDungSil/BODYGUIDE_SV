@@ -35,17 +35,17 @@ public class ExerciseAnalysisService {
         return level;
     }
 
-    public ExerciseProfile analyzeExercise(String exercise, String sex, double bodyWeight, double liftingWeight, int reps) {
+    public ExerciseProfile analyzeExercise(int exerciseId, String gender, double bodyWeight, double liftingWeight, int reps) {
         ExerciseProfile profile = new ExerciseProfile();
     
-        String part = exerciseQueryRepository.findMuscleGroupByExerName(exercise);
+        String muscle = exerciseQueryRepository.findMuscleGroupIdNameByExerName(exerciseId);
 
         // 성별에 따른 기준 설정
-        List<Double> thresholds = exerciseQueryRepository.findThresholds(exercise, sex);
+        List<Double> thresholds = exerciseQueryRepository.findThresholds(exerciseId, gender);
         double[] scores = {0, 20, 40, 60, 80, 100, 120};
         
         double SP, strength;
-        int threshold_type = exerciseQueryRepository.findThresholdTypeByExerName(exercise);
+        long threshold_type = exerciseQueryRepository.findThresholdTypeByExerName(exerciseId);
         if(threshold_type == 0) { // db
             SP = reps;
             strength = reps;
@@ -82,7 +82,7 @@ public class ExerciseAnalysisService {
         }
         
         // 결과 저장
-        profile.setPart(part);
+        profile.setMuscle(muscle);
         profile.setScore(score);
         profile.setLevel(level);
         profile.setStrength(Math.floor(strength));

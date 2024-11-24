@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class BodyPart {
+public class WebMuscleDTO {
     String strength;
     List<String> details;
 }

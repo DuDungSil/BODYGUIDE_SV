@@ -2,12 +2,13 @@ package org.hepi.hepi_sv.product.repository;
 
 import java.util.List;
 
+import org.hepi.hepi_sv.product.dto.ShopProductDTO;
 import org.hepi.hepi_sv.product.entity.QRecommendFood;
 import org.hepi.hepi_sv.product.entity.QRecommendSupplements;
 import org.hepi.hepi_sv.product.entity.QShopProduct;
-import org.hepi.hepi_sv.product.entity.ShopProduct;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -18,34 +19,66 @@ public class ProductQueryRepository {
     
     private final JPAQueryFactory queryFactory;
     
-    public List<ShopProduct> selectFoodsByNutrientTypeAndDietType(String nutrientType, String dietType) {
+    public List<ShopProductDTO> selectFoodsByNutrientTypeAndDietType(int nutrientTypeId, int dietTypeId) {
         QShopProduct shopProduct = QShopProduct.shopProduct;
         QRecommendFood recommendFood = QRecommendFood.recommendFood;
 
         return queryFactory
-                .select(shopProduct)
+                .select(Projections.constructor(
+                        ShopProductDTO.class, // DTO 매핑
+                        shopProduct.productId,
+                        shopProduct.name,
+                        shopProduct.url,
+                        shopProduct.imgUrl,
+                        shopProduct.brand,
+                        shopProduct.price,
+                        shopProduct.salePrice,
+                        shopProduct.discount,
+                        shopProduct.rating,
+                        shopProduct.review,
+                        shopProduct.category,
+                        shopProduct.keyword,
+                        shopProduct.isRocketDelivery,
+                        shopProduct.isRocketFresh
+                ))
                 .from(shopProduct)
                 .innerJoin(recommendFood)
-                .on(shopProduct.product_id.eq(recommendFood.productId))
+                .on(shopProduct.productId.eq(recommendFood.productId))
                 .where(
-                        recommendFood.nutrientType.eq(nutrientType),
-                        recommendFood.dietType.eq(dietType))
+                        recommendFood.nutrientType.eq(nutrientTypeId),
+                        recommendFood.dietType.eq(dietTypeId))
                 .fetch();
     }
 
-    public List<ShopProduct> selectSupplementsByNutrientName(String nutrientName) {
+    public List<ShopProductDTO> selectSupplementsByNutrientName(int nutrientId) {
         QShopProduct shopProduct = QShopProduct.shopProduct;
         QRecommendSupplements recommendSupplements = QRecommendSupplements.recommendSupplements;
 
         return queryFactory
-            .select(shopProduct)
-            .from(shopProduct)
-            .innerJoin(recommendSupplements)
-            .on(shopProduct.product_id.eq(recommendSupplements.productId))
-            .where(
-                recommendSupplements.relatedNutrient.eq(nutrientName)
-            )
-            .fetch();
+                .select(Projections.constructor(
+                        ShopProductDTO.class, // DTO 매핑
+                        shopProduct.productId,
+                        shopProduct.name,
+                        shopProduct.url,
+                        shopProduct.imgUrl,
+                        shopProduct.brand,
+                        shopProduct.price,
+                        shopProduct.salePrice,
+                        shopProduct.discount,
+                        shopProduct.rating,
+                        shopProduct.review,
+                        shopProduct.category,
+                        shopProduct.keyword,
+                        shopProduct.isRocketDelivery,
+                        shopProduct.isRocketFresh
+                ))
+                .from(shopProduct)
+                .innerJoin(recommendSupplements)
+                .on(shopProduct.productId.eq(recommendSupplements.productId))
+                .where(
+                    recommendSupplements.relatedNutrientId.eq(nutrientId)
+                )
+                .fetch();
     }
 
 }

@@ -16,17 +16,20 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "SHOP_PRODUCT")
+@Table(name = "RECOMMEND_FOOD")
 public class RecommendFood {
     
     @Id
+    @Column(name = "recommend_id")
+    private int id;
+
     @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "nutrient_type")
-    private String nutrientType;
+    @Column(name = "nutrient_type", columnDefinition = "TINYINT")
+    private int nutrientType;
 
-    @Column(name = "diet_type")
-    private String dietType;
+    @Column(name = "diet_type", columnDefinition = "TINYINT")
+    private int dietType;
 
 }

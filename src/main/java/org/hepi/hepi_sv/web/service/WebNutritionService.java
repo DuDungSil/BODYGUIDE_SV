@@ -8,6 +8,7 @@ import org.hepi.hepi_sv.common.util.ClientIpExtraction;
 import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
 import org.hepi.hepi_sv.nutrition.service.NutritionAnalysisService;
 import org.hepi.hepi_sv.nutrition.service.SourceRecommendService;
+import org.hepi.hepi_sv.product.dto.ShopProductDTO;
 import org.hepi.hepi_sv.product.entity.ShopProduct;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
 import org.hepi.hepi_sv.web.dto.nutrition.RecommendProduct;
@@ -70,18 +71,39 @@ public class WebNutritionService {
         webNutriAnalysisDataRepository.save(analysisData);
     }
     
+    // 식단 영양 성분 가져오기
+    public MealNutrientComposition getMealNutrientComposition(Double targetCalory, String dietType) {
+        
+        int dietTypeId = 1;
+
+        switch (dietType) {
+            case "일반적" -> dietTypeId = 1;
+            case "저탄수화물" -> dietTypeId = 2;
+            case "고탄수화물" -> dietTypeId = 3;
+            case "저지방" -> dietTypeId = 4;
+            case "비건" -> dietTypeId = 5;
+            default -> dietTypeId = 1;
+        }
+
+        MealNutrientComposition mealNutrientComposition = nutrientAnalysisService.getMealNutrientComposition(targetCalory, dietTypeId);
+
+        return mealNutrientComposition;
+    }
+
     // 추천 급원 DB에서 가져오기
     public RecommendSourceDto getRecommendSource(String dietType) {
 
         RecommendSourceDto sources = new RecommendSourceDto();
 
-        if (!dietType.equals("비건")) {
-            dietType = "일반";
+        int dietTypeId = 1;
+
+        if (dietType.equals("비건")) {
+            dietTypeId = 5;
         }
 
-        List<String> carbohydrate = sourceRecommendService.getRecommendSource("탄수화물", "일반");
-        List<String> protein = sourceRecommendService.getRecommendSource("단백질", dietType);
-        List<String> fat = sourceRecommendService.getRecommendSource("지방", "일반");
+        List<String> carbohydrate = sourceRecommendService.getRecommendSource(1, dietTypeId);
+        List<String> protein = sourceRecommendService.getRecommendSource(2, dietTypeId);
+        List<String> fat = sourceRecommendService.getRecommendSource(3, dietTypeId);
 
         sources.setCarbohydrate(carbohydrate);
         sources.setProtein(protein);
@@ -94,13 +116,15 @@ public class WebNutritionService {
     private RecommendProduct getRecommendFoodByMajorNutrient(String dietType) {
         RecommendProduct products = new RecommendProduct();
 
-        if (!dietType.equals("비건")) {
-            dietType = "일반";
+        int dietTypeId = 1;
+
+        if (dietType.equals("비건")) {
+            dietTypeId = 5;
         }
 
-        List<ShopProduct> carbohydrate = productRecommendService.getRecommendFoodByMajorNutrient("탄수화물", "일반");
-        List<ShopProduct> protein = productRecommendService.getRecommendFoodByMajorNutrient("단백질", dietType);
-        List<ShopProduct> fat = productRecommendService.getRecommendFoodByMajorNutrient("지방", "일반");
+        List<ShopProductDTO> carbohydrate = productRecommendService.getRecommendFoodByMajorNutrient(1, dietTypeId);
+        List<ShopProductDTO> protein = productRecommendService.getRecommendFoodByMajorNutrient(2, dietTypeId);
+        List<ShopProductDTO> fat = productRecommendService.getRecommendFoodByMajorNutrient(3, dietTypeId);
 
         Collections.shuffle(carbohydrate);
         Collections.shuffle(protein);
@@ -120,8 +144,7 @@ public class WebNutritionService {
                 request.getAge());
         double TDEE = nutrientAnalysisService.calculateTDEE(BMR, request.getPA());
         double targetCalory = nutrientAnalysisService.calculateTargetCalory(TDEE, request.getDietGoal());
-        MealNutrientComposition composition = nutrientAnalysisService.getMealNutrientComposition(targetCalory,
-                request.getDietType());
+        MealNutrientComposition composition = getMealNutrientComposition(targetCalory, request.getDietType());
         List<String> mealTimes = nutrientAnalysisService.recommendMealTimes(request.getWakeup(), request.getSleep());
         RecommendSourceDto recommendSource = getRecommendSource(request.getDietType());
 
@@ -141,7 +164,7 @@ public class WebNutritionService {
         result.setProducts(recommendProduct);
 
         // 데이터베이스에 기록
-        recordUserNutriData(request, result, servletRequest);
+        //recordUserNutriData(request, result, servletRequest);
 
         return result;
     }

@@ -14,7 +14,7 @@ public class NutrientRecommendService {
     
     private final NutritionQueryRepository nutritionQueryRepository;
 
-    // 운동 수준에 따른 추천
+    // 운동 수준에 따른 추천 ( 0 <= totalScore <= 120)
     public List<NutrientProfile> getRecommendNutirientForLevel(int totalScore) {
 
         int level = (totalScore / 20) + 1;
@@ -22,7 +22,6 @@ public class NutrientRecommendService {
             level = 6;
         }
 
-        // db 쿼리 키 : level
         List<NutrientProfile> profiles = nutritionQueryRepository.selectNutrientProfilesByLevel(level);
 
         return profiles;
@@ -31,7 +30,6 @@ public class NutrientRecommendService {
     // 운동 목적에 따른 추천
     public List<NutrientProfile> getRecommendNutirientForPurpose(String purpose) {
 
-        // db 쿼리 키 : purpose
         List<NutrientProfile> profiles = nutritionQueryRepository.selectNutrientProfilesByPurpose(purpose);
 
         return profiles;
