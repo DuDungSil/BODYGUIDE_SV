@@ -20,7 +20,7 @@ public class WebProductClickData {
     private Long id;
 
     @Column(name = "product_id")
-    private Long productId;
+    private int productId;
 
     @Column(name = "client_ip")
     private String clientIp;

@@ -2,6 +2,10 @@ package org.hepi.hepi_sv.web.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -68,6 +72,7 @@ public class WebExerInputData {
     @Column(name = "pullup_reps")
     private Integer pullupReps;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "exer_purposes", columnDefinition = "json")
     private String[] supplePurpose;
 

@@ -75,7 +75,7 @@ public class NutritionAnalysisService {
         MealMacroDetails satFat = new MealMacroDetails();
 
         // 탄수화물, 단백질, 불포화지방, 포화지방 비율 db에서 가져오기
-        DietType dietTypeEntity = dietTypeRepository.findById((long) dietType).orElseThrow(() -> new IllegalArgumentException("DietType not found for id: " + dietType));
+        DietType dietTypeEntity = dietTypeRepository.findById(dietType).orElseThrow(() -> new IllegalArgumentException("DietType not found for id: " + dietType));
 
         carbohydrate.setRatio(dietTypeEntity.getCarbohydrate());
         carbohydrate.setCalory(Math.round(targetCalory * carbohydrate.getRatio() / 100));

@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,11 +18,11 @@ import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
 import org.hepi.hepi_sv.nutrition.service.NutrientRecommendService;
 import org.hepi.hepi_sv.product.dto.ShopProductDTO;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
-import org.hepi.hepi_sv.web.dto.exercise.WebMuscleDTO;
 import org.hepi.hepi_sv.web.dto.exercise.ExerciseAbility;
 import org.hepi.hepi_sv.web.dto.exercise.PurposeRecommend;
 import org.hepi.hepi_sv.web.dto.exercise.WebExerciseRequest;
 import org.hepi.hepi_sv.web.dto.exercise.WebExerciseResult;
+import org.hepi.hepi_sv.web.dto.exercise.WebMuscleDTO;
 import org.hepi.hepi_sv.web.entity.WebExerAnalysisData;
 import org.hepi.hepi_sv.web.entity.WebExerInputData;
 import org.hepi.hepi_sv.web.repository.WebExerAnalysisDataRepository;
@@ -258,7 +256,7 @@ public class WebExerciseService {
         result.setPuporseProducts(purposeProducts);
 
         // DB 인서트
-        //recordUserExerData(request, result, servletRequest);
+        recordUserExerData(request, result, servletRequest);
 
         return result;
     }

@@ -9,7 +9,6 @@ import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
 import org.hepi.hepi_sv.nutrition.service.NutritionAnalysisService;
 import org.hepi.hepi_sv.nutrition.service.SourceRecommendService;
 import org.hepi.hepi_sv.product.dto.ShopProductDTO;
-import org.hepi.hepi_sv.product.entity.ShopProduct;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
 import org.hepi.hepi_sv.web.dto.nutrition.RecommendProduct;
 import org.hepi.hepi_sv.web.dto.nutrition.RecommendSourceDto;
@@ -164,7 +163,7 @@ public class WebNutritionService {
         result.setProducts(recommendProduct);
 
         // 데이터베이스에 기록
-        //recordUserNutriData(request, result, servletRequest);
+        recordUserNutriData(request, result, servletRequest);
 
         return result;
     }

@@ -54,7 +54,7 @@ public class WebController {
     }
     
     @PostMapping("/productClick/{id}")
-    public ResponseEntity<String> insertProductClick(@PathVariable Long id, HttpServletRequest servletRequest) {
+    public ResponseEntity<String> insertProductClick(@PathVariable int id, HttpServletRequest servletRequest) {
         webProductClickService.recordUserProductClickData(id, servletRequest);
         return ResponseEntity.ok("성공적으로 데이터를 등록하였습니다.");
     }   

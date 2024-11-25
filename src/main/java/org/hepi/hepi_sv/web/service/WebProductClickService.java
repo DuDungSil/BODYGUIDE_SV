@@ -17,7 +17,7 @@ public class WebProductClickService {
     private final ClientIpExtraction clientIpExtraction;
     private final WebProductClickDataRepository webProductClickDataRepository;
 
-    public void recordUserProductClickData(Long productId, HttpServletRequest servletRequest) {
+    public void recordUserProductClickData(int productId, HttpServletRequest servletRequest) {
 
         String clientIp = clientIpExtraction.getClientIp(servletRequest);
         String userAgent = servletRequest.getHeader("User-Agent");
