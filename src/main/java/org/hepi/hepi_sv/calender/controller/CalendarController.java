@@ -1,7 +1,9 @@
 package org.hepi.hepi_sv.calender.controller;
 
 import java.util.List;
+import java.util.UUID;
 
+import org.hepi.hepi_sv.calender.dto.CalendarMemoDTO;
 import org.hepi.hepi_sv.calender.service.CalendarService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,20 +25,24 @@ public class CalendarController {
     // 메모 날짜
     @GetMapping("/memo")
     public ResponseEntity<List<String>> getMemoDays(@AuthenticationPrincipal UserDetails userDetails) {
-        List<String> memoDays = calendarService.getMemoDays();
+        List<String> memoDays = calendarService.getMemoDays(UUID.fromString(userDetails.getUsername()));
         return ResponseEntity.ok(memoDays);
     }
 
     // 메모 날짜 상세
     @GetMapping("/memo/{number}")
-    public ResponseEntity<String> getMemoDayDetail(@PathVariable("number") Integer number) {
-        return ResponseEntity.ok("Number provided: " + number + ". Displaying specific memo data.");
+    public ResponseEntity<CalendarMemoDTO> getMemoDayDetail(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("number") String number) {
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        CalendarMemoDTO calendarMemoDTO = calendarService.getCalendarMemoDetail(userId, number);
+        return ResponseEntity.ok(calendarMemoDTO);
     }
+
 
     //  운동 기록
     @GetMapping("/exercise")
-    public ResponseEntity<String> getExerciseDays() {
-        return ResponseEntity.ok("Number not provided. Displaying default exercise data.");
+    public ResponseEntity<List<String>> getExerciseDays(@AuthenticationPrincipal UserDetails userDetails) {
+        List<String> exerciseDays = calendarService.getExerciseDays(UUID.fromString(userDetails.getUsername()));
+        return ResponseEntity.ok(exerciseDays);
     }
 
     // 운동 날짜 상세
@@ -47,8 +53,9 @@ public class CalendarController {
 
     //  섭취 기록
     @GetMapping("/nutrition")
-    public ResponseEntity<String> getNutritionDays() {
-        return ResponseEntity.ok("Number not provided. Displaying default nutrition data.");
+    public ResponseEntity<List<String>> getNutritionDays(@AuthenticationPrincipal UserDetails userDetails) {
+        List<String> nutritionDays = calendarService.getNutritionDays(UUID.fromString(userDetails.getUsername()));
+        return ResponseEntity.ok(nutritionDays);
     }
 
     // 섭취 날짜 상세
