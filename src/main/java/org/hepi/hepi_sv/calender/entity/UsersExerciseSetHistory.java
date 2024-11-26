@@ -1,12 +1,13 @@
 package org.hepi.hepi_sv.calender.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "USERS_EXERCISE_SET_HISTORY")
@@ -20,19 +21,19 @@ public class UsersExerciseSetHistory {
     private UUID userId;
 
     @Column(name = "record_at")
-    private String recordAt;
+    private LocalDateTime recordAt;
 
     @Column(name = "exercise_name")
     private String exerciseName;
 
     @Column(name = "set")
-    private String set;
+    private Integer set;
 
     @Column(name = "weight")
-    private String weight;
+    private Double weight;
 
     @Column(name = "reps")
-    private String reps;
+    private Integer reps;
 
     @Column(name = "exercise_date")
     private LocalDate exerciseDate;

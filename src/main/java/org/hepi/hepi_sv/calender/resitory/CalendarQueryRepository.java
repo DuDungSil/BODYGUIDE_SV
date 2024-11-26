@@ -24,10 +24,13 @@ public class CalendarQueryRepository {
         QUsersCalendarMemoHistory qUsersCalendarMemoHistory = QUsersCalendarMemoHistory.usersCalendarMemoHistory;
 
         return queryFactory
-                .select(Expressions.stringTemplate("extract(DAY FROM {0})", qUsersCalendarMemoHistory.noteDate))
+                .select(Expressions.numberTemplate(Integer.class, "EXTRACT(DAY FROM {0})", qUsersCalendarMemoHistory.noteDate))
                 .from(qUsersCalendarMemoHistory)
                 .where(qUsersCalendarMemoHistory.userId.eq(userId))
-                .fetch();
+                .fetch()
+                .stream()
+                .map(String::valueOf)
+                .toList();
     }
 
     public List<String> findExerciseDays(UUID userId) {
