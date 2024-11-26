@@ -1,12 +1,13 @@
 package org.hepi.hepi_sv.calender.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "USERS_INTAKE_HISTORY")
@@ -20,7 +21,7 @@ public class UsersIntakeHistory {
     private UUID userId;
 
     @Column(name = "record_at")
-    private String recordAt;
+    private LocalDateTime recordAt;
 
     @Column(name = "intake_date")
     private LocalDate intakeDate;
@@ -32,7 +33,7 @@ public class UsersIntakeHistory {
     private String brand;
 
     @Column(name = "serving_amount")
-    private String servingAmount;
+    private Double servingAmount;
 
     @Column(name = "serving_unit")
     private String servingUnit;

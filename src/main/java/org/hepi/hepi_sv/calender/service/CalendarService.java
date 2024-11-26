@@ -6,8 +6,6 @@ import java.util.UUID;
 import org.hepi.hepi_sv.calender.dto.CalendarMemoDTO;
 import org.hepi.hepi_sv.calender.entity.UsersCalendarMemoHistory;
 import org.hepi.hepi_sv.calender.resitory.CalendarQueryRepository;
-import org.hepi.hepi_sv.user.dto.UserProfileDTO;
-import org.hepi.hepi_sv.user.entity.UsersProfile;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
