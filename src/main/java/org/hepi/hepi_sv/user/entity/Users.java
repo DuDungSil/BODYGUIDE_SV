@@ -34,13 +34,16 @@ public class Users{
     @Column(name = "role")
     private Role role = Role.USER; // 기본값을 USER로 설정
 
+    @Column(name = "provider")
     private String provider;
 
     @Column(name = "provider_id")
     private String providerId;
 
+    @Column(name = "email")
     private String email;
     
+    @Column(name = "name")
     private String name;
 
 }

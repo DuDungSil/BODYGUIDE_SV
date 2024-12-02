@@ -2,7 +2,7 @@ package org.hepi.hepi_sv.exercise.service;
 
 import java.util.List;
 
-import org.hepi.hepi_sv.exercise.dto.ExerciseProfile;
+import org.hepi.hepi_sv.exercise.dto.ExerciseAnalysisProfile;
 import org.hepi.hepi_sv.exercise.repository.ExerciseQueryRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +35,8 @@ public class ExerciseAnalysisService {
         return level;
     }
 
-    public ExerciseProfile analyzeExercise(int exerciseId, String gender, double bodyWeight, double liftingWeight, int reps) {
-        ExerciseProfile profile = new ExerciseProfile();
+    public ExerciseAnalysisProfile analyzeExercise(int exerciseId, String gender, double bodyWeight, double liftingWeight, int reps) {
+        ExerciseAnalysisProfile profile = new ExerciseAnalysisProfile();
     
         String muscle = exerciseQueryRepository.findMuscleGroupIdNameByExerName(exerciseId);
 
@@ -82,6 +82,7 @@ public class ExerciseAnalysisService {
         }
         
         // 결과 저장
+        profile.setExerId(exerciseId);
         profile.setMuscle(muscle);
         profile.setScore(score);
         profile.setLevel(level);

@@ -2,12 +2,14 @@ package org.hepi.hepi_sv.auth.controller;
 
 import java.util.UUID;
 
-import org.hepi.hepi_sv.auth.dto.TokenRequestDTO;
-import org.hepi.hepi_sv.auth.dto.TokenResponseDTO;
+import org.hepi.hepi_sv.auth.dto.InitializeRequest;
+import org.hepi.hepi_sv.auth.dto.TokenRequest;
+import org.hepi.hepi_sv.auth.dto.TokenResponse;
 import org.hepi.hepi_sv.auth.service.TestTokenService;
 import org.hepi.hepi_sv.auth.service.TokenService;
 import org.hepi.hepi_sv.auth.service.UnlinkService;
-import org.hepi.hepi_sv.user.service.UserProviderTokenService;
+import org.hepi.hepi_sv.user.service.UserProfileService;
+import org.hepi.hepi_sv.user.service.UserSocialTokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,10 +29,12 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/auth")
 public class AuthController {
 
+    private final TestTokenService testTokenService; // 개발용
+
     private final TokenService tokenService;
     private final UnlinkService unlinkService;
-    private final UserProviderTokenService userProviderTokenService;
-    private final TestTokenService testTokenService;
+    private final UserSocialTokenService userProviderTokenService;
+    private final UserProfileService userProfileService;
 
     // OAuth2 로그인 성공 후 콜백
     // @GetMapping("/success")
@@ -52,6 +56,20 @@ public class AuthController {
         return ResponseEntity.ok(accessToken);
     }
     
+    // 유저 프로필 최초 입력 ( GUEST -> USER )
+    @PostMapping("/initialize")
+    public ResponseEntity<TokenResponse> initialize(@AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody InitializeRequest request) {
+        
+        // 프로필 입력
+        userProfileService.initializeUserProfile(UUID.fromString(userDetails.getUsername()), request);
+
+        // 유저 권한 상승 후 새 토큰 반환
+        TokenResponse tokenResponse = tokenService.upgradeUserRoleWithToken(UUID.fromString(userDetails.getUsername()));
+
+        return ResponseEntity.ok(tokenResponse);
+    }
+
     // 로그아웃
     @DeleteMapping("/logout")
     public ResponseEntity<Void> logout(@AuthenticationPrincipal UserDetails userDetails) {
@@ -62,9 +80,9 @@ public class AuthController {
 
     // 액세스토큰 재발급
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponseDTO> refreshToken(@RequestBody TokenRequestDTO tokenRequestDTO) {
+    public ResponseEntity<TokenResponse> refreshToken(@RequestBody TokenRequest tokenRequestDTO) {
 
-        TokenResponseDTO tokenResponse = tokenService.reissueTokenResponse(tokenRequestDTO);
+        TokenResponse tokenResponse = tokenService.reissueTokenResponse(tokenRequestDTO);
 
         return ResponseEntity.ok(tokenResponse);
     }

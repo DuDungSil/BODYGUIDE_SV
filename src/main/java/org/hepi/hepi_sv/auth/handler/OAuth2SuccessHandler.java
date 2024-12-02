@@ -2,9 +2,9 @@ package org.hepi.hepi_sv.auth.handler;
 
 import java.util.UUID;
 
-import org.hepi.hepi_sv.auth.dto.TokenResponseDTO;
+import org.hepi.hepi_sv.auth.dto.TokenResponse;
 import org.hepi.hepi_sv.auth.service.TokenService;
-import org.hepi.hepi_sv.user.service.UserProviderTokenService;
+import org.hepi.hepi_sv.user.service.UserSocialTokenService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     
     private final TokenService tokenService;
-    private final UserProviderTokenService userProviderTokenService;
+    private final UserSocialTokenService userSocialTokenService;
     private final OAuth2AuthorizedClientService authorizedClientService;
 
     @Override
@@ -50,10 +50,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             String providerRefreshToken = authorizedClient.getRefreshToken().getTokenValue();
 
             // 필요 시 DB 저장
-            userProviderTokenService.updateRefreshToken(userId, providerRefreshToken);
+            userSocialTokenService.updateRefreshToken(userId, providerRefreshToken);
 
             // TokenResponseDTO 생성
-            TokenResponseDTO tokenResponse = tokenService.generateTokenResponse(authentication);
+            TokenResponse tokenResponse = tokenService.generateTokenResponse(authentication);
 
             // JSON 응답 설정
             response.setContentType("application/json");

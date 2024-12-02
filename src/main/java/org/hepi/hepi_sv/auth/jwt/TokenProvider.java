@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 
 import org.hepi.hepi_sv.auth.exception.TokenException;
+import org.hepi.hepi_sv.user.entity.Users;
+
 import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.INVALID_JWT_SIGNATURE;
 import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.INVALID_TOKEN;
 import org.springframework.beans.factory.annotation.Value;
@@ -152,4 +154,18 @@ public class TokenProvider {
             throw new TokenException(INVALID_TOKEN);
         }
     }
+    
+    public Authentication createAuthenticationFromUser(Users user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null.");
+        }
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().name()));
+
+        return new UsernamePasswordAuthenticationToken(
+                user.getUserId().toString(),
+                null,
+                authorities
+        );
+    }
+
 }

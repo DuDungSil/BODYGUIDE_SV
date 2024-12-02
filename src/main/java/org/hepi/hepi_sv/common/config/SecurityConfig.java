@@ -66,7 +66,13 @@ private final CustomAccessTokenResponseClient accessTokenResponseClient;
                                         new AntPathRequestMatcher("/auth/test"),                        
                                         new AntPathRequestMatcher("/web/**")
                                 ).permitAll()
-                                .anyRequest().authenticated()
+                                
+                                // GUEST만 접근 가능한 엔드포인트
+                                .requestMatchers(
+                                        new AntPathRequestMatcher("/auth/initialize")
+                                ).hasRole("GUEST")
+
+                                .anyRequest().hasAnyRole("USER", "ADMIN")
                 )
 
                 // oauth2 설정
