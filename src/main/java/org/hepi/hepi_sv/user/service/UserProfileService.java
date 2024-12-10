@@ -56,7 +56,6 @@ public class UserProfileService {
         }
         if (request.birthDate() != null) {
             usersProfile.setBirthDate(request.birthDate());
-            // 나이도 계산 해서 넣어야함
         }
         if (request.profileImg() != null) {
             usersProfile.setProfileImg(request.profileImg());

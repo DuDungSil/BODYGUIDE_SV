@@ -32,8 +32,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException, java.io.IOException {
                 
-        if (authentication instanceof OAuth2AuthenticationToken) {
-            OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
+        if (authentication instanceof OAuth2AuthenticationToken authToken) {
 
             // 사용자 ID 추출 (OAuth2AuthenticationToken의 이름 또는 속성에서 가져오기)
             String userIdString = authToken.getName(); // 일반적으로 OAuth2 인증의 "sub" (사용자 고유 ID)

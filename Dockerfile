@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # JAR 파일 복사
-COPY target/BODY_GUIDE.jar app.jar
+COPY target/BODYGUIDE_SV-1.0.jar app.jar
 COPY config/application.properties /app/config/application.properties
 
 # 환경 변수 설정

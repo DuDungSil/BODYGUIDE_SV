@@ -61,6 +61,8 @@ private final CustomAccessTokenResponseClient accessTokenResponseClient;
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(
                                         new AntPathRequestMatcher("/"),
+                                        new AntPathRequestMatcher("/swagger-ui/**"),
+                                        new AntPathRequestMatcher("/v3/api-docs/**"),                 
                                         new AntPathRequestMatcher("/auth/success"),
                                         new AntPathRequestMatcher("/auth/refresh"),
                                         new AntPathRequestMatcher("/auth/test"),                        
@@ -70,8 +72,9 @@ private final CustomAccessTokenResponseClient accessTokenResponseClient;
                                 // GUEST만 접근 가능한 엔드포인트
                                 .requestMatchers(
                                         new AntPathRequestMatcher("/auth/initialize")
-                                ).hasRole("GUEST")
+                                        ).hasRole("GUEST")
 
+                                // 그외 엔드포인트 USER 이상만
                                 .anyRequest().hasAnyRole("USER", "ADMIN")
                 )
 

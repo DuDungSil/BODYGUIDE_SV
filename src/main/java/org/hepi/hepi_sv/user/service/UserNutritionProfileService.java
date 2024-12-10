@@ -62,16 +62,34 @@ public class UserNutritionProfileService {
                 .build();
         profileHistoryRepository.save(history);
 
-        // 요청 데이터를 기반으로 필드 업데이트
-        existingProfile.setPa(request.pa());
-        existingProfile.setDietId(request.dietId());
-        existingProfile.setTargetWeight(request.targetWeight());
-        existingProfile.setTargetCalory(request.targetCalory());
-        existingProfile.setCarbCal(request.carbCal());
-        existingProfile.setProteinCal(request.proteinCal());
-        existingProfile.setFatCal(request.fatCal());
-        existingProfile.setWakeupTime(request.wakeupTime());
-        existingProfile.setSleepTime(request.sleepTime());
+        // 요청 데이터를 기반으로 필드 업데이트 (null 체크 추가)
+        if (request.pa() != 0) {
+            existingProfile.setPa(request.pa());
+        }
+        if (request.dietId() != 0) {
+            existingProfile.setDietId(request.dietId());
+        }
+        if (request.targetWeight() != null) {
+            existingProfile.setTargetWeight(request.targetWeight());
+        }
+        if (request.targetCalory() != null) {
+            existingProfile.setTargetCalory(request.targetCalory());
+        }
+        if (request.carbCal() != null) {
+            existingProfile.setCarbCal(request.carbCal());
+        }
+        if (request.proteinCal() != null) {
+            existingProfile.setProteinCal(request.proteinCal());
+        }
+        if (request.fatCal() != null) {
+            existingProfile.setFatCal(request.fatCal());
+        }
+        if (request.wakeupTime() != null) {
+            existingProfile.setWakeupTime(request.wakeupTime());
+        }
+        if (request.sleepTime() != null) {
+            existingProfile.setSleepTime(request.sleepTime());
+        }
         
         // 업데이트된 시간 갱신
         existingProfile.setUpdatedAt(LocalDateTime.now());

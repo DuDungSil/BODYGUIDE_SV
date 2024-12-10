@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/recommend")
+@Tag(name = "Recommend", description = "추천")
 public class RecommendController {
     
     private final RecommendFoodService recommendFoodService;
@@ -27,6 +30,7 @@ public class RecommendController {
 
     // 음식 추천
     @GetMapping("/food")
+    @Operation(summary = "급원 추천", description = "급원 추천")
     public ResponseEntity<RecommendFoodResponse> getRecommendFood(@AuthenticationPrincipal UserDetails userDetails) {
         RecommendFoodResponse response = recommendFoodService.getRecommendFoodResponse(UUID.fromString(userDetails.getUsername()));
         return ResponseEntity.ok(response);
@@ -34,6 +38,7 @@ public class RecommendController {
 
     // 영양성분, 보충제 추천
     @GetMapping("/supplement")
+    @Operation(summary = "영양성분 & 보충제 추천", description = "운동 목적에 따른 영양성분 & 보충제 추천")
     public ResponseEntity<RecommendSupplementResponse> getRecommendSupplement(@AuthenticationPrincipal UserDetails userDetails, @RequestBody RecommendSupplementRequest request) {
         RecommendSupplementResponse response = recommendSupplementService.getRecommendSupplementResponse(UUID.fromString(userDetails.getUsername()), request);
         return ResponseEntity.ok(response);

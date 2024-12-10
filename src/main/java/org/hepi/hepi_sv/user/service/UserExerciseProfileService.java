@@ -63,17 +63,37 @@ public class UserExerciseProfileService {
                 .build();
         profileHistoryRepository.save(history);
 
-        // 요청 데이터를 기반으로 필드 업데이트
-        existingProfile.setBenchWeight(request.benchWeight());
-        existingProfile.setBenchReps(request.benchReps());
-        existingProfile.setSquatWeight(request.squatWeight());
-        existingProfile.setSquatReps(request.squatReps());
-        existingProfile.setDeadWeight(request.deadWeight());
-        existingProfile.setDeadReps(request.deadReps());
-        existingProfile.setOverheadWeight(request.overheadWeight());
-        existingProfile.setOverheadReps(request.overheadReps());
-        existingProfile.setPushupReps(request.pushupReps());
-        existingProfile.setPullupReps(request.pullupReps());
+        // 요청 데이터를 기반으로 필드 업데이트 (null 체크 추가)
+        if (request.benchWeight() != null) {
+            existingProfile.setBenchWeight(request.benchWeight());
+        }
+        if (request.benchReps() != 0) {
+            existingProfile.setBenchReps(request.benchReps());
+        }
+        if (request.squatWeight() != null) {
+            existingProfile.setSquatWeight(request.squatWeight());
+        }
+        if (request.squatReps() != 0) {
+            existingProfile.setSquatReps(request.squatReps());
+        }
+        if (request.deadWeight() != null) {
+            existingProfile.setDeadWeight(request.deadWeight());
+        }
+        if (request.deadReps() != 0) {
+            existingProfile.setDeadReps(request.deadReps());
+        }
+        if (request.overheadWeight() != null) {
+            existingProfile.setOverheadWeight(request.overheadWeight());
+        }
+        if (request.overheadReps() != 0) {
+            existingProfile.setOverheadReps(request.overheadReps());
+        }
+        if (request.pushupReps() != 0) {
+            existingProfile.setPushupReps(request.pushupReps());
+        }
+        if (request.pullupReps() != 0) {
+            existingProfile.setPullupReps(request.pullupReps());
+        }
 
         // 업데이트된 시간 갱신
         existingProfile.setUpdatedAt(LocalDateTime.now());

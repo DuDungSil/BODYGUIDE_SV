@@ -3,17 +3,21 @@ package org.hepi.hepi_sv.common.config;
 import java.util.Collection;
 import java.util.Enumeration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hepi.hepi_sv.common.util.ClientIpExtraction;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
+@Slf4j
 @Component
 public class HttpLoggingInterceptor implements HandlerInterceptor {
-    private static final Logger logger = LoggerFactory.getLogger(HttpLoggingInterceptor.class);
+
+    private final ClientIpExtraction clientIpExtraction;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -26,15 +30,17 @@ public class HttpLoggingInterceptor implements HandlerInterceptor {
             headers.append(headerName).append(": ").append(headerValue).append("\n");
         }
 
-        logger.info("==================== REQUEST ====================\nClient IP: {}:{} \nRequest URL: {} \nHTTP Method: {} \n[Headers]: \n{}",
-                request.getRemoteAddr(),
+        String clientIp = clientIpExtraction.getClientIp(request);
+
+        log.info("==================== REQUEST ====================\nClient IP: {}:{} \nRequest URL: {} \nHTTP Method: {} \n[Headers]: \n{}",
+                clientIp,
                 request.getRemotePort(),
                 request.getRequestURL().toString(),
                 request.getMethod(),
                 headers.toString()
                 );
 
-        response.addHeader("client-ip", request.getRemoteAddr()+":"+request.getRemotePort());
+        response.addHeader("client-ip", clientIp + ":" + request.getRemotePort());
         return true;
     }
 
@@ -49,7 +55,7 @@ public class HttpLoggingInterceptor implements HandlerInterceptor {
             headers.append(headerName).append(": ").append(headerValue).append("\n");
         }
 
-        logger.info("==================== RESPONSE ====================\nStatus: {} \n[Headers]: \n{} \n[Content]: \n{}\n",
+        log.info("==================== RESPONSE ====================\nStatus: {} \n[Headers]: \n{} \n[Content]: \n{}\n",
                 response.getStatus(),
                 headers.toString(),
                 (String) request.getAttribute("content")
