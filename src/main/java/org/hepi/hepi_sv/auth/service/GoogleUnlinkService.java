@@ -3,7 +3,7 @@ package org.hepi.hepi_sv.auth.service;
 import java.util.Map;
 import java.util.UUID;
 
-import org.hepi.hepi_sv.user.service.UserProviderTokenService;
+import org.hepi.hepi_sv.user.service.UserSocialTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class GoogleUnlinkService {
     
-    private final UserProviderTokenService userProviderTokenService;
+    private final UserSocialTokenService userProviderTokenService;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;

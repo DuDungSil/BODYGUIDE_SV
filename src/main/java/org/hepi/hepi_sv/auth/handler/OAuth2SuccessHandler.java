@@ -2,9 +2,10 @@ package org.hepi.hepi_sv.auth.handler;
 
 import java.util.UUID;
 
-import org.hepi.hepi_sv.auth.dto.TokenResponseDTO;
+import org.hepi.hepi_sv.auth.dto.TokenResponse;
 import org.hepi.hepi_sv.auth.service.TokenService;
-import org.hepi.hepi_sv.user.service.UserProviderTokenService;
+import org.hepi.hepi_sv.user.service.UserMetaService;
+import org.hepi.hepi_sv.user.service.UserSocialTokenService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -25,15 +26,15 @@ import lombok.RequiredArgsConstructor;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     
     private final TokenService tokenService;
-    private final UserProviderTokenService userProviderTokenService;
+    private final UserMetaService userMetaService;
+    private final UserSocialTokenService userSocialTokenService;
     private final OAuth2AuthorizedClientService authorizedClientService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException, java.io.IOException {
                 
-        if (authentication instanceof OAuth2AuthenticationToken) {
-            OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
+        if (authentication instanceof OAuth2AuthenticationToken authToken) {
 
             // 사용자 ID 추출 (OAuth2AuthenticationToken의 이름 또는 속성에서 가져오기)
             String userIdString = authToken.getName(); // 일반적으로 OAuth2 인증의 "sub" (사용자 고유 ID)
@@ -50,10 +51,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             String providerRefreshToken = authorizedClient.getRefreshToken().getTokenValue();
 
             // 필요 시 DB 저장
-            userProviderTokenService.updateRefreshToken(userId, providerRefreshToken);
+            userSocialTokenService.updateRefreshToken(userId, providerRefreshToken);
 
-            // TokenResponseDTO 생성
-            TokenResponseDTO tokenResponse = tokenService.generateTokenResponse(authentication);
+            // TokenResponse 생성
+            TokenResponse tokenResponse = tokenService.generateTokenResponse(authentication);
 
             // JSON 응답 설정
             response.setContentType("application/json");
@@ -63,6 +64,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValue(response.getWriter(), tokenResponse);
             
+            // 유저 로그인 시간 기록
+            userMetaService.updateLastLoginAt(userId);
+
         } else {
             throw new IllegalArgumentException("Authentication is not OAuth2AuthenticationToken");
         }

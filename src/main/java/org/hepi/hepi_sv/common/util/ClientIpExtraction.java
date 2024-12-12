@@ -12,14 +12,7 @@ public class ClientIpExtraction {
     
         // 가장 흔히 사용되는 헤더들을 순차적으로 검사
         String[] headers = {
-            "X-Forwarded-For",
-            "X-Real-IP",
-            "CF-Connecting-IP",        // Cloudflare
-            "True-Client-IP",          // Akamai
-            "X-Client-IP",
-            "X-Cluster-Client-IP",
-            "Forwarded-For",
-            "Forwarded"
+            "X-Forwarded-For"
         };
     
         for (String header : headers) {

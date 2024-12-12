@@ -3,6 +3,7 @@ package org.hepi.hepi_sv.web.dto.nutrition;
 import java.util.List;
 
 import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
+import org.hepi.hepi_sv.nutrition.dto.RecommendSource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,7 +23,7 @@ public class WebNutrientResult {
     private String wakeup;
     private String sleep;
     private List<String> mealTimes;
-    private RecommendSourceDto sources;
-    private RecommendProduct products;
+    private RecommendSource sources;
+    private WebRecommendFood products;
 }
 

@@ -1,6 +1,7 @@
 package org.hepi.hepi_sv.user.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -38,9 +39,6 @@ public class UsersProfile {
     @Column(name = "gender")
     private String gender;
 
-    @Column(name = "age")
-    private int age;
-
     @Column(name = "height")
     private double height;
     
@@ -55,5 +53,8 @@ public class UsersProfile {
 
     @Column(name = "intro_text")
     private String introText;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
 }

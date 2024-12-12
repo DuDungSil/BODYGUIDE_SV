@@ -27,10 +27,18 @@ public class NutrientRecommendService {
         return profiles;
     }
 
-    // 운동 목적에 따른 추천
+    // 운동 목적에 따른 추천 ( purpose name )
     public List<NutrientProfile> getRecommendNutirientForPurpose(String purpose) {
 
-        List<NutrientProfile> profiles = nutritionQueryRepository.selectNutrientProfilesByPurpose(purpose);
+        List<NutrientProfile> profiles = nutritionQueryRepository.selectNutrientProfilesByPurposeName(purpose);
+
+        return profiles;
+    }
+
+    // 운동 목적에 따른 추천 ( purpose id )
+    public List<NutrientProfile> getRecommendNutirientForPurpose(int purposeId) {
+
+        List<NutrientProfile> profiles = nutritionQueryRepository.selectNutrientProfilesByPurposeId(purposeId);
 
         return profiles;
     }

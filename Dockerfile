@@ -4,8 +4,11 @@ FROM openjdk:17-jdk-alpine
 # 작업 디렉토리 설정
 WORKDIR /app
 
+# tzdata 패키지 설치 (시간대 데이터 추가)
+RUN apk add --no-cache tzdata
+
 # JAR 파일 복사
-COPY target/BODY_GUIDE.jar app.jar
+COPY target/BODYGUIDE_SV-1.0.jar app.jar
 COPY config/application.properties /app/config/application.properties
 
 # 환경 변수 설정

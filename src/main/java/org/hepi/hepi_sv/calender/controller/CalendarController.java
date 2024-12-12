@@ -31,7 +31,7 @@ public class CalendarController {
 
     // 메모 날짜 상세
     @GetMapping("/memo/{number}")
-    public ResponseEntity<CalendarMemoDTO> getMemoDayDetail(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("number") String number) {
+    public ResponseEntity<CalendarMemoDTO> getMemoDayDetail(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String number) {
         UUID userId = UUID.fromString(userDetails.getUsername());
         CalendarMemoDTO calendarMemoDTO = calendarService.getCalendarMemoDetail(userId, number);
         return ResponseEntity.ok(calendarMemoDTO);
@@ -47,7 +47,7 @@ public class CalendarController {
 
     // 운동 날짜 상세
     @GetMapping("/exercise/{number}")
-    public ResponseEntity<String> getExerciseDayDetail(@PathVariable("number") Integer number) {
+    public ResponseEntity<String> getExerciseDayDetail(@PathVariable Integer number) {
         return ResponseEntity.ok("Number provided: " + number + ". Displaying specific exercise data.");
     }
 
@@ -60,7 +60,7 @@ public class CalendarController {
 
     // 섭취 날짜 상세
     @GetMapping("/nutrition/{number}")
-    public ResponseEntity<String> getNutritionDayDetail(@PathVariable("number") Integer number) {
+    public ResponseEntity<String> getNutritionDayDetail(@PathVariable Integer number) {
         return ResponseEntity.ok("Number provided: " + number + ". Displaying specific nutrition data.");
     }
 
@@ -72,7 +72,7 @@ public class CalendarController {
 
     // 섭취 날짜 상세
     @GetMapping("/weight/{number}")
-    public ResponseEntity<String> getWeightDayDetail(@PathVariable("number") Integer number) {
+    public ResponseEntity<String> getWeightDayDetail(@PathVariable Integer number) {
         return ResponseEntity.ok("Number provided: " + number + ". Displaying specific weight data.");
     }
 

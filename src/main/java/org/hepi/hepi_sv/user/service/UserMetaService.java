@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hepi.hepi_sv.user.entity.UsersMeta;
-import org.hepi.hepi_sv.user.repository.jpa.UsersMetaRepository;
+import org.hepi.hepi_sv.user.repository.UsersMetaRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -27,17 +27,39 @@ public class UserMetaService {
                 .userId(userId)
                 .createdAt(dateTime)
                 .lastLoginAt(dateTime)
-                .lastUpdatedAt(dateTime)
+                .updatedAt(dateTime)
                 .isDelete(false)
                 .build();
 
         usersMetaRepository.save(usersMeta);
     }
 
-    public void updateUsersMetaProfile() {
+    public void updateSource(UUID userId, String source) {
 
-        // 필드를 받아서 업데이트?
+        // 1. 기존 메타 조회
+        UsersMeta usersMeta = usersMetaRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User profile not found with user_id: " + userId));
+
+        // 2. 필드 업데이트
+        usersMeta.setSource(source);
+
+        // 3. 엔티티 저장
+        usersMetaRepository.save(usersMeta);
+
+    }
     
+    public void updateLastLoginAt(UUID userId) {
+        
+        // 1. 기존 메타 조회
+        UsersMeta usersMeta = usersMetaRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User profile not found with user_id: " + userId));
+
+        // 2. 필드 업데이트
+        usersMeta.setLastLoginAt(LocalDateTime.now());
+
+        // 3. 엔티티 저장
+        usersMetaRepository.save(usersMeta);
+
     }
 
 }

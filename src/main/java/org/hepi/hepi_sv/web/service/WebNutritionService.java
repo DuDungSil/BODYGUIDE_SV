@@ -6,12 +6,12 @@ import java.util.List;
 
 import org.hepi.hepi_sv.common.util.ClientIpExtraction;
 import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
+import org.hepi.hepi_sv.nutrition.dto.RecommendSource;
 import org.hepi.hepi_sv.nutrition.service.NutritionAnalysisService;
 import org.hepi.hepi_sv.nutrition.service.SourceRecommendService;
 import org.hepi.hepi_sv.product.dto.ShopProductDTO;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
-import org.hepi.hepi_sv.web.dto.nutrition.RecommendProduct;
-import org.hepi.hepi_sv.web.dto.nutrition.RecommendSourceDto;
+import org.hepi.hepi_sv.web.dto.nutrition.WebRecommendFood;
 import org.hepi.hepi_sv.web.dto.nutrition.WebNutrientRequest;
 import org.hepi.hepi_sv.web.dto.nutrition.WebNutrientResult;
 import org.hepi.hepi_sv.web.entity.WebNutriAnalysisData;
@@ -90,36 +90,22 @@ public class WebNutritionService {
     }
 
     // 추천 급원 DB에서 가져오기
-    public RecommendSourceDto getRecommendSource(String dietType) {
+    public RecommendSource getRecommendSource(String dietType) {
 
-        RecommendSourceDto sources = new RecommendSourceDto();
-
-        int dietTypeId = 1;
-
-        if (dietType.equals("비건")) {
-            dietTypeId = 5;
-        }
+        int dietTypeId = dietType.equals("비건") ? 5 : 1;
 
         List<String> carbohydrate = sourceRecommendService.getRecommendSource(1, dietTypeId);
         List<String> protein = sourceRecommendService.getRecommendSource(2, dietTypeId);
         List<String> fat = sourceRecommendService.getRecommendSource(3, dietTypeId);
 
-        sources.setCarbohydrate(carbohydrate);
-        sources.setProtein(protein);
-        sources.setFat(fat);
-
-        return sources;
+        return new RecommendSource(carbohydrate, protein, fat);
     }
 
     // 3대영양소에 따른 음식 추천
-    private RecommendProduct getRecommendFoodByMajorNutrient(String dietType) {
-        RecommendProduct products = new RecommendProduct();
+    private WebRecommendFood getRecommendFoodByMajorNutrient(String dietType) {
+        WebRecommendFood products = new WebRecommendFood();
 
-        int dietTypeId = 1;
-
-        if (dietType.equals("비건")) {
-            dietTypeId = 5;
-        }
+        int dietTypeId = dietType.equals("비건") ? 5 : 1;
 
         List<ShopProductDTO> carbohydrate = productRecommendService.getRecommendFoodByMajorNutrient(1, dietTypeId);
         List<ShopProductDTO> protein = productRecommendService.getRecommendFoodByMajorNutrient(2, dietTypeId);
@@ -145,9 +131,9 @@ public class WebNutritionService {
         double targetCalory = nutrientAnalysisService.calculateTargetCalory(TDEE, request.getDietGoal());
         MealNutrientComposition composition = getMealNutrientComposition(targetCalory, request.getDietType());
         List<String> mealTimes = nutrientAnalysisService.recommendMealTimes(request.getWakeup(), request.getSleep());
-        RecommendSourceDto recommendSource = getRecommendSource(request.getDietType());
+        RecommendSource recommendSource = getRecommendSource(request.getDietType());
 
-        RecommendProduct recommendProduct = getRecommendFoodByMajorNutrient(request.getDietType());
+        WebRecommendFood recommendProduct = getRecommendFoodByMajorNutrient(request.getDietType());
 
         WebNutrientResult result = new WebNutrientResult();
         result.setBMI(BMI);

@@ -5,10 +5,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
-import org.hepi.hepi_sv.nutrition.dto.MealMacroDetails;
+import org.hepi.hepi_sv.nutrition.dto.MealMacroNutrientDetails;
 import org.hepi.hepi_sv.nutrition.entity.DietType;
 import org.hepi.hepi_sv.nutrition.repository.DietTypeRepository;
 import org.springframework.stereotype.Service;
@@ -67,35 +66,38 @@ public class NutritionAnalysisService {
         return dietGoal_calory;
     } 
 
-    // 목표 칼로리와 식단 유형에 따라 탄수화물, 단백질, 불포화지방, 포화지방 함량 계산
     public MealNutrientComposition getMealNutrientComposition(double targetCalory, int dietType) {
-        MealMacroDetails carbohydrate = new MealMacroDetails();
-        MealMacroDetails protein = new MealMacroDetails();
-        MealMacroDetails unFat = new MealMacroDetails();
-        MealMacroDetails satFat = new MealMacroDetails();
 
         // 탄수화물, 단백질, 불포화지방, 포화지방 비율 db에서 가져오기
-        DietType dietTypeEntity = dietTypeRepository.findById(dietType).orElseThrow(() -> new IllegalArgumentException("DietType not found for id: " + dietType));
-
-        carbohydrate.setRatio(dietTypeEntity.getCarbohydrate());
-        carbohydrate.setCalory(Math.round(targetCalory * carbohydrate.getRatio() / 100));
-        carbohydrate.setGram(Math.round(carbohydrate.getCalory() * 0.25));
-
-        protein.setRatio(dietTypeEntity.getProtein());
-        protein.setCalory(Math.round(targetCalory * protein.getRatio() / 100));
-        protein.setGram(Math.round(protein.getCalory() * 0.25));
-
-        unFat.setRatio(dietTypeEntity.getUnFat());
-        unFat.setCalory(Math.round(targetCalory * unFat.getRatio() / 100));
-        unFat.setGram(Math.round(unFat.getCalory() / 9));
-
-        satFat.setRatio(dietTypeEntity.getSatFat());
-        satFat.setCalory(Math.round(targetCalory * satFat.getRatio() / 100));
-        satFat.setGram(Math.round(satFat.getCalory() / 9));
-
+        DietType dietTypeEntity = dietTypeRepository.findById(dietType)
+            .orElseThrow(() -> new IllegalArgumentException("DietType not found for id: " + dietType));
+    
+        // 각 매크로 영양소에 대한 데이터 계산
+        double carbohydrateRatio = dietTypeEntity.getCarbohydrate();
+        double carbohydrateCalory = Math.round(targetCalory * carbohydrateRatio / 100);
+        double carbohydrateGram = Math.round(carbohydrateCalory * 0.25);
+        MealMacroNutrientDetails carbohydrate = new MealMacroNutrientDetails(carbohydrateRatio, carbohydrateCalory, carbohydrateGram);
+    
+        double proteinRatio = dietTypeEntity.getProtein();
+        double proteinCalory = Math.round(targetCalory * proteinRatio / 100);
+        double proteinGram = Math.round(proteinCalory * 0.25);
+        MealMacroNutrientDetails protein = new MealMacroNutrientDetails(proteinRatio, proteinCalory, proteinGram);
+    
+        double unFatRatio = dietTypeEntity.getUnFat();
+        double unFatCalory = Math.round(targetCalory * unFatRatio / 100);
+        double unFatGram = Math.round(unFatCalory / 9);
+        MealMacroNutrientDetails unFat = new MealMacroNutrientDetails(unFatRatio, unFatCalory, unFatGram);
+    
+        double satFatRatio = dietTypeEntity.getSatFat();
+        double satFatCalory = Math.round(targetCalory * satFatRatio / 100);
+        double satFatGram = Math.round(satFatCalory / 9);
+        MealMacroNutrientDetails satFat = new MealMacroNutrientDetails(satFatRatio, satFatCalory, satFatGram);
+    
+        // 구성 객체 생성
         MealNutrientComposition composition = new MealNutrientComposition(carbohydrate, protein, unFat, satFat);
-
+    
         return composition;
+
     }
     
     // 식사 시간 추천

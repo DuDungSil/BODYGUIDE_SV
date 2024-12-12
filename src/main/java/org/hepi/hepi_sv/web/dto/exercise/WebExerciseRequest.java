@@ -9,11 +9,11 @@ public class WebExerciseRequest {
     int age;
     double height;
     double weight;
-    ExerciseSet bench;
-    ExerciseSet squat;
-    ExerciseSet dead;
-    ExerciseSet overhead;
-    ExerciseSet pushup;
-    ExerciseSet pullup;
+    WebExerciseSet bench;
+    WebExerciseSet squat;
+    WebExerciseSet dead;
+    WebExerciseSet overhead;
+    WebExerciseSet pushup;
+    WebExerciseSet pullup;
     String[] supplePurpose;
 }

@@ -38,8 +38,8 @@ public class UsersMeta {
     @Column(name = "source")
     private String source;
 
-    @Column(name = "last_updated_at")
-    private LocalDateTime lastUpdatedAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;

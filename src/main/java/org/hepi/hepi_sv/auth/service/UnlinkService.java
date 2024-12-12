@@ -6,6 +6,7 @@ import org.hepi.hepi_sv.auth.exception.AuthException;
 import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.ILLEGAL_REGISTRATION_PROVIDER;
 import org.hepi.hepi_sv.user.entity.Users;
 import org.hepi.hepi_sv.user.service.UserRegistrationService;
+import org.hepi.hepi_sv.user.service.UserService;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UnlinkService {
     
+    private final UserService usernService;
     private final UserRegistrationService userRegistrationService;
     private final KakaoUnlinkService kakaoUnlinkService;
     private final GoogleUnlinkService googleUnlinkService;
@@ -22,7 +24,7 @@ public class UnlinkService {
     @Transactional
     public void unlink(UUID userId) {
         // povider, provider id 확인
-        Users user = userRegistrationService.getUsers(userId);
+        Users user = usernService.getUserById(userId);
         String provider = user.getProvider();
         String providerId = user.getProviderId();
 

@@ -58,7 +58,7 @@ public record OAuth2UserInfo(
                 .providerId(providerId)
                 .name(name)
                 .email(email)
-                .role(Role.USER)
+                .role(Role.GUEST)
                 .build();
     }
 
