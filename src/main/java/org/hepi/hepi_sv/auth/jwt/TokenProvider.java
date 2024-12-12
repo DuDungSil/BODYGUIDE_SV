@@ -8,10 +8,11 @@ import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 
 import org.hepi.hepi_sv.auth.exception.TokenException;
-import org.hepi.hepi_sv.user.entity.Users;
-
 import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.INVALID_JWT_SIGNATURE;
 import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.INVALID_TOKEN;
+import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.USER_NOT_FOUND;
+import org.hepi.hepi_sv.user.Exception.UserException;
+import org.hepi.hepi_sv.user.entity.Users;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,6 +46,7 @@ public class TokenProvider {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L * 24 * 7; // 7일
     private static final String KEY_ROLE = "role";
 
+    // 초기화
     @PostConstruct
     public void init() {
         if (key.getBytes().length < 64) {
@@ -53,14 +55,17 @@ public class TokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(key.getBytes());
     }
 
+    // 액세스 토큰 생성
     public String generateAccessToken(Authentication authentication) {
         return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME, "ACCESS");
     }
 
+    // 리프레시 토큰 생성
     public String generateRefreshToken(Authentication authentication) {
         return generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME, "REFRESH");
     }
 
+    // 토큰 생성 
     public String generateToken(Authentication authentication, long expireTime, String tokenType) {
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expireTime);
@@ -79,37 +84,19 @@ public class TokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        Claims claims = parseClaims(token);
-        validateTokenType(claims, "ACCESS");
-
-        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
-        User principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-    }
-
-    private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
-        return Arrays.stream(claims.get(KEY_ROLE).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
-
+    // 액세스 토큰 재발급
     public String reissueAccessToken(String refreshToken) {
-        Claims claims = parseClaims(refreshToken);
-        validateTokenType(claims, "REFRESH");
-
-        Authentication authentication = getAuthentication(refreshToken);
+        Authentication authentication = getAuthenticationFromRefreshToken(refreshToken);
         return generateAccessToken(authentication);
     }
 
+    // 리프레시 토큰 재발급
     public String reissueRefreshToken(String refreshToken) {
-        Claims claims = parseClaims(refreshToken);
-        validateTokenType(claims, "REFRESH");
-
-        Authentication authentication = getAuthentication(refreshToken);
+        Authentication authentication = getAuthenticationFromRefreshToken(refreshToken);
         return generateRefreshToken(authentication);
     }
 
+    // 토큰 검증
     public boolean validateToken(String token) {
         if (!StringUtils.hasText(token)) {
             return false;
@@ -130,6 +117,7 @@ public class TokenProvider {
         }
     }
 
+    // 클레임 정보 파싱
     private Claims parseClaims(String token) {
         try {
             return Jwts.parserBuilder()
@@ -148,6 +136,7 @@ public class TokenProvider {
         }
     }
 
+    // 토큰 타입 검증
     private void validateTokenType(Claims claims, String expectedType) {
         String tokenType = claims.get("type", String.class);
         if (!expectedType.equals(tokenType)) {
@@ -155,17 +144,48 @@ public class TokenProvider {
         }
     }
     
+    // 액세스토큰으로 인증 객체 생성
+    public Authentication getAuthenticationFromAccessToken(String accessToken) {
+        Claims claims = parseClaims(accessToken);
+
+        // 액세스 토큰 검증
+        validateTokenType(claims, "ACCESS");
+
+        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
+        User principal = new User(claims.getSubject(), "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
+    }
+
+    // 리프레시토큰으로 인증 객체 생성
+    public Authentication getAuthenticationFromRefreshToken(String refreshToken) {
+        Claims claims = parseClaims(refreshToken);
+    
+        // 리프레시 토큰 검증
+        validateTokenType(claims, "REFRESH");
+        
+        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
+        User principal = new User(claims.getSubject(), "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, refreshToken, authorities);
+    }
+
+    // 유저 엔티티로 인증 객체 생성
     public Authentication createAuthenticationFromUser(Users user) {
         if (user == null) {
-            throw new IllegalArgumentException("User cannot be null.");
+            throw new UserException(USER_NOT_FOUND);
         }
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().name()));
 
         return new UsernamePasswordAuthenticationToken(
                 user.getUserId().toString(),
                 null,
-                authorities
-        );
+                authorities);
+    }
+
+    // 권한 객체 목록으로 변환
+    private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
+        return Arrays.stream(claims.get(KEY_ROLE).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
 }

@@ -39,9 +39,23 @@ public class UserMetaService {
         // 1. 기존 메타 조회
         UsersMeta usersMeta = usersMetaRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User profile not found with user_id: " + userId));
-        
+
         // 2. 필드 업데이트
         usersMeta.setSource(source);
+
+        // 3. 엔티티 저장
+        usersMetaRepository.save(usersMeta);
+
+    }
+    
+    public void updateLastLoginAt(UUID userId) {
+        
+        // 1. 기존 메타 조회
+        UsersMeta usersMeta = usersMetaRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User profile not found with user_id: " + userId));
+
+        // 2. 필드 업데이트
+        usersMeta.setLastLoginAt(LocalDateTime.now());
 
         // 3. 엔티티 저장
         usersMetaRepository.save(usersMeta);

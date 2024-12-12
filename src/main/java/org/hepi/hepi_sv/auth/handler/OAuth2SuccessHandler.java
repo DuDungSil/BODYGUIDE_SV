@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.hepi.hepi_sv.auth.dto.TokenResponse;
 import org.hepi.hepi_sv.auth.service.TokenService;
+import org.hepi.hepi_sv.user.service.UserMetaService;
 import org.hepi.hepi_sv.user.service.UserSocialTokenService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     
     private final TokenService tokenService;
+    private final UserMetaService userMetaService;
     private final UserSocialTokenService userSocialTokenService;
     private final OAuth2AuthorizedClientService authorizedClientService;
 
@@ -51,7 +53,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             // 필요 시 DB 저장
             userSocialTokenService.updateRefreshToken(userId, providerRefreshToken);
 
-            // TokenResponseDTO 생성
+            // TokenResponse 생성
             TokenResponse tokenResponse = tokenService.generateTokenResponse(authentication);
 
             // JSON 응답 설정
@@ -62,6 +64,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValue(response.getWriter(), tokenResponse);
             
+            // 유저 로그인 시간 기록
+            userMetaService.updateLastLoginAt(userId);
+
         } else {
             throw new IllegalArgumentException("Authentication is not OAuth2AuthenticationToken");
         }

@@ -6,15 +6,14 @@ import org.hepi.hepi_sv.auth.dto.TokenRequest;
 import org.hepi.hepi_sv.auth.dto.TokenResponse;
 import org.hepi.hepi_sv.auth.exception.TokenException;
 import org.hepi.hepi_sv.auth.jwt.TokenProvider;
-import org.hepi.hepi_sv.common.redis.entity.Token;
-import org.hepi.hepi_sv.common.redis.repository.TokenRepository;
-import org.hepi.hepi_sv.user.entity.Role;
-import org.hepi.hepi_sv.user.entity.Users;
-
 import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.INVALID_TOKEN;
 import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.TOKEN_EXPIRED;
 import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.TOKEN_MISMATCHED;
 import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.TOKEN_NOT_FOUND;
+import org.hepi.hepi_sv.common.redis.entity.Token;
+import org.hepi.hepi_sv.common.redis.repository.TokenRepository;
+import org.hepi.hepi_sv.user.entity.Users;
+import org.hepi.hepi_sv.user.service.UserMetaService;
 import org.hepi.hepi_sv.user.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -30,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TokenService {
 
     private final UserService userService;
+    private final UserMetaService userMetaService;
     private final TokenRepository tokenRepository;
     private final TokenProvider tokenProvider;
 
@@ -40,7 +40,7 @@ public class TokenService {
 
     // accessToken을 기반으로 Authentication 객체를 생성
     public Authentication getAuthentication(String accessToken) {
-        return tokenProvider.getAuthentication(accessToken);
+        return tokenProvider.getAuthenticationFromAccessToken(accessToken);
     }
 
     // 리프레시 토큰 저장 또는 갱신
@@ -97,7 +97,7 @@ public class TokenService {
         String clientRefreshToken = tokenRequest.refreshToken();
 
         // 저장된 리프레시 토큰 확인
-        UUID userID = UUID.fromString(tokenProvider.getAuthentication(clientRefreshToken).getName());
+        UUID userID = UUID.fromString(tokenProvider.getAuthenticationFromRefreshToken(clientRefreshToken).getName());
         Token storedToken = tokenRepository.findById(userID)
                 .orElseThrow(() -> new TokenException(TOKEN_NOT_FOUND));
 
@@ -118,12 +118,15 @@ public class TokenService {
         // Redis 갱신
         saveOrUpdate(userID, newRefreshToken);
 
+        // 유저 로그인 시간 기록
+        userMetaService.updateLastLoginAt(userID);
+
         log.info("Token reissued for userID: {}", userID);
 
         return new TokenResponse(newAccessToken, newRefreshToken);
     }
     
-    // 유저 권한 상승 후 토큰 Respons 반환
+    // 유저 권한 상승 후 토큰 Response 반환
     @Transactional
     public TokenResponse upgradeUserRoleWithToken(UUID userID) {
 

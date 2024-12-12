@@ -1,6 +1,7 @@
 package org.hepi.hepi_sv.user.service;
 
 import java.util.UUID;
+
 import org.hepi.hepi_sv.common.errorHandler.ErrorCode;
 import org.hepi.hepi_sv.user.Exception.UserException;
 import org.hepi.hepi_sv.user.entity.Role;
@@ -32,6 +33,20 @@ public class UserService {
     // 유저 저장
     public Users saveUser(Users user) {
         return usersRepository.save(user);
+    }
+
+    // 유저 이름, 이메일 업데이트
+    @Transactional
+    public Users updateUserNameAndEmail(UUID userId, String name, String email) {
+        // 유저 정보 가져오기
+        Users user = getUserById(userId);
+
+        // 이름 및 이메일 업데이트
+        user.setName(name);
+        user.setEmail(email);
+
+        // 변경된 유저 저장 및 반환
+        return saveUser(user);
     }
 
     // GUEST -> USER

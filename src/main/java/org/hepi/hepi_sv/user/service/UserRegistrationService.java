@@ -1,10 +1,9 @@
 package org.hepi.hepi_sv.user.service;
 
-import java.util.UUID;
-
 import org.hepi.hepi_sv.auth.dto.OAuth2UserInfo;
 import org.hepi.hepi_sv.user.entity.Users;
 import org.springframework.stereotype.Service;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -23,9 +22,18 @@ public class UserRegistrationService {
     public Users loadUser(OAuth2UserInfo oAuth2UserInfo) {
         String provider = oAuth2UserInfo.provider();
         String providerId = oAuth2UserInfo.providerId();
+        String name = oAuth2UserInfo.name();
+        String email = oAuth2UserInfo.email();
 
         // 유저가 존재할 경우 로드, 없으면 회원가입
         Users user = userService.getUserByProvider(provider, providerId);
+        user = user != null ? user : registUser(oAuth2UserInfo);
+
+        // 유저 이메일, 이름 검증 후 다를 시 업데이트
+        if ( !user.getName().equals(name) || !user.getEmail().equals(email) ) {
+            user = userService.updateUserNameAndEmail(user.getUserId(), name, email);
+        }
+
         return user != null ? user : registUser(oAuth2UserInfo);
     }
 

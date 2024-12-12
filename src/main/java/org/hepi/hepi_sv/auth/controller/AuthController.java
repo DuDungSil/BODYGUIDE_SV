@@ -84,9 +84,9 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @Operation(summary = "토큰 재발급 ( 인증 X )", description = "클라이언트로부터 리프레시 토큰을 전달받아 유저 리프레시 토큰 저장소에서 검증 후 새로운 액세스 토큰, 리프레시 토큰을 재발급")
-    public ResponseEntity<TokenResponse> refreshToken(@RequestBody TokenRequest tokenRequestDTO) {
+    public ResponseEntity<TokenResponse> refreshToken(@RequestBody TokenRequest tokenRequest) {
 
-        TokenResponse tokenResponse = tokenService.reissueTokenResponse(tokenRequestDTO);
+        TokenResponse tokenResponse = tokenService.reissueTokenResponse(tokenRequest);
 
         return ResponseEntity.ok(tokenResponse);
     }
