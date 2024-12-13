@@ -62,6 +62,9 @@ jobs:
           echo "Pulling latest API image..."
           docker-compose -f $PROJECT_DIR/docker-compose.yml pull api
 
+          echo "Doker compose down"
+          docker-compose -f $PROJECT_DIR/docker-compose.yml down
+
           echo "Rebuilding and restarting API service..."
           docker-compose -f $PROJECT_DIR/docker-compose.yml up -d --no-deps --build api
 
