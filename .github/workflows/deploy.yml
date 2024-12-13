@@ -1,0 +1,74 @@
+name: bodyguide server CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. 코드 체크아웃
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. JDK 설정
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+         
+    # 3. config 폴더 생성 및 application.properties 작성
+    - name: Create application.properties from Secret
+      run: |
+        mkdir -p config
+        echo "${{ secrets.PROPERTIES }}" > config/application.properties
+
+    # 4. Maven으로 빌드
+    - name: Build with Maven
+      run: mvn clean package -DskipTests
+
+    # 5. Docker 이미지 빌드
+    - name: Build Docker Image
+      run: |
+        docker build -t dudungsil540/bodyguide-sv:latest .
+
+    # 6. Docker Hub로 푸시
+    - name: Push Docker Image to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - run: |
+        docker push dudungsil540/bodyguide-sv:latest
+
+    # 7. 배포 (원격 서버에서 Docker 실행)
+    - name: Execute remote command over SSH
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          echo "Stopping and removing old container..."
+          docker stop bodyguide-sv || true
+          docker rm bodyguide-sv || true
+          
+          echo "Pulling latest image from Docker Hub..."
+          docker pull dudungsil540/bodyguide-sv:latest
+          
+          echo "Running new container..."
+          docker run -d \
+            --name bodyguide-sv \
+            --restart unless-stopped \
+            -p 3573:3573 \
+            dudungsil540/bodyguide-sv:latest
+          
+          echo "Cleaning up old images..."
+          docker image prune -f
+          
+          echo "Deployment completed successfully."
