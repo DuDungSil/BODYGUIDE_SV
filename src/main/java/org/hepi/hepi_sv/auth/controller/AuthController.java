@@ -45,7 +45,7 @@ public class AuthController {
     //     return ResponseEntity.ok(tokenResponse);
     // }
 
-    @GetMapping("/zzzz")
+    @GetMapping("/zzzzz")
     @Operation(summary = "zzzz", description = "테스트용 액세스 토큰 발급")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> zzzzzz() {
