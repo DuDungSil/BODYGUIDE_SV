@@ -62,6 +62,10 @@ jobs:
           echo "Pulling latest API image..."
           docker-compose -f $PROJECT_DIR/docker-compose.yml pull api
           
+          echo "Stopping existing API container (if running)..."'
+	  docker-compose -f $PROJECT_DIR/docker-compose.yml stop api
+          docker-compose -f $PROJECT_DIR/docker-compose.yml rm -f api
+
           echo "Rebuilding and restarting API service..."
           docker-compose -f $PROJECT_DIR/docker-compose.yml up -d --no-deps --build api
           
