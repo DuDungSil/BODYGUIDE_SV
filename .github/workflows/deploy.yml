@@ -66,6 +66,7 @@ jobs:
             --name bodyguide \
             --restart unless-stopped \
             -p 3573:3573 \
+            --add-host=host.docker.internal:host-gateway \
             dudungsil540/bodyguide-sv:latest
           
           echo "Cleaning up old images..."
