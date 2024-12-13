@@ -44,16 +44,6 @@ public class AuthController {
     // public ResponseEntity<TokenResponseDTO> loginSuccess(@Validated TokenResponseDTO tokenResponse) {
     //     return ResponseEntity.ok(tokenResponse);
     // }
-
-    @GetMapping("/ffff")
-    @Operation(summary = "ci 테스트", description = "테스트용 액세스 토큰 발급")
-    @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<String> DDResponseEntity() {
-
-
-        // 액세스 토큰 반환
-        return ResponseEntity.ok("DD");
-    }
     
     @GetMapping("/test")
     @Operation(summary = "테스트용 액세스 토큰 발급 ( 인증 X )", description = "테스트용 액세스 토큰 발급")
