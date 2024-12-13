@@ -55,15 +55,15 @@ jobs:
         port: 22
         script: |
           echo "Stopping and removing old container..."
-          docker stop bodyguide-sv || true
-          docker rm bodyguide-sv || true
+          docker stop bodyguide || true
+          docker rm bodyguide || true
           
           echo "Pulling latest image from Docker Hub..."
           docker pull dudungsil540/bodyguide-sv:latest
           
           echo "Running new container..."
           docker run -d \
-            --name bodyguide-sv \
+            --name bodyguide \
             --restart unless-stopped \
             -p 3573:3573 \
             dudungsil540/bodyguide-sv:latest
