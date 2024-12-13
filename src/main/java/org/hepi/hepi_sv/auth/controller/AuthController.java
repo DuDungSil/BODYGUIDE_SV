@@ -46,7 +46,7 @@ public class AuthController {
     // }
     
     @GetMapping("/test")
-    @Operation(summary = "테스트용 액세스 토큰 발급 ( 인증 X )", description = "테스트용 액세스 토큰 발급")
+    @Operation(summary = "테스트용 액세스 토큰 발급d ( 인증 X )", description = "테스트용 액세스 토큰 발급")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> generateTestAccessToken() {
 
