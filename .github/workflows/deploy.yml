@@ -59,6 +59,9 @@ jobs:
           echo "Navigating to project directory..."
           cd $PROJECT_DIR || exit 1
 
+          echo "Pulling latest Docker image..."
+          docker pull dudungsil540/bodyguide-sv:latest
+
           echo "Rebuilding and restarting API service..."
           docker-compose -f $PROJECT_DIR/docker-compose.yml up -d --no-deps --build api
 
