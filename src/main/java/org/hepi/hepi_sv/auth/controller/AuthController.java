@@ -50,8 +50,6 @@ public class AuthController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> DDResponseEntity() {
 
-        String d = "Dd";
-        // 액세스 토큰 반환
         return ResponseEntity.ok("DD");
     }
     
