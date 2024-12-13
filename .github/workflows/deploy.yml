@@ -45,7 +45,7 @@ jobs:
     - run: |
         docker push dudungsil540/bodyguide-sv:latest
 
-    # 7. 배포 (원격 서버에서 Docker 실행)
+    # 7. 배포 (API 서버만 업데이트)
     - name: Execute remote command over SSH
       uses: appleboy/ssh-action@v0.1.8
       with:
@@ -54,22 +54,18 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
-          echo "Stopping and removing old container..."
-          docker stop bodyguide || true
-          docker rm bodyguide || true
+          PROJECT_DIR="/home/${{ secrets.SERVER_USER }}/bodyguide"
+
+          echo "Navigating to project directory..."
+          cd $PROJECT_DIR || exit 1
           
-          echo "Pulling latest image from Docker Hub..."
-          docker pull dudungsil540/bodyguide-sv:latest
+          echo "Pulling latest API image..."
+          docker-compose -f $PROJECT_DIR/docker-compose.yml pull api
           
-          echo "Running new container..."
-          docker run -d \
-            --name bodyguide \
-            --restart unless-stopped \
-            -p 3573:3573 \
-            --add-host=host.docker.internal:host-gateway \
-            dudungsil540/bodyguide-sv:latest
+          echo "Rebuilding and restarting API service..."
+          docker-compose -f $PROJECT_DIR/docker-compose.yml up -d --no-deps --build api
           
-          echo "Cleaning up old images..."
+          echo "Cleaning up unused images..."
           docker image prune -f
           
-          echo "Deployment completed successfully."
+          echo "API service deployment completed successfully."
