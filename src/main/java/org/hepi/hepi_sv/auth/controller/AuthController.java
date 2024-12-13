@@ -48,7 +48,7 @@ public class AuthController {
     @GetMapping("/zzzz")
     @Operation(summary = "zzzz", description = "테스트용 액세스 토큰 발급")
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<String> zzzzz() {
+    public ResponseEntity<String> zzzzzz() {
 
         // 고정된 테스트 사용자 UUID
         String _testUser = "9609c827-2bd0-4c9b-8b19-06cb1169ea5c";
