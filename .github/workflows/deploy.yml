@@ -53,23 +53,23 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
-        script: |
-          PROJECT_DIR="/home/${{ secrets.SERVER_USER }}/bodyguide"
+	script: |
+  	PROJECT_DIR="/home/${{ secrets.SERVER_USER }}/bodyguide"
 
-          echo "Navigating to project directory..."
-          cd $PROJECT_DIR || exit 1
-          
-          echo "Pulling latest API image..."
-          docker-compose -f $PROJECT_DIR/docker-compose.yml pull api
-          
-          echo "Stopping existing API container (if running)..."'
-	  docker-compose -f $PROJECT_DIR/docker-compose.yml stop api
-          docker-compose -f $PROJECT_DIR/docker-compose.yml rm -f api
+  	echo "Navigating to project directory..."
+  	cd $PROJECT_DIR || exit 1
 
-          echo "Rebuilding and restarting API service..."
-          docker-compose -f $PROJECT_DIR/docker-compose.yml up -d --no-deps --build api
-          
-          echo "Cleaning up unused images..."
-          docker image prune -f
-          
-          echo "API service deployment completed successfully."
+  	echo "Pulling latest API image..."
+  	docker-compose -f $PROJECT_DIR/docker-compose.yml pull api
+
+ 	echo "Stopping existing API container (if running)..."
+  	docker-compose -f $PROJECT_DIR/docker-compose.yml stop api
+ 	docker-compose -f $PROJECT_DIR/docker-compose.yml rm -f api
+
+  	echo "Rebuilding and restarting API service..."
+  	docker-compose -f $PROJECT_DIR/docker-compose.yml up -d --no-deps --build api
+
+  	echo "Cleaning up unused images..."
+  	docker image prune -f
+
+  	echo "API service deployment completed successfully."
