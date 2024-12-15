@@ -22,15 +22,17 @@ public class UserNutritionProfileService {
     private final UsersNutritionProfileHistoryRepository profileHistoryRepository;
 
     // 생성
-    public void createUsersExerciseProfile(UUID userId) {
+    public void createUsersNutritionProfile(UUID userId) {
         
         if (userId == null) {
-            throw new IllegalArgumentException("userId must not be null when creating a exercise profile.");
+            throw new IllegalArgumentException("userId must not be null when creating a nutrition profile.");
         }
 
         LocalDateTime dateTime = LocalDateTime.now();
 
         UsersNutritionProfile usersExerciseProfile = UsersNutritionProfile.builder()
+                                                    .dietId(1)
+                                                    .pa(1)
                                                     .userId(userId)
                                                     .updatedAt(dateTime)
                                                     .build();

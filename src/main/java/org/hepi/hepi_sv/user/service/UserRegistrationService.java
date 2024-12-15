@@ -46,7 +46,7 @@ public class UserRegistrationService {
 
         userProfileService.createUserProfile(user.getUserId());
         userExerciseProfileService.createUsersExerciseProfile(user.getUserId());
-        userNutritionProfileService.createUsersExerciseProfile(user.getUserId());
+        userNutritionProfileService.createUsersNutritionProfile(user.getUserId());
         userMetaService.createUsersMeta(user.getUserId());
         userSocialTokenService.createUserProviderToken(user.getUserId());
 

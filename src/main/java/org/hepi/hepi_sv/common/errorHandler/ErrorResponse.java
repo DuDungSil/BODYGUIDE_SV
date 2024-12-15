@@ -16,4 +16,17 @@ public class ErrorResponse {
         this.error = errorCode.getHttpStatus().name();
         this.message = errorCode.getMessage();
     }
+
+    // 팩토리 메서드: 기존 객체의 데이터를 유지하면서 message를 수정한 새 객체를 생성
+    public ErrorResponse withCustomMessage(String customMessage) {
+        return new ErrorResponse(this.statusCode, this.error, customMessage);
+    }
+
+    // private 생성자: 새로운 객체 생성에 사용
+    private ErrorResponse(int statusCode, String error, String message) {
+        this.statusCode = statusCode;
+        this.error = error;
+        this.message = message;
+    }
+
 }
