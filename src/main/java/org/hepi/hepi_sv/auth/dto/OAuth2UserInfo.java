@@ -5,8 +5,8 @@ import static org.hepi.hepi_sv.common.errorHandler.ErrorCode.ILLEGAL_REGISTRATIO
 import java.util.Map;
 
 import org.hepi.hepi_sv.auth.exception.AuthException;
-import org.hepi.hepi_sv.user.entity.Role;
 import org.hepi.hepi_sv.user.entity.Users;
+import org.hepi.hepi_sv.user.enums.Role;
 
 import lombok.Builder;
 
