@@ -7,13 +7,14 @@ import java.util.List;
 import org.hepi.hepi_sv.common.util.ClientIpExtraction;
 import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
 import org.hepi.hepi_sv.nutrition.dto.RecommendSource;
+import org.hepi.hepi_sv.nutrition.enums.PAType;
 import org.hepi.hepi_sv.nutrition.service.NutritionAnalysisService;
 import org.hepi.hepi_sv.nutrition.service.SourceRecommendService;
 import org.hepi.hepi_sv.product.dto.ShopProductDTO;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
-import org.hepi.hepi_sv.web.dto.nutrition.WebRecommendFood;
 import org.hepi.hepi_sv.web.dto.nutrition.WebNutrientRequest;
 import org.hepi.hepi_sv.web.dto.nutrition.WebNutrientResult;
+import org.hepi.hepi_sv.web.dto.nutrition.WebRecommendFood;
 import org.hepi.hepi_sv.web.entity.WebNutriAnalysisData;
 import org.hepi.hepi_sv.web.entity.WebNutriInputData;
 import org.hepi.hepi_sv.web.repository.WebNutriAnalysisDataRepository;
@@ -70,6 +71,14 @@ public class WebNutritionService {
         webNutriAnalysisDataRepository.save(analysisData);
     }
     
+    // TDEE 계산
+    public double getTDEE(double BMR, String PA){
+        // String -> pa_type 변환
+        PAType pa = PAType.fromDescription(PA);
+
+        return nutrientAnalysisService.calculateTDEE(BMR, pa);
+    } 
+
     // 식단 영양 성분 가져오기
     public MealNutrientComposition getMealNutrientComposition(Double targetCalory, String dietType) {
         
@@ -127,7 +136,7 @@ public class WebNutritionService {
                 / 100.0;
         double BMR = nutrientAnalysisService.calculateBMR(request.getSex(), request.getHeight(), request.getWeight(),
                 request.getAge());
-        double TDEE = nutrientAnalysisService.calculateTDEE(BMR, request.getPA());
+        double TDEE = getTDEE(BMR, request.getPA());
         double targetCalory = nutrientAnalysisService.calculateTargetCalory(TDEE, request.getDietGoal());
         MealNutrientComposition composition = getMealNutrientComposition(targetCalory, request.getDietType());
         List<String> mealTimes = nutrientAnalysisService.recommendMealTimes(request.getWakeup(), request.getSleep());

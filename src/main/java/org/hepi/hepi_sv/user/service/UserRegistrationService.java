@@ -1,5 +1,8 @@
 package org.hepi.hepi_sv.user.service;
 
+import java.util.UUID;
+
+import org.hepi.hepi_sv.activity.service.UserExpProfileService;
 import org.hepi.hepi_sv.auth.dto.OAuth2UserInfo;
 import org.hepi.hepi_sv.user.entity.Users;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ public class UserRegistrationService {
     private final UserNutritionProfileService userNutritionProfileService;
     private final UserMetaService userMetaService;
     private final UserSocialTokenService userSocialTokenService;
+    private final UserExpProfileService userExpProfileService;
 
     // 유저 정보 로드
     public Users loadUser(OAuth2UserInfo oAuth2UserInfo) {
@@ -43,12 +47,14 @@ public class UserRegistrationService {
         // 프로필, 메타도 같이 생성 (트랜잭션 처리)
         Users user = oAuth2UserInfo.toEntity();
         user = userService.saveUser(user);
+        UUID userId = user.getUserId();
 
-        userProfileService.createUserProfile(user.getUserId());
-        userExerciseProfileService.createUsersExerciseProfile(user.getUserId());
-        userNutritionProfileService.createUsersExerciseProfile(user.getUserId());
-        userMetaService.createUsersMeta(user.getUserId());
-        userSocialTokenService.createUserProviderToken(user.getUserId());
+        userProfileService.createUserProfile(userId);
+        userExerciseProfileService.createUsersExerciseProfile(userId);
+        userNutritionProfileService.createUsersNutritionProfile(userId);
+        userMetaService.createUsersMeta(userId);
+        userSocialTokenService.createUserProviderToken(userId);
+        userExpProfileService.createUserExpProfile(userId);
 
         return user;
     }

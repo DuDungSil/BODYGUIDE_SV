@@ -2,6 +2,8 @@ package org.hepi.hepi_sv.user.entity;
 
 import java.util.UUID;
 
+import org.hepi.hepi_sv.user.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.user.entity;
+package org.hepi.hepi_sv.user.enums;
 
 import lombok.Getter;
 
