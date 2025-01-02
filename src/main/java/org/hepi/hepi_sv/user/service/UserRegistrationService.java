@@ -2,8 +2,8 @@ package org.hepi.hepi_sv.user.service;
 
 import java.util.UUID;
 
+import org.hepi.hepi_sv.activity.service.UserExpProfileService;
 import org.hepi.hepi_sv.auth.dto.OAuth2UserInfo;
-import org.hepi.hepi_sv.experience.service.UserExpProfileService;
 import org.hepi.hepi_sv.user.entity.Users;
 import org.springframework.stereotype.Service;
 

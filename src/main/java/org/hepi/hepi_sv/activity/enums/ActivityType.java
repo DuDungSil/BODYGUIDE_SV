@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.experience.enums;
+package org.hepi.hepi_sv.activity.enums;
 
 public enum ActivityType {
     EXERCISE(101, 5, 4), // 운동 기록

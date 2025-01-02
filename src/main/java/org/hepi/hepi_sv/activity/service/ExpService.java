@@ -1,14 +1,14 @@
-package org.hepi.hepi_sv.experience.service;
+package org.hepi.hepi_sv.activity.service;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.hepi.hepi_sv.experience.entity.LevelInfo;
-import org.hepi.hepi_sv.experience.entity.UsersActivityLog;
-import org.hepi.hepi_sv.experience.entity.UsersExpProfile;
-import org.hepi.hepi_sv.experience.enums.ActivityType;
-import org.hepi.hepi_sv.experience.repository.UsersActivityLogRepository;
+import org.hepi.hepi_sv.activity.entity.LevelInfo;
+import org.hepi.hepi_sv.activity.entity.UsersActivityLog;
+import org.hepi.hepi_sv.activity.entity.UsersExpProfile;
+import org.hepi.hepi_sv.activity.enums.ActivityType;
+import org.hepi.hepi_sv.activity.repository.UsersActivityLogRepository;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;

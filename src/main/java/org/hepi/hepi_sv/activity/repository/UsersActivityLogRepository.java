@@ -1,6 +1,6 @@
-package org.hepi.hepi_sv.experience.repository;
+package org.hepi.hepi_sv.activity.repository;
 
-import org.hepi.hepi_sv.experience.entity.UsersActivityLog;
+import org.hepi.hepi_sv.activity.entity.UsersActivityLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

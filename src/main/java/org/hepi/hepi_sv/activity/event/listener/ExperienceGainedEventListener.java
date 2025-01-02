@@ -1,10 +1,10 @@
-package org.hepi.hepi_sv.experience.event.listener;
+package org.hepi.hepi_sv.activity.event.listener;
 
 import java.util.UUID;
 
-import org.hepi.hepi_sv.experience.enums.ActivityType;
-import org.hepi.hepi_sv.experience.event.ExperienceGainedEvent;
-import org.hepi.hepi_sv.experience.service.ExpService;
+import org.hepi.hepi_sv.activity.enums.ActivityType;
+import org.hepi.hepi_sv.activity.event.ExperienceGainedEvent;
+import org.hepi.hepi_sv.activity.service.ExpService;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 

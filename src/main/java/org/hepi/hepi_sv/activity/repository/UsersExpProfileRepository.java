@@ -1,9 +1,9 @@
-package org.hepi.hepi_sv.experience.repository;
+package org.hepi.hepi_sv.activity.repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import org.hepi.hepi_sv.experience.entity.UsersExpProfile;
+import org.hepi.hepi_sv.activity.entity.UsersExpProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

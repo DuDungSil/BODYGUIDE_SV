@@ -1,8 +1,8 @@
-package org.hepi.hepi_sv.experience.event;
+package org.hepi.hepi_sv.activity.event;
 
 import java.util.UUID;
 
-import org.hepi.hepi_sv.experience.enums.ActivityType;
+import org.hepi.hepi_sv.activity.enums.ActivityType;
 
 public class ExperienceGainedEvent {
 

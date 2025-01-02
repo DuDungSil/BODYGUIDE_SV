@@ -1,9 +1,9 @@
-package org.hepi.hepi_sv.experience.service;
+package org.hepi.hepi_sv.activity.service;
 
 import java.util.List;
 
-import org.hepi.hepi_sv.experience.entity.LevelInfo;
-import org.hepi.hepi_sv.experience.repository.LevelInfoRepository;
+import org.hepi.hepi_sv.activity.entity.LevelInfo;
+import org.hepi.hepi_sv.activity.repository.LevelInfoRepository;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 

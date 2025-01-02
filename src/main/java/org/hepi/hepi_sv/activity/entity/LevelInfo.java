@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.experience.entity;
+package org.hepi.hepi_sv.activity.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

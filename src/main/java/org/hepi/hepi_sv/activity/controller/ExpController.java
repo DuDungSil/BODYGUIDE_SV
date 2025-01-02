@@ -1,11 +1,11 @@
-package org.hepi.hepi_sv.experience.controller;
+package org.hepi.hepi_sv.activity.controller;
 
 import java.util.UUID;
 
-import org.hepi.hepi_sv.experience.dto.ExpProfileResponse;
-import static org.hepi.hepi_sv.experience.enums.ActivityType.EXERCISE;
-import org.hepi.hepi_sv.experience.event.ExperienceGainedEvent;
-import org.hepi.hepi_sv.experience.service.UserExpProfileService;
+import org.hepi.hepi_sv.activity.dto.ExpProfileResponse;
+import static org.hepi.hepi_sv.activity.enums.ActivityType.EXERCISE;
+import org.hepi.hepi_sv.activity.event.ExperienceGainedEvent;
+import org.hepi.hepi_sv.activity.service.UserExpProfileService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

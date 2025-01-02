@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.experience.dto;
+package org.hepi.hepi_sv.activity.dto;
 
 import lombok.Builder;
 

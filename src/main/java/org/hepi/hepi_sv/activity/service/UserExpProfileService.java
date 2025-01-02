@@ -1,11 +1,11 @@
-package org.hepi.hepi_sv.experience.service;
+package org.hepi.hepi_sv.activity.service;
 
 import java.util.UUID;
 
-import org.hepi.hepi_sv.experience.dto.ExpProfileResponse;
-import org.hepi.hepi_sv.experience.entity.LevelInfo;
-import org.hepi.hepi_sv.experience.entity.UsersExpProfile;
-import org.hepi.hepi_sv.experience.repository.UsersExpProfileRepository;
+import org.hepi.hepi_sv.activity.dto.ExpProfileResponse;
+import org.hepi.hepi_sv.activity.entity.LevelInfo;
+import org.hepi.hepi_sv.activity.entity.UsersExpProfile;
+import org.hepi.hepi_sv.activity.repository.UsersExpProfileRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
