@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.calender.entity;
+package org.hepi.hepi_sv.calendar.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
