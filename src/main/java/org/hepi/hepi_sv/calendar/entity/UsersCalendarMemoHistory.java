@@ -1,6 +1,7 @@
-package org.hepi.hepi_sv.calender.entity;
+package org.hepi.hepi_sv.calendar.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -22,7 +23,7 @@ public class UsersCalendarMemoHistory {
     private UUID userId;
 
     @Column(name = "record_at")
-    private String recordAt;
+    private LocalDateTime recordAt;
 
     @Column(name = "note")
     private String note;

@@ -35,3 +35,4 @@ build/
 ### PROPERTIES ###
 *.properties
 logs/hepiLog.log
+logs/hepiLog.log
