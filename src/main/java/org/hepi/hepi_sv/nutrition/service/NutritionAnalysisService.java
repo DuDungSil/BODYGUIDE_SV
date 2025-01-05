@@ -6,9 +6,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
 import org.hepi.hepi_sv.nutrition.dto.MealMacroNutrientDetails;
+import org.hepi.hepi_sv.nutrition.dto.MealNutrientComposition;
 import org.hepi.hepi_sv.nutrition.entity.DietType;
+import org.hepi.hepi_sv.nutrition.enums.PAType;
 import org.hepi.hepi_sv.nutrition.repository.DietTypeRepository;
 import org.springframework.stereotype.Service;
 
@@ -39,17 +40,11 @@ public class NutritionAnalysisService {
         return BMR;
     } 
 
-    public double calculateTDEE(double BMR, String PA){
+    public double calculateTDEE(double BMR, PAType pa){
         // 비활동적 / 저활동적 / 활동적 / 고활동적 / 매우활동적 
         double TDEE;
-        TDEE = switch (PA) {
-            case "비활동적" -> BMR * 1.2;
-            case "저활동적" -> BMR * 1.375;
-            case "활동적" -> BMR * 1.55;
-            case "고활동적" -> BMR * 1.725;
-            case "매우활동적" -> BMR * 1.9;
-            default -> BMR * 1.55;
-        };
+        TDEE = BMR * pa.getValue();
+
         return TDEE;
     } 
 
@@ -102,7 +97,7 @@ public class NutritionAnalysisService {
     
     // 식사 시간 추천
     public List<String> recommendMealTimes(String wakeUpTime, String bedTime) {
-        List<String> mealTimes = new ArrayList<String>();
+        List<String> mealTimes = new ArrayList<>();
 
         // 시간 형식을 맞추기 위한 포맷터
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");

@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.hepi.hepi_sv.common.errorHandler.ErrorCode;
 import org.hepi.hepi_sv.user.Exception.UserException;
-import org.hepi.hepi_sv.user.entity.Role;
 import org.hepi.hepi_sv.user.entity.Users;
+import org.hepi.hepi_sv.user.enums.Role;
 import org.hepi.hepi_sv.user.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 

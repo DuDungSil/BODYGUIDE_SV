@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 
@@ -46,7 +47,7 @@ public class AuthController {
     // }
 
     @GetMapping("/test")
-    @Operation(summary = "테스트용 액세스 토큰 발급d ( 인증 X )", description = "테스트용 액세스 토큰 발급")
+    @Operation(summary = "테스트용 액세스 토큰 발급 ( 인증 X )", description = "테스트용 액세스 토큰 발급")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> generateTestAccessToken() {
 
@@ -61,9 +62,9 @@ public class AuthController {
     }
 
     @PostMapping("/initialize")
-    @Operation(summary = "계정 초기화", description = "계정 초기 데이터를 입력받아 계정 프로필을 초기화 후 GUEST -> USER 권한 상승")
+    @Operation(summary = "GUEST 권한 계정 초기화", description = "계정 초기 데이터를 입력받아 계정 프로필을 초기화 후 GUEST -> USER 권한 상승")
     public ResponseEntity<TokenResponse> initialize(@AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody InitializeRequest request) {
+        @Valid @RequestBody InitializeRequest request) {
 
         // 프로필 입력
         userProfileService.initializeUserProfile(UUID.fromString(userDetails.getUsername()), request);
@@ -84,7 +85,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @Operation(summary = "토큰 재발급 ( 인증 X )", description = "클라이언트로부터 리프레시 토큰을 전달받아 유저 리프레시 토큰 저장소에서 검증 후 새로운 액세스 토큰, 리프레시 토큰을 재발급")
-    public ResponseEntity<TokenResponse> refreshToken(@RequestBody TokenRequest tokenRequest) {
+    public ResponseEntity<TokenResponse> refreshToken(@Valid @RequestBody TokenRequest tokenRequest) {
 
         TokenResponse tokenResponse = tokenService.reissueTokenResponse(tokenRequest);
 

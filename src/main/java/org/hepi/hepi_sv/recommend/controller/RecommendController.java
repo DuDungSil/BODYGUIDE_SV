@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class RecommendController {
 
     @PostMapping("/supplement")
     @Operation(summary = "영양성분 & 보충제 추천", description = "운동 목적에 따른 영양성분 & 보충제 추천")
-    public ResponseEntity<RecommendSupplementResponse> getRecommendSupplement(@AuthenticationPrincipal UserDetails userDetails, @RequestBody RecommendSupplementRequest request) {
+    public ResponseEntity<RecommendSupplementResponse> getRecommendSupplement(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody RecommendSupplementRequest request) {
         RecommendSupplementResponse response = recommendSupplementService.getRecommendSupplementResponse(UUID.fromString(userDetails.getUsername()), request);
         return ResponseEntity.ok(response);
     }
