@@ -1,15 +1,15 @@
-package org.hepi.hepi_sv.user.service;
+package org.hepi.hepi_sv.nutrition.service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.hepi.hepi_sv.user.dto.UserNutritionProfileDTO;
-import org.hepi.hepi_sv.user.dto.UserNutritionProfileRequest;
-import org.hepi.hepi_sv.user.dto.UserNutritionProfileResponse;
-import org.hepi.hepi_sv.user.entity.UsersNutritionProfile;
-import org.hepi.hepi_sv.user.entity.UsersNutritionProfileHistory;
-import org.hepi.hepi_sv.user.repository.UsersNutritionProfileHistoryRepository;
-import org.hepi.hepi_sv.user.repository.UsersNutritionProfileRepository;
+import org.hepi.hepi_sv.nutrition.dto.UserNutritionProfileDTO;
+import org.hepi.hepi_sv.nutrition.dto.UserNutritionProfileRequest;
+import org.hepi.hepi_sv.nutrition.dto.UserNutritionProfileResponse;
+import org.hepi.hepi_sv.nutrition.entity.UsersNutritionProfile;
+import org.hepi.hepi_sv.nutrition.entity.UsersNutritionProfileHistory;
+import org.hepi.hepi_sv.nutrition.repository.UsersNutritionProfileHistoryRepository;
+import org.hepi.hepi_sv.nutrition.repository.UsersNutritionProfileRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

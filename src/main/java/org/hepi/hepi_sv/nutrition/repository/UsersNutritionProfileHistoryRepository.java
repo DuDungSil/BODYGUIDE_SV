@@ -1,6 +1,6 @@
-package org.hepi.hepi_sv.user.repository;
+package org.hepi.hepi_sv.nutrition.repository;
 
-import org.hepi.hepi_sv.user.entity.UsersNutritionProfileHistory;
+import org.hepi.hepi_sv.nutrition.entity.UsersNutritionProfileHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

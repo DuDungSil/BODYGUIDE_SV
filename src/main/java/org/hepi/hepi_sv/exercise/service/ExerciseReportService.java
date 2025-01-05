@@ -12,9 +12,8 @@ import org.hepi.hepi_sv.exercise.dto.ExerciseAbility;
 import org.hepi.hepi_sv.exercise.dto.ExerciseAnalysisProfile;
 import org.hepi.hepi_sv.exercise.dto.ExerciseReportResponse;
 import org.hepi.hepi_sv.exercise.dto.MuscleProfile;
-import org.hepi.hepi_sv.user.dto.UserExerciseProfileDTO;
+import org.hepi.hepi_sv.exercise.dto.UserExerciseStatsDTO;
 import org.hepi.hepi_sv.user.dto.UserProfileDTO;
-import org.hepi.hepi_sv.user.service.UserExerciseProfileService;
 import org.hepi.hepi_sv.user.service.UserProfileService;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class ExerciseReportService {
     
     private final UserProfileService userProfileService;
-    private final UserExerciseProfileService userExerciseProfileService;
+    private final UserExerciseStatsService userExerciseProfileService;
     private final ExerciseAnalysisService exerciseAnalysisService;
     private final ExerciseMetaService exerciseMetaService;
 
@@ -36,7 +35,7 @@ public class ExerciseReportService {
         // db 에서 유저 프로필 가져오기
         UserProfileDTO userProfile = userProfileService.getUserProfileDTO(userId);
         // db 에서 운동 프로필 가져오기
-        UserExerciseProfileDTO userExerciseProfile = userExerciseProfileService.getUserExerciseProfileDTO(userId);
+        UserExerciseStatsDTO userExerciseProfile = userExerciseProfileService.getUserExerciseProfileDTO(userId);
 
         // 2. 분석
 

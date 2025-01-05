@@ -4,11 +4,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import org.hepi.hepi_sv.nutrition.dto.UserNutritionProfileDTO;
+import org.hepi.hepi_sv.nutrition.service.UserNutritionProfileService;
 import org.hepi.hepi_sv.product.dto.ShopProductDTO;
 import org.hepi.hepi_sv.product.service.ProductRecommendService;
 import org.hepi.hepi_sv.recommend.dto.RecommendFoodResponse;
-import org.hepi.hepi_sv.user.dto.UserNutritionProfileDTO;
-import org.hepi.hepi_sv.user.service.UserNutritionProfileService;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

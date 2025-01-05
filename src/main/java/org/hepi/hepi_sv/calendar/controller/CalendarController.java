@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/calendar")
-@Tag(name = "Calendar", description = "운동 관련")
+@Tag(name = "Calendar", description = "캘린더 관련")
 public class CalendarController {
 
     private final CalendarService calendarService;

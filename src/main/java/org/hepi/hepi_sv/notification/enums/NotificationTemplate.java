@@ -75,7 +75,7 @@ public enum NotificationTemplate {
         }
     }
 
-    // 플레이스홀더 교체체
+    // 플레이스홀더 교체
     private String applyPlaceholders(String message, Map<String, String> placeholders) {
         for (Map.Entry<String, String> entry : placeholders.entrySet()) {
             message = message.replace("#{" + entry.getKey() + "}", entry.getValue());

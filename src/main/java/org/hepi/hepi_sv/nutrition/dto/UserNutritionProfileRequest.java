@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.user.dto;
+package org.hepi.hepi_sv.nutrition.dto;
 
 public record UserNutritionProfileRequest(
     int pa,

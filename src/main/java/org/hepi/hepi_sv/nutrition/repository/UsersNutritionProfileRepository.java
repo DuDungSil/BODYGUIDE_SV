@@ -1,9 +1,9 @@
-package org.hepi.hepi_sv.user.repository;
+package org.hepi.hepi_sv.nutrition.repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import org.hepi.hepi_sv.user.entity.UsersNutritionProfile;
+import org.hepi.hepi_sv.nutrition.entity.UsersNutritionProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

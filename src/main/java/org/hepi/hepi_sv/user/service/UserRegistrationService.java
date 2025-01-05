@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.hepi.hepi_sv.activity.service.UserExpProfileService;
 import org.hepi.hepi_sv.auth.dto.OAuth2UserInfo;
+import org.hepi.hepi_sv.exercise.service.UserExerciseStatsService;
+import org.hepi.hepi_sv.nutrition.service.UserNutritionProfileService;
 import org.hepi.hepi_sv.user.entity.Users;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,12 @@ public class UserRegistrationService {
 
     private final UserService userService;
     private final UserProfileService userProfileService;
-    private final UserExerciseProfileService userExerciseProfileService;
-    private final UserNutritionProfileService userNutritionProfileService;
     private final UserMetaService userMetaService;
     private final UserSocialTokenService userSocialTokenService;
+
+    // 분리해야함
+    private final UserExerciseStatsService userExerciseProfileService;
+    private final UserNutritionProfileService userNutritionProfileService;
     private final UserExpProfileService userExpProfileService;
 
     // 유저 정보 로드
@@ -50,10 +54,11 @@ public class UserRegistrationService {
         UUID userId = user.getUserId();
 
         userProfileService.createUserProfile(userId);
-        userExerciseProfileService.createUsersExerciseProfile(userId);
-        userNutritionProfileService.createUsersNutritionProfile(userId);
         userMetaService.createUsersMeta(userId);
         userSocialTokenService.createUserProviderToken(userId);
+
+        userExerciseProfileService.createUsersExerciseProfile(userId);
+        userNutritionProfileService.createUsersNutritionProfile(userId);
         userExpProfileService.createUserExpProfile(userId);
 
         return user;

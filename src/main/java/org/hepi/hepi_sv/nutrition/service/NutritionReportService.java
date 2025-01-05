@@ -3,9 +3,8 @@ package org.hepi.hepi_sv.nutrition.service;
 import java.util.UUID;
 
 import org.hepi.hepi_sv.nutrition.dto.NutritionReportResponse;
-import org.hepi.hepi_sv.user.dto.UserNutritionProfileDTO;
+import org.hepi.hepi_sv.nutrition.dto.UserNutritionProfileDTO;
 import org.hepi.hepi_sv.user.dto.UserProfileDTO;
-import org.hepi.hepi_sv.user.service.UserNutritionProfileService;
 import org.hepi.hepi_sv.user.service.UserProfileService;
 import org.springframework.stereotype.Service;
 

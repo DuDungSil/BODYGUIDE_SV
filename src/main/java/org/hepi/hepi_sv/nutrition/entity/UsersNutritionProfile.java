@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.user.entity;
+package org.hepi.hepi_sv.nutrition.entity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,12 +21,12 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS_NUTRITION_PROFILE_HISTORY")
-public class UsersNutritionProfileHistory {
+@Table(name = "USERS_NUTRITION_PROFILE")
+public class UsersNutritionProfile {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "history_id", updatable = false, nullable = false) 
+    @Column(name = "profile_id", updatable = false, nullable = false) 
     private Long id;
 
     @Column(name = "user_id", updatable = false, nullable = false)
@@ -59,7 +59,7 @@ public class UsersNutritionProfileHistory {
     @Column(name = "sleep_time")
     private String sleepTime;
 
-    @Column(name = "record_at")
-    private LocalDateTime recordAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
 }

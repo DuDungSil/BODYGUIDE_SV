@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.user.entity;
+package org.hepi.hepi_sv.nutrition.entity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -21,8 +21,8 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS_EXERCISE_PROFILE_HISTORY")
-public class UsersExerciseProfileHistory {
+@Table(name = "USERS_NUTRITION_PROFILE_HISTORY")
+public class UsersNutritionProfileHistory {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,35 +32,32 @@ public class UsersExerciseProfileHistory {
     @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
 
-    @Column(name = "bench_weight")
-    private Double benchWeight;
+    @Column(name = "PA", columnDefinition = "TINYINT")
+    private int pa;
 
-    @Column(name = "bench_reps")
-    private Integer benchReps;
+    @Column(name = "diet_type_id", columnDefinition = "TINYINT")
+    private int dietId;
 
-    @Column(name = "squat_weight")
-    private Double squatWeight;
+    @Column(name = "target_weight")
+    private Double targetWeight;
 
-    @Column(name = "squat_reps")
-    private Integer squatReps;
+    @Column(name = "target_calory")
+    private Double targetCalory;
 
-    @Column(name = "dead_weight")
-    private Double deadWeight;
+    @Column(name = "target_carbohydrate_calory")
+    private Double carbCal;
 
-    @Column(name = "dead_reps")
-    private Integer deadReps;
+    @Column(name = "target_protein_calory")
+    private Double proteinCal;
 
-    @Column(name = "overhead_weight")
-    private Double overheadWeight;
+    @Column(name = "target_fat_calory")
+    private Double fatCal;
 
-    @Column(name = "overhead_reps")
-    private Integer overheadReps;
+    @Column(name = "wakeup_time")
+    private String wakeupTime;
 
-    @Column(name = "pushup_reps")
-    private Integer pushupReps;
-
-    @Column(name = "pullup_reps")
-    private Integer pullupReps;
+    @Column(name = "sleep_time")
+    private String sleepTime;
 
     @Column(name = "record_at")
     private LocalDateTime recordAt;

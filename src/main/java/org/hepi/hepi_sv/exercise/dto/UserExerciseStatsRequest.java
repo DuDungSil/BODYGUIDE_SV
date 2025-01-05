@@ -1,9 +1,6 @@
-package org.hepi.hepi_sv.user.dto;
+package org.hepi.hepi_sv.exercise.dto;
 
-import lombok.Builder;
-
-@Builder
-public record UserExerciseProfileResponse(
+public record UserExerciseStatsRequest(
     Double benchWeight,
     int benchReps,
     Double squatWeight,
