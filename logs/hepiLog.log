@@ -1,394 +1,235 @@
-2025-01-02 22:28:43 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2025-01-02 22:28:43 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
+2025-01-05 17:48:52 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2025-01-05 17:48:52 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - Starting HepiSvApplication using Java 17.0.11 with PID 18532 (D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes started by oms9931 in D:\workspace\BODYGUIDE\BODYGUIDE_SV)
+2025-01-05 17:48:52 [main] DEBUG org.hepi.hepi_sv.HepiSvApplication - Running with Spring Boot v3.3.6, Spring v6.1.15
+2025-01-05 17:48:52 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - No active profile set, falling back to 1 default profile: "default"
+2025-01-05 17:48:53 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-05 17:48:53 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-01-05 17:48:53 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 73 ms. Found 1 Redis repository interface.
+2025-01-05 17:48:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-05 17:48:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-05 17:48:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JPA - Could not safely identify store assignment for repository candidate interface org.hepi.hepi_sv.common.redis.repository.TokenRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: jakarta.persistence.Entity, jakarta.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
+2025-01-05 17:48:54 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 93 ms. Found 21 JPA repository interfaces.
+2025-01-05 17:48:55 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 3573 (https)
+2025-01-05 17:48:55 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-3573"]
+2025-01-05 17:48:55 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-01-05 17:48:55 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-01-05 17:48:55 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-01-05 17:48:55 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2741 ms
+2025-01-05 17:48:56 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-05 17:48:56 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-01-05 17:48:56 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-01-05 17:48:56 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-05 17:48:56 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-01-05 17:48:56 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@33997e07
+2025-01-05 17:48:56 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-01-05 17:48:57 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-05 17:48:58 [main] ERROR o.s.o.j.LocalContainerEntityManagerFactoryBean - Failed to initialize JPA EntityManagerFactory: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [record_at] in table [USERS_CALENDAR_MEMO_HISTORY]; found [datetime (Types#TIMESTAMP)], but expecting [varchar(255) (Types#VARCHAR)]
+2025-01-05 17:48:58 [main] ERROR o.s.b.w.e.tomcat.TomcatStarter - Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'tokenAuthenticationFilter' defined in file [D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes\org\hepi\hepi_sv\auth\filter\TokenAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'tokenService' defined in file [D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes\org\hepi\hepi_sv\auth\service\TokenService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userService' defined in file [D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes\org\hepi\hepi_sv\user\service\UserService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'usersRepository' defined in org.hepi.hepi_sv.user.repository.UsersRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
+2025-01-05 17:48:58 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2025-01-05 17:48:58 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [lettuce-eventExecutorLoop-1-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.11/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.11/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.11/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.11/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:460)
+ app//io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:256)
+ app//io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ app//io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ app//io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ app//io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.base@17.0.11/java.lang.Thread.run(Thread.java:842)
+2025-01-05 17:48:58 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [lettuce-timer-3-1] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.11/java.lang.Thread.sleep(Native Method)
+ app//io.netty.util.HashedWheelTimer$Worker.waitForNextTick(HashedWheelTimer.java:598)
+ app//io.netty.util.HashedWheelTimer$Worker.run(HashedWheelTimer.java:494)
+ app//io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.base@17.0.11/java.lang.Thread.run(Thread.java:842)
+2025-01-05 17:48:58 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.11/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.11/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.11/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.11/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.11/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.11/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.11/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.11/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.11/java.lang.Thread.run(Thread.java:842)
+2025-01-05 17:48:58 [main] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [ROOT] appears to have started a thread named [HikariPool-1 connection adder] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.11/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.11/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.11/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.11/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:460)
+ java.base@17.0.11/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1061)
+ java.base@17.0.11/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.11/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.11/java.lang.Thread.run(Thread.java:842)
+2025-01-05 17:48:58 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2025-01-05 17:48:58 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-01-05 17:48:58 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-01-05 17:48:58 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
 
-Found multiple occurrences of org.json.JSONObject on the class path:
-
-	jar:file:/C:/Users/osm99/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
-	jar:file:/C:/Users/osm99/.m2/repository/org/json/json/20240303/json-20240303.jar!/org/json/JSONObject.class
-
-You may wish to exclude one of them to ensure predictable runtime behavior
-
-2025-01-02 22:28:43 [main] INFO  o.h.hepi_sv.HepiSvApplicationTests - Starting HepiSvApplicationTests using Java 17.0.11 with PID 26492 (started by oms9931 in D:\workspace\BODYGUIDE\BODYGUIDE_SV)
-2025-01-02 22:28:43 [main] DEBUG o.h.hepi_sv.HepiSvApplicationTests - Running with Spring Boot v3.3.6, Spring v6.1.15
-2025-01-02 22:28:43 [main] INFO  o.h.hepi_sv.HepiSvApplicationTests - No active profile set, falling back to 1 default profile: "default"
-2025-01-02 22:28:44 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2025-01-02 22:28:44 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2025-01-02 22:28:44 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 90 ms. Found 1 Redis repository interface.
-2025-01-02 22:28:45 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2025-01-02 22:28:45 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-01-02 22:28:45 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JPA - Could not safely identify store assignment for repository candidate interface org.hepi.hepi_sv.common.redis.repository.TokenRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: jakarta.persistence.Entity, jakarta.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
-2025-01-02 22:28:45 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 76 ms. Found 21 JPA repository interfaces.
-2025-01-02 22:28:46 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-01-02 22:28:46 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2025-01-02 22:28:46 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2025-01-02 22:28:46 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-01-02 22:28:46 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2025-01-02 22:28:46 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@464abed
-2025-01-02 22:28:46 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2025-01-02 22:28:47 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-01-02 22:28:47 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-01-02 22:28:50 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-01-02 22:28:50 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
-2025-01-02 22:28:50 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/error'], Ant [pattern='/error']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2025-01-02 22:28:50 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/favicon.ico'], Ant [pattern='/favicon.ico']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2025-01-02 22:28:51 [main] INFO  o.h.hepi_sv.HepiSvApplicationTests - Started HepiSvApplicationTests in 8.446 seconds (process running for 9.115)
-2025-01-02 22:28:51 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-01-02 22:28:51 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2025-01-02 22:28:51 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2025-01-02 22:29:00 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2025-01-02 22:29:00 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - Starting HepiSvApplication using Java 17.0.11 with PID 2528 (D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes started by oms9931 in D:\workspace\BODYGUIDE\BODYGUIDE_SV)
-2025-01-02 22:29:00 [main] DEBUG org.hepi.hepi_sv.HepiSvApplication - Running with Spring Boot v3.3.6, Spring v6.1.15
-2025-01-02 22:29:00 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - No active profile set, falling back to 1 default profile: "default"
-2025-01-02 22:29:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2025-01-02 22:29:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2025-01-02 22:29:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 66 ms. Found 1 Redis repository interface.
-2025-01-02 22:29:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2025-01-02 22:29:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-01-02 22:29:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JPA - Could not safely identify store assignment for repository candidate interface org.hepi.hepi_sv.common.redis.repository.TokenRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: jakarta.persistence.Entity, jakarta.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
-2025-01-02 22:29:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 93 ms. Found 21 JPA repository interfaces.
-2025-01-02 22:29:02 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 3573 (https)
-2025-01-02 22:29:02 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-3573"]
-2025-01-02 22:29:02 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2025-01-02 22:29:02 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
-2025-01-02 22:29:02 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2025-01-02 22:29:02 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2232 ms
-2025-01-02 22:29:03 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-01-02 22:29:03 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
-2025-01-02 22:29:03 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2025-01-02 22:29:04 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-01-02 22:29:04 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2025-01-02 22:29:04 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7dd847a2
-2025-01-02 22:29:04 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2025-01-02 22:29:05 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-01-02 22:29:05 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-01-02 22:29:06 [main] DEBUG o.h.h.a.f.TokenAuthenticationFilter - Filter 'tokenAuthenticationFilter' configured for use
-2025-01-02 22:29:07 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-01-02 22:29:07 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
-2025-01-02 22:29:07 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/error'], Ant [pattern='/error']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2025-01-02 22:29:07 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/favicon.ico'], Ant [pattern='/favicon.ico']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
-2025-01-02 22:29:08 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-3573"]
-2025-01-02 22:29:08 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-3573], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\osm99\.keystore] using alias [mysslkey] with trust store [null]
-2025-01-02 22:29:08 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 3573 (https) with context path '/'
-2025-01-02 22:29:08 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - Started HepiSvApplication in 7.92 seconds (process running for 8.307)
-2025-01-02 22:29:08 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - ==================== START BODYGUIDE SERVER ====================
-2025-01-02 22:29:09 [RMI TCP Connection(2)-127.0.0.1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-01-02 22:29:09 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2025-01-02 22:29:09 [RMI TCP Connection(2)-127.0.0.1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-10] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
-Client IP: 0:0:0:0:0:0:0:1:55407 
-Request URL: https://localhost:3573/swagger-ui/index.html 
-HTTP Method: GET 
-[Headers]: 
-host: localhost:3573
-connection: keep-alive
-cache-control: max-age=0
-sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "Windows"
-upgrade-insecure-requests: 1
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
-accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-sec-fetch-site: none
-sec-fetch-mode: navigate
-sec-fetch-user: ?1
-sec-fetch-dest: document
-accept-encoding: gzip, deflate, br, zstd
-accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-10] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
-Status: 200 
-Execution Time: 15 ms 
-[Headers]: 
-Vary: Origin
-Vary: Origin
-Vary: Origin
-client-ip: 0:0:0:0:0:0:0:1:55407
-Last-Modified: Fri, 06 Dec 2024 22:48:45 GMT
-Accept-Ranges: bytes
-Content-Type: text/html
-Content-Length: 734
-Date: Thu, 02 Jan 2025 13:29:43 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
- 
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-4] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
-Client IP: 0:0:0:0:0:0:0:1:55407 
-Request URL: https://localhost:3573/swagger-ui/swagger-ui.css 
-HTTP Method: GET 
-[Headers]: 
-host: localhost:3573
-connection: keep-alive
-sec-ch-ua-platform: "Windows"
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
-sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
-sec-ch-ua-mobile: ?0
-accept: text/css,*/*;q=0.1
-sec-fetch-site: same-origin
-sec-fetch-mode: no-cors
-sec-fetch-dest: style
-referer: https://localhost:3573/swagger-ui/index.html
-accept-encoding: gzip, deflate, br, zstd
-accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-7] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
-Client IP: 0:0:0:0:0:0:0:1:55413 
-Request URL: https://localhost:3573/swagger-ui/index.css 
-HTTP Method: GET 
-[Headers]: 
-host: localhost:3573
-connection: keep-alive
-sec-ch-ua-platform: "Windows"
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
-sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
-sec-ch-ua-mobile: ?0
-accept: text/css,*/*;q=0.1
-sec-fetch-site: same-origin
-sec-fetch-mode: no-cors
-sec-fetch-dest: style
-referer: https://localhost:3573/swagger-ui/index.html
-accept-encoding: gzip, deflate, br, zstd
-accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-2] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
-Client IP: 0:0:0:0:0:0:0:1:55414 
-Request URL: https://localhost:3573/swagger-ui/swagger-initializer.js 
-HTTP Method: GET 
-[Headers]: 
-host: localhost:3573
-connection: keep-alive
-sec-ch-ua-platform: "Windows"
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
-sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
-sec-ch-ua-mobile: ?0
-accept: */*
-sec-fetch-site: same-origin
-sec-fetch-mode: no-cors
-sec-fetch-dest: script
-referer: https://localhost:3573/swagger-ui/index.html
-accept-encoding: gzip, deflate, br, zstd
-accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-9] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
-Client IP: 0:0:0:0:0:0:0:1:55416 
-Request URL: https://localhost:3573/swagger-ui/swagger-ui-standalone-preset.js 
-HTTP Method: GET 
-[Headers]: 
-host: localhost:3573
-connection: keep-alive
-sec-ch-ua-platform: "Windows"
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
-sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
-sec-ch-ua-mobile: ?0
-accept: */*
-sec-fetch-site: same-origin
-sec-fetch-mode: no-cors
-sec-fetch-dest: script
-referer: https://localhost:3573/swagger-ui/index.html
-accept-encoding: gzip, deflate, br, zstd
-accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-3] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
-Client IP: 0:0:0:0:0:0:0:1:55415 
-Request URL: https://localhost:3573/swagger-ui/swagger-ui-bundle.js 
-HTTP Method: GET 
-[Headers]: 
-host: localhost:3573
-connection: keep-alive
-sec-ch-ua-platform: "Windows"
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
-sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
-sec-ch-ua-mobile: ?0
-accept: */*
-sec-fetch-site: same-origin
-sec-fetch-mode: no-cors
-sec-fetch-dest: script
-referer: https://localhost:3573/swagger-ui/index.html
-accept-encoding: gzip, deflate, br, zstd
-accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-7] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
-Status: 200 
-Execution Time: 3 ms 
-[Headers]: 
-Vary: Origin
-Vary: Origin
-Vary: Origin
-client-ip: 0:0:0:0:0:0:0:1:55413
-Last-Modified: Fri, 06 Dec 2024 22:48:45 GMT
-Accept-Ranges: bytes
-Content-Type: text/css
-Content-Length: 202
-Date: Thu, 02 Jan 2025 13:29:43 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
- 
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-4] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
-Status: 200 
-Execution Time: 16 ms 
-[Headers]: 
-Vary: Origin
-Vary: Origin
-Vary: Origin
-client-ip: 0:0:0:0:0:0:0:1:55407
-Last-Modified: Fri, 06 Dec 2024 22:48:45 GMT
-Accept-Ranges: bytes
-Content-Type: text/css
-Content-Length: 152072
-Date: Thu, 02 Jan 2025 13:29:43 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
- 
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-9] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
-Status: 200 
-Execution Time: 13 ms 
-[Headers]: 
-Vary: Origin
-Vary: Origin
-Vary: Origin
-client-ip: 0:0:0:0:0:0:0:1:55416
-Last-Modified: Fri, 06 Dec 2024 22:48:45 GMT
-Accept-Ranges: bytes
-Content-Type: text/javascript
-Content-Length: 230640
-Date: Thu, 02 Jan 2025 13:29:43 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
- 
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-2] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
-Status: 200 
-Execution Time: 23 ms 
-[Headers]: 
-Vary: Origin
-Vary: Origin
-Vary: Origin
-client-ip: 0:0:0:0:0:0:0:1:55414
-Last-Modified: Fri, 06 Dec 2024 22:48:45 GMT
-Cache-Control: no-store
-Accept-Ranges: bytes
-Content-Type: text/javascript
-Content-Length: 615
-Date: Thu, 02 Jan 2025 13:29:43 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
- 
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-3] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
-Status: 200 
-Execution Time: 44 ms 
-[Headers]: 
-Vary: Origin
-Vary: Origin
-Vary: Origin
-client-ip: 0:0:0:0:0:0:0:1:55415
-Last-Modified: Fri, 06 Dec 2024 22:48:45 GMT
-Accept-Ranges: bytes
-Content-Type: text/javascript
-Content-Length: 1400247
-Date: Thu, 02 Jan 2025 13:29:43 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
- 
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-8] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
-Client IP: 0:0:0:0:0:0:0:1:55415 
-Request URL: https://localhost:3573/v3/api-docs/swagger-config 
-HTTP Method: GET 
-[Headers]: 
-host: localhost:3573
-connection: keep-alive
-sec-ch-ua-platform: "Windows"
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
-sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
-sec-ch-ua-mobile: ?0
-accept: */*
-sec-fetch-site: same-origin
-sec-fetch-mode: cors
-sec-fetch-dest: empty
-referer: https://localhost:3573/swagger-ui/index.html
-accept-encoding: gzip, deflate, br, zstd
-accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-5] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
-Client IP: 0:0:0:0:0:0:0:1:55414 
-Request URL: https://localhost:3573/swagger-ui/favicon-32x32.png 
-HTTP Method: GET 
-[Headers]: 
-host: localhost:3573
-connection: keep-alive
-sec-ch-ua-platform: "Windows"
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
-sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
-sec-ch-ua-mobile: ?0
-accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-sec-fetch-site: same-origin
-sec-fetch-mode: no-cors
-sec-fetch-dest: image
-referer: https://localhost:3573/swagger-ui/index.html
-accept-encoding: gzip, deflate, br, zstd
-accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-5] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
-Status: 200 
-Execution Time: 2 ms 
-[Headers]: 
-Vary: Origin
-Vary: Origin
-Vary: Origin
-client-ip: 0:0:0:0:0:0:0:1:55414
-Last-Modified: Fri, 06 Dec 2024 22:48:45 GMT
-Accept-Ranges: bytes
-Content-Type: image/png
-Content-Length: 628
-Date: Thu, 02 Jan 2025 13:29:43 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
- 
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-8] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
-Status: 200 
-Execution Time: 19 ms 
-[Headers]: 
-client-ip: 0:0:0:0:0:0:0:1:55415
-Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Thu, 02 Jan 2025 13:29:43 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
- 
-
-2025-01-02 22:29:43 [https-jsse-nio-3573-exec-10] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== REQUEST ====================
-Client IP: 0:0:0:0:0:0:0:1:55415 
-Request URL: https://localhost:3573/v3/api-docs 
-HTTP Method: GET 
-[Headers]: 
-host: localhost:3573
-connection: keep-alive
-sec-ch-ua-platform: "Windows"
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
-accept: application/json,*/*
-sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
-sec-ch-ua-mobile: ?0
-sec-fetch-site: same-origin
-sec-fetch-mode: cors
-sec-fetch-dest: empty
-referer: https://localhost:3573/swagger-ui/index.html
-accept-encoding: gzip, deflate, br, zstd
-accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
-
-2025-01-02 22:29:44 [https-jsse-nio-3573-exec-10] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 611 ms
-2025-01-02 22:29:44 [https-jsse-nio-3573-exec-10] INFO  o.h.h.c.c.HttpLoggingInterceptor - ==================== RESPONSE ====================
-Status: 200 
-Execution Time: 638 ms 
-[Headers]: 
-client-ip: 0:0:0:0:0:0:0:1:55415
-Content-Type: application/json
-Content-Length: 24333
-Date: Thu, 02 Jan 2025 13:29:44 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
- 
-
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-01-05 17:48:58 [main] ERROR o.s.boot.SpringApplication - Application run failed
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:165)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:619)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at org.hepi.hepi_sv.HepiSvApplication.main(HepiSvApplication.java:14)
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:147)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:107)
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:516)
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:222)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:188)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:162)
+	... 8 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'tokenAuthenticationFilter' defined in file [D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes\org\hepi\hepi_sv\auth\filter\TokenAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'tokenService' defined in file [D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes\org\hepi\hepi_sv\auth\service\TokenService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userService' defined in file [D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes\org\hepi\hepi_sv\user\service\UserService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'usersRepository' defined in org.hepi.hepi_sv.user.repository.UsersRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1375)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1212)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:205)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:211)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:174)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:169)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAdaptableBeans(ServletContextInitializerBeans.java:154)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:87)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:266)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:240)
+	at org.springframework.boot.web.embedded.tomcat.TomcatStarter.onStartup(TomcatStarter.java:52)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4426)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1203)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1193)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:749)
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:772)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1203)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1193)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:749)
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:203)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:415)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:870)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:437)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:128)
+	... 13 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'tokenService' defined in file [D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes\org\hepi\hepi_sv\auth\service\TokenService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'userService' defined in file [D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes\org\hepi\hepi_sv\user\service\UserService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'usersRepository' defined in org.hepi.hepi_sv.user.repository.UsersRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1375)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1212)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
+	... 54 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userService' defined in file [D:\workspace\BODYGUIDE\BODYGUIDE_SV\target\classes\org\hepi\hepi_sv\user\service\UserService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'usersRepository' defined in org.hepi.hepi_sv.user.repository.UsersRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:795)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:237)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1375)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1212)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
+	... 68 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'usersRepository' defined in org.hepi.hepi_sv.user.repository.UsersRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1705)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1454)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:599)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:904)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:782)
+	... 82 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'jpaSharedEM_entityManagerFactory': Cannot resolve reference to bean 'entityManagerFactory' while setting constructor argument
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveConstructorArguments(ConstructorResolver.java:682)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1355)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1185)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
+	... 96 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [record_at] in table [USERS_CALENDAR_MEMO_HISTORY]; found [datetime (Types#TIMESTAMP)], but expecting [varchar(255) (Types#VARCHAR)]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1806)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
+	... 108 common frames omitted
+Caused by: jakarta.persistence.PersistenceException: [PersistenceUnit: default] Unable to build Hibernate SessionFactory; nested exception is org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [record_at] in table [USERS_CALENDAR_MEMO_HISTORY]; found [datetime (Types#TIMESTAMP)], but expecting [varchar(255) (Types#VARCHAR)]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:421)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1853)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1802)
+	... 115 common frames omitted
+Caused by: org.hibernate.tool.schema.spi.SchemaManagementException: Schema-validation: wrong column type encountered in column [record_at] in table [USERS_CALENDAR_MEMO_HISTORY]; found [datetime (Types#TIMESTAMP)], but expecting [varchar(255) (Types#VARCHAR)]
+	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.validateColumnType(AbstractSchemaValidator.java:168)
+	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.validateTable(AbstractSchemaValidator.java:155)
+	at org.hibernate.tool.schema.internal.GroupedSchemaValidatorImpl.validateTables(GroupedSchemaValidatorImpl.java:46)
+	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.performValidation(AbstractSchemaValidator.java:98)
+	at org.hibernate.tool.schema.internal.AbstractSchemaValidator.doValidation(AbstractSchemaValidator.java:76)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:289)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1421)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:322)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:457)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1506)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:75)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409)
+	... 119 common frames omitted

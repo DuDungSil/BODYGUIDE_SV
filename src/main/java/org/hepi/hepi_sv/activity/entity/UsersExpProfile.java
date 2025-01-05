@@ -35,7 +35,6 @@ public class UsersExpProfile {
     @Column(name = "total_exp")
     private int totalExp;
 
-    // 상태 업데이트 메서드
     public void updateExperience(int newTotalExp, int newLevel) {
         this.totalExp = newTotalExp;
         this.currentLevel = newLevel;
