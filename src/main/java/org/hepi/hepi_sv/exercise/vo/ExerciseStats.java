@@ -1,6 +1,5 @@
 package org.hepi.hepi_sv.exercise.vo;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,6 @@ import lombok.Data;
 @Embeddable
 public class ExerciseStats {
 
-    @Column
     private Double benchWeight;   // 벤치프레스 중량
     private Integer benchReps;    // 벤치프레스 횟수
 

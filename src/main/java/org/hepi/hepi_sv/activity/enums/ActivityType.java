@@ -7,7 +7,7 @@ public enum ActivityType {
 
     private final int code;   // 활동 코드    
     private final int exp;    // 1회 활동시 획득 경험치
-    private final int maxDailyCount;      // 하루 최대 경험치 획득 횟수수
+    private final int maxDailyCount;      // 하루 최대 경험치 획득 횟수
 
     ActivityType(int code, int exp, int maxDailyCount) {
         this.code = code;

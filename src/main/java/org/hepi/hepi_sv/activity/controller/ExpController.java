@@ -3,10 +3,7 @@ package org.hepi.hepi_sv.activity.controller;
 import java.util.UUID;
 
 import org.hepi.hepi_sv.activity.dto.ExpProfileResponse;
-import static org.hepi.hepi_sv.activity.enums.ActivityType.EXERCISE;
-import org.hepi.hepi_sv.activity.event.ExperienceGainedEvent;
 import org.hepi.hepi_sv.activity.service.UserExpProfileService;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,16 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class ExpController {
 
     private final UserExpProfileService userExpProfileService;
-    private final ApplicationEventPublisher eventPublisher;
-
-    @GetMapping("/test")
-    public ResponseEntity<String> test(@AuthenticationPrincipal UserDetails userDetails) {
-
-        ExperienceGainedEvent event = new ExperienceGainedEvent(UUID.fromString(userDetails.getUsername()), EXERCISE);
-        eventPublisher.publishEvent(event);
-    
-        return ResponseEntity.ok("성공");
-    }
 
     // 경험치 프로필 가져오기
     @GetMapping("/profile")

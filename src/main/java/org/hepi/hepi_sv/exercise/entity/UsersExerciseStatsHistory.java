@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.hepi.hepi_sv.exercise.vo.ExerciseStats;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -24,7 +26,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS_EXERCISE_PROFILE_HISTORY")
+@Table(name = "USERS_EXERCISE_STATS_HISTORY")
 public class UsersExerciseStatsHistory {
     
     @Id
@@ -36,7 +38,19 @@ public class UsersExerciseStatsHistory {
     private UUID userId;
 
     @Embedded
-    private ExerciseStats exerciseStats; // 운동 데이터
+    @AttributeOverrides({
+        @AttributeOverride(name = "benchWeight", column = @Column(name = "benchpress_weight")),
+        @AttributeOverride(name = "benchReps", column = @Column(name = "benchpress_reps")),
+        @AttributeOverride(name = "squatWeight", column = @Column(name = "squat_weight")),
+        @AttributeOverride(name = "squatReps", column = @Column(name = "squat_reps")),
+        @AttributeOverride(name = "deadWeight", column = @Column(name = "deadlift_weight")),
+        @AttributeOverride(name = "deadReps", column = @Column(name = "deadlift_reps")),
+        @AttributeOverride(name = "overheadWeight", column = @Column(name = "overheadpress_weight")),
+        @AttributeOverride(name = "overheadReps", column = @Column(name = "overheadpress_reps")),
+        @AttributeOverride(name = "pushupReps", column = @Column(name = "pushup_reps")),
+        @AttributeOverride(name = "pullupReps", column = @Column(name = "pullup_reps"))
+    })
+    private ExerciseStats exerciseStats; 
 
     @Column(name = "record_at")
     private LocalDateTime recordAt;

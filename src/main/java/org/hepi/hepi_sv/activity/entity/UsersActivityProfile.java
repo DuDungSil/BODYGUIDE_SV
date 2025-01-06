@@ -1,6 +1,7 @@
 package org.hepi.hepi_sv.activity.entity;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,37 +27,40 @@ public class UsersActivityProfile {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
+
     @Column(name = "exercise_count")
     private int exerciseCount;
 
-    @Column(name = "last_exercise_time")
-    private LocalDateTime lastExerciseTime;
+    @Column(name = "exercise_updated_at")
+    private LocalDateTime exerciseUpdatedAt;
 
     @Column(name = "diet_count")
     private int dietCount;
 
-    @Column(name = "last_diet_time")
-    private LocalDateTime lastDietTime;
+    @Column(name = "diet_updated_at")
+    private LocalDateTime dietUpdatedAt;
 
     @Column(name = "weight_count")
     private int weightCount;
 
-    @Column(name = "last_weight_time")
-    private LocalDateTime lastWeightTime;
+    @Column(name = "weight_updated_at")
+    private LocalDateTime weightUpdatedAt;
 
     public void updateExerciseCount() {
         this.exerciseCount++;
-        this.lastExerciseTime = LocalDateTime.now();
+        this.exerciseUpdatedAt = LocalDateTime.now();
     }
 
     public void updateDietCount() {
         this.dietCount++;
-        this.lastDietTime = LocalDateTime.now();
+        this.dietUpdatedAt = LocalDateTime.now();
     }
 
     public void updateWeightCount() {
         this.weightCount++;
-        this.lastWeightTime = LocalDateTime.now();
+        this.weightUpdatedAt = LocalDateTime.now();
     }
 
 }
