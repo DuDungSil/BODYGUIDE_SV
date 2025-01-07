@@ -5,15 +5,13 @@ import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.hepi.hepi_sv.calendar.dto.CalendarMemoDTO;
 import org.hepi.hepi_sv.calendar.service.CalendarService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 
@@ -66,10 +64,16 @@ public class CalendarController {
     @Operation(summary = "특정 날짜 기록 종합 조회", description = "선택한 특정 날짜의 메모, 운동, 섭취, 체중 기록들을 일괄 조회하여 반환")
     public ResponseEntity<CalendarMemoDTO> getMemoDayDetail(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String yyyymmdd) {
         UUID userId = UUID.fromString(userDetails.getUsername());
-        CalendarMemoDTO calendarMemoDTO = calendarService.getCalendarMemoDetail(userId, yyyymmdd);
+        CalendarMemoDTO calendarMemoDTO = calendarService.getMemoDayDetail(userId, yyyymmdd);
         return ResponseEntity.ok(calendarMemoDTO);
     }
 
-    // 메모 입력 & 수정 & 삭제
-
+    // 메모 입력 & 수정
+    @PostMapping("/memo")
+    @Operation(summary = "특정 날짜 메모 기입", description = "선택한 특정 날짜에 작성한 메모를 기입")
+    public ResponseEntity<CalendarMemoDTO> postMemo(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody CalendarMemoDTO request) {
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        CalendarMemoDTO calendarMemoDTO = calendarService.postMemo(userId, request);
+        return ResponseEntity.ok(calendarMemoDTO);
+    }
 }
