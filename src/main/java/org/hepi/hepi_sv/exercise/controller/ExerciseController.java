@@ -29,6 +29,16 @@ public class ExerciseController {
     private final UserExerciseStatsService userExerciseStatsService;
     private final ExerciseReportService exerciseReportService;
 
+    // 운동 기록 post
+
+    // 운동 기록 수정
+
+    // 운동 기록 삭제
+
+    // 운동 기록 조회 여러개
+
+    // 유저 운동 통합 기록 조회
+
     @GetMapping("/stats")
     @Operation(summary = "유저 운동 스탯 조회", description = "유저 운동 스탯 정보를 조회")
     public ResponseEntity<UserExerciseStatsResponse> getExerciseProfile(@AuthenticationPrincipal UserDetails userDetails) {
@@ -44,8 +54,6 @@ public class ExerciseController {
         userExerciseStatsService.updateUserExerciseProfile(UUID.fromString(userDetails.getUsername()), request);
         return ResponseEntity.ok("유저 운동 스탯 업데이트 완료");
     }
-
-    // 유저 운동 통합 기록 조회
 
     @GetMapping("/analysis/report")
     @Operation(summary = "운동 분석 리포트 결과", description = "DB의 유저 프로필 정보들을 통해 운동 분석 결과를 조회")

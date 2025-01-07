@@ -63,4 +63,18 @@ public class UsersActivityProfile {
         this.weightUpdatedAt = LocalDateTime.now();
     }
 
+    // 생성 함수
+    public static UsersActivityProfile create(UUID userId) {
+        LocalDateTime now = LocalDateTime.now();
+        return UsersActivityProfile.builder()
+                .userId(userId)
+                .exerciseCount(0)
+                .exerciseUpdatedAt(now)
+                .dietCount(0)
+                .dietUpdatedAt(now)
+                .weightCount(0)
+                .weightUpdatedAt(now)
+                .build();
+    }
+
 }

@@ -23,22 +23,14 @@ public class UserNutritionProfileService {
 
     // 생성
     public void createUsersNutritionProfile(UUID userId) {
-        
         if (userId == null) {
             throw new IllegalArgumentException("userId must not be null when creating a nutrition profile.");
         }
-
-        LocalDateTime dateTime = LocalDateTime.now();
-
-        UsersNutritionProfile usersExerciseProfile = UsersNutritionProfile.builder()
-                                                    .dietId(1)
-                                                    .pa(1)
-                                                    .userId(userId)
-                                                    .updatedAt(dateTime)
-                                                    .build();
-
-        profileRepository.save(usersExerciseProfile);
-
+    
+        // UsersNutritionProfile의 create 메서드 사용
+        UsersNutritionProfile usersNutritionProfile = UsersNutritionProfile.create(userId);
+    
+        profileRepository.save(usersNutritionProfile);
     }
 
     // 업데이트

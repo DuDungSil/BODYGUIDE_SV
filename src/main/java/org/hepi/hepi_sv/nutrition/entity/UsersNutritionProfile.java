@@ -62,4 +62,22 @@ public class UsersNutritionProfile {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+
+    // 생성 메서드
+    public static UsersNutritionProfile create(UUID userId) {
+        return UsersNutritionProfile.builder()
+                .userId(userId)
+                .pa(1) 
+                .dietId(1)
+                .targetWeight(null) 
+                .targetCalory(null) 
+                .carbCal(null)
+                .proteinCal(null) 
+                .fatCal(null) 
+                .wakeupTime(null)
+                .sleepTime(null) 
+                .updatedAt(LocalDateTime.now())
+                .build();
+    }
+
 }

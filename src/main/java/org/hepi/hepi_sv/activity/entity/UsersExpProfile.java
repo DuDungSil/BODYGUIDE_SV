@@ -40,4 +40,13 @@ public class UsersExpProfile {
         this.currentLevel = newLevel;
     }
 
+    // 생성 함수
+    public static UsersExpProfile create(UUID userId) {
+        return UsersExpProfile.builder()
+                .userId(userId)
+                .currentLevel(1) 
+                .totalExp(0)    
+                .build();
+    }
+
 }

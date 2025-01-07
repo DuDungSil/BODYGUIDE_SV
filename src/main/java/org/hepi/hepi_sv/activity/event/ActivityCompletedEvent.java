@@ -4,6 +4,9 @@ import java.util.UUID;
 
 import org.hepi.hepi_sv.activity.enums.ActivityType;
 
+import lombok.Getter;
+
+@Getter
 public class ActivityCompletedEvent {
 
     private final UUID userId;       // 활동을 완료한 사용자 ID
@@ -12,14 +15,6 @@ public class ActivityCompletedEvent {
     public ActivityCompletedEvent(UUID userId, ActivityType activityType) {
         this.userId = userId;
         this.activityType = activityType;
-    }
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public ActivityType getActivityType() {
-        return activityType;
     }
 
 }

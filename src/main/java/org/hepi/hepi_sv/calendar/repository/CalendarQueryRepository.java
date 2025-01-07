@@ -7,9 +7,9 @@ import java.util.UUID;
 
 import org.hepi.hepi_sv.calendar.dto.CalendarMemoDTO;
 import org.hepi.hepi_sv.calendar.entity.QUsersCalendarMemoHistory;
-import org.hepi.hepi_sv.calendar.entity.QUsersExerciseSetHistory;
 import org.hepi.hepi_sv.calendar.entity.QUsersIntakeHistory;
 import org.hepi.hepi_sv.calendar.entity.QUsersWeightHistory;
+import org.hepi.hepi_sv.exercise.entity.QUsersExerciseSetHistory;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.dsl.Expressions;

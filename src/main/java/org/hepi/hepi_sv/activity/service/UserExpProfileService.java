@@ -17,6 +17,12 @@ public class UserExpProfileService {
     private final UsersExpProfileRepository usersExpProfileRepository;
     private final LevelInfoService levelInfoService;
 
+    // 새로운 유저 ExpProfile 생성
+    public UsersExpProfile createUserExpProfile(UUID userId) {
+        UsersExpProfile newProfile = UsersExpProfile.create(userId);
+        return usersExpProfileRepository.save(newProfile);
+    }
+
     // ExpProfileResponse 생성
     public ExpProfileResponse getExpProfileResponse(UUID userId) {
 
@@ -57,14 +63,4 @@ public class UserExpProfileService {
         usersExpProfileRepository.save(updatedProfile);
     }
 
-    // 새로운 사용자 경험치 프로필 생성
-    public UsersExpProfile createUserExpProfile(UUID userId) {
-        UsersExpProfile newProfile = UsersExpProfile.builder()
-                .userId(userId)
-                .currentLevel(1)
-                .totalExp(0)
-                .build();
-
-        return usersExpProfileRepository.save(newProfile);
-    }
 }

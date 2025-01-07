@@ -7,6 +7,8 @@ import org.hepi.hepi_sv.auth.dto.OAuth2UserInfo;
 import org.hepi.hepi_sv.exercise.service.UserExerciseStatsService;
 import org.hepi.hepi_sv.nutrition.service.UserNutritionProfileService;
 import org.hepi.hepi_sv.user.entity.Users;
+import org.hepi.hepi_sv.user.event.UserRegisterEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -16,15 +18,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserRegistrationService {
 
+    private final ApplicationEventPublisher eventPublisher;
+
     private final UserService userService;
     private final UserProfileService userProfileService;
     private final UserMetaService userMetaService;
     private final UserSocialTokenService userSocialTokenService;
-
-    // 분리해야함
-    private final UserExerciseStatsService userExerciseProfileService;
-    private final UserNutritionProfileService userNutritionProfileService;
-    private final UserExpProfileService userExpProfileService;
 
     // 유저 정보 로드
     public Users loadUser(OAuth2UserInfo oAuth2UserInfo) {
@@ -57,9 +56,9 @@ public class UserRegistrationService {
         userMetaService.createUsersMeta(userId);
         userSocialTokenService.createUserProviderToken(userId);
 
-        userExerciseProfileService.createUsersExerciseProfile(userId);
-        userNutritionProfileService.createUsersNutritionProfile(userId);
-        userExpProfileService.createUserExpProfile(userId);
+        // 이벤트 발행
+        UserRegisterEvent event = new UserRegisterEvent(userId);
+        eventPublisher.publishEvent(event);
 
         return user;
     }

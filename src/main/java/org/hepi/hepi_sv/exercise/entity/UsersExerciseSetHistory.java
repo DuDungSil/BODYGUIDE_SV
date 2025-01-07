@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.calendar.entity;
+package org.hepi.hepi_sv.exercise.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,8 +23,8 @@ public class UsersExerciseSetHistory {
     @Column(name = "record_at")
     private LocalDateTime recordAt;
 
-    @Column(name = "exercise_name")
-    private String exerciseName;
+    @Column(name = "exercise_id", columnDefinition = "SMALLINT")
+    private Integer exerciseId;
 
     @Column(name = "set")
     private Integer set;

@@ -58,7 +58,16 @@ public class UsersExerciseStats {
 
     public void updateWithStats(ExerciseStats requestStats) {
         this.exerciseStats.updateWith(requestStats); // 운동 데이터 업데이트
-        this.updatedAt = LocalDateTime.now();       // 업데이트 시간 갱신
+        this.updatedAt = LocalDateTime.now(); // 업데이트 시간 갱신
     }
+
+        // 생성 메서드
+        public static UsersExerciseStats create(UUID userId) {
+            return UsersExerciseStats.builder()
+                    .userId(userId)
+                    .exerciseStats(ExerciseStats.createDefault()) // 기본값 설정
+                    .updatedAt(LocalDateTime.now()) // 생성 시점의 시간
+                    .build();
+        }
 
 }

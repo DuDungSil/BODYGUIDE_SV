@@ -8,6 +8,7 @@ import org.hepi.hepi_sv.auth.dto.TokenResponse;
 import org.hepi.hepi_sv.auth.service.TestTokenService;
 import org.hepi.hepi_sv.auth.service.TokenService;
 import org.hepi.hepi_sv.auth.service.UnlinkService;
+import org.hepi.hepi_sv.user.service.UserMetaService;
 import org.hepi.hepi_sv.user.service.UserProfileService;
 import org.hepi.hepi_sv.user.service.UserSocialTokenService;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,12 +41,19 @@ public class AuthController {
     private final UnlinkService unlinkService;
     private final UserSocialTokenService userProviderTokenService;
     private final UserProfileService userProfileService;
+    private final UserMetaService userMetaService;
 
-    // OAuth2 로그인 성공 후 콜백
-    // @GetMapping("/success")
-    // public ResponseEntity<TokenResponseDTO> loginSuccess(@Validated TokenResponseDTO tokenResponse) {
-    //     return ResponseEntity.ok(tokenResponse);
-    // }
+    @GetMapping("/callback")
+    public TokenResponse handleOAuthCallback(
+            @RequestParam("access_token") String accessToken,
+            @RequestParam("refresh_token") String refreshToken
+    ) {
+        // 로직 처리 (예: 사용자 정보 업데이트, 토큰 저장 등)
+        // userMetaService.updateLastLoginAt(accessToken);
+
+        // 필요한 응답 반환 (클라이언트에서 필요한 형식으로)
+        return new TokenResponse(accessToken, refreshToken);
+    }
 
     @GetMapping("/test")
     @Operation(summary = "테스트용 액세스 토큰 발급 ( 인증 X )", description = "테스트용 액세스 토큰 발급")

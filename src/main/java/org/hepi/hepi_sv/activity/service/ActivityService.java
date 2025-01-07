@@ -25,6 +25,12 @@ public class ActivityService {
     private final UsersActivityLogRepository usersActivityLogRepository;
     private final UsersActivityProfileRepository usersActivityProfileRepository;
 
+    // 새로운 유저 ActivityProfile 생성
+    public UsersActivityProfile createUserActivityProfile(UUID userId) {
+        UsersActivityProfile newProfile = UsersActivityProfile.create(userId);
+        return usersActivityProfileRepository.save(newProfile);
+    }
+
     // 활동 기록 ( 활동 기록 ) 
     @Transactional
     public void processActivityCompleted(UUID userId, ActivityType activityType) {

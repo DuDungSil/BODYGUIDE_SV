@@ -63,7 +63,7 @@ private final CustomAccessTokenResponseClient accessTokenResponseClient;
                                         new AntPathRequestMatcher("/"),
                                         new AntPathRequestMatcher("/swagger-ui/**"),
                                         new AntPathRequestMatcher("/v3/api-docs/**"),                 
-                                        new AntPathRequestMatcher("/auth/success"),
+                                        new AntPathRequestMatcher("/auth/callback"),
                                         new AntPathRequestMatcher("/auth/refresh"),
                                         new AntPathRequestMatcher("/auth/test"),                        
                                         new AntPathRequestMatcher("/web/**")

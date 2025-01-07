@@ -13,8 +13,6 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     
     private final TokenService tokenService;
-    private final UserMetaService userMetaService;
     private final UserSocialTokenService userSocialTokenService;
     private final OAuth2AuthorizedClientService authorizedClientService;
 
@@ -56,16 +53,15 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             // TokenResponse 생성
             TokenResponse tokenResponse = tokenService.generateTokenResponse(authentication);
 
-            // JSON 응답 설정
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+            // 클라이언트가 요청할 URL 설정
+            String redirectUrl = String.format(
+                    "/auth/callback?access_token=%s&refresh_token=%s",
+                    tokenResponse.accessToken(),
+                    tokenResponse.refreshToken()
+            );
 
-            // 객체를 JSON으로 변환 후 응답
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(response.getWriter(), tokenResponse);
-            
-            // 유저 로그인 시간 기록
-            userMetaService.updateLastLoginAt(userId);
+            // 리다이렉션
+            response.sendRedirect(redirectUrl);
 
         } else {
             throw new IllegalArgumentException("Authentication is not OAuth2AuthenticationToken");

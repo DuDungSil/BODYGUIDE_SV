@@ -51,4 +51,20 @@ public class ExerciseStats {
             this.pullupReps = requestStats.getPullupReps();
     }
     
+    // 기본값 생성 메서드
+    public static ExerciseStats createDefault() {
+        return ExerciseStats.builder()
+                .benchWeight(0.0)
+                .benchReps(0)
+                .squatWeight(0.0)
+                .squatReps(0)
+                .deadWeight(0.0)
+                .deadReps(0)
+                .overheadWeight(0.0)
+                .overheadReps(0)
+                .pushupReps(0)
+                .pullupReps(0)
+                .build();
+    }
+
 }

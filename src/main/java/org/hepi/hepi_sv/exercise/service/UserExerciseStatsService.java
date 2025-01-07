@@ -28,15 +28,10 @@ public class UserExerciseStatsService {
         if (userId == null) {
             throw new IllegalArgumentException("userId must not be null when creating a exercise profile.");
         }
+        
+        UsersExerciseStats usersExerciseStats = UsersExerciseStats.create(userId);
 
-        LocalDateTime dateTime = LocalDateTime.now();
-
-        UsersExerciseStats usersExerciseProfile = UsersExerciseStats.builder()
-                                                    .userId(userId)
-                                                    .updatedAt(dateTime)
-                                                    .build();
-
-        profileRepository.save(usersExerciseProfile);
+        profileRepository.save(usersExerciseStats);
 
     }
 
