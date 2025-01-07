@@ -15,4 +15,8 @@ public enum MajorExercise {
     private final int exerId;
     private final String exerName;
 
+    public int getExerId() {
+        return this.exerId;
+    }
+
 }
