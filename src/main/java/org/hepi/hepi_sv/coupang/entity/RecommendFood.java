@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.product.entity;
+package org.hepi.hepi_sv.coupang.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,9 +16,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RECOMMEND_SUPPLEMENTS")
-public class RecommendSupplements {
-  
+@Table(name = "RECOMMEND_FOOD")
+public class RecommendFood {
+    
     @Id
     @Column(name = "recommend_id")
     private int id;
@@ -26,7 +26,10 @@ public class RecommendSupplements {
     @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "related_nutrient_id")
-    private int relatedNutrientId;
+    @Column(name = "nutrient_type", columnDefinition = "TINYINT")
+    private int nutrientType;
+
+    @Column(name = "diet_type", columnDefinition = "TINYINT")
+    private int dietType;
 
 }

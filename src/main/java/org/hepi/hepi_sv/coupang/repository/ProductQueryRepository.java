@@ -1,11 +1,11 @@
-package org.hepi.hepi_sv.product.repository;
+package org.hepi.hepi_sv.coupang.repository;
 
 import java.util.List;
 
-import org.hepi.hepi_sv.product.dto.ShopProductDTO;
-import org.hepi.hepi_sv.product.entity.QRecommendFood;
-import org.hepi.hepi_sv.product.entity.QRecommendSupplements;
-import org.hepi.hepi_sv.product.entity.QShopProduct;
+import org.hepi.hepi_sv.coupang.dto.ShopProductDTO;
+import org.hepi.hepi_sv.coupang.entity.QRecommendFood;
+import org.hepi.hepi_sv.coupang.entity.QRecommendSupplements;
+import org.hepi.hepi_sv.coupang.entity.QShopProduct;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Projections;

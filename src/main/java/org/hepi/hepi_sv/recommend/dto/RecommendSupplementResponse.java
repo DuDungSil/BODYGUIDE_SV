@@ -3,7 +3,7 @@ package org.hepi.hepi_sv.recommend.dto;
 import java.util.List;
 
 import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
-import org.hepi.hepi_sv.product.dto.ShopProductDTO;
+import org.hepi.hepi_sv.coupang.dto.ShopProductDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

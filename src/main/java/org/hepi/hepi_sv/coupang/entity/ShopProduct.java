@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.product.entity;
+package org.hepi.hepi_sv.coupang.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

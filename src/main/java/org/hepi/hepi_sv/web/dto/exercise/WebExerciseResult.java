@@ -5,7 +5,7 @@ import java.util.List;
 import org.hepi.hepi_sv.exercise.dto.ExerciseAbility;
 import org.hepi.hepi_sv.exercise.dto.MuscleProfile;
 import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
-import org.hepi.hepi_sv.product.dto.ShopProductDTO;
+import org.hepi.hepi_sv.coupang.dto.ShopProductDTO;
 
 import lombok.Data;
 

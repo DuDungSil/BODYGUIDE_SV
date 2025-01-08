@@ -1,9 +1,9 @@
-package org.hepi.hepi_sv.product.service;
+package org.hepi.hepi_sv.coupang.service;
 
 import java.util.List;
 
-import org.hepi.hepi_sv.product.dto.ShopProductDTO;
-import org.hepi.hepi_sv.product.repository.ProductQueryRepository;
+import org.hepi.hepi_sv.coupang.dto.ShopProductDTO;
+import org.hepi.hepi_sv.coupang.repository.ProductQueryRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

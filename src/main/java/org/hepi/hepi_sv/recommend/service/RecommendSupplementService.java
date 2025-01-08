@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
 import org.hepi.hepi_sv.nutrition.service.NutrientRecommendService;
-import org.hepi.hepi_sv.product.dto.ShopProductDTO;
-import org.hepi.hepi_sv.product.service.ProductRecommendService;
+import org.hepi.hepi_sv.coupang.dto.ShopProductDTO;
+import org.hepi.hepi_sv.coupang.service.ProductRecommendService;
 import org.hepi.hepi_sv.recommend.dto.PurposeNutrientProfiles;
 import org.hepi.hepi_sv.recommend.dto.RecommendSupplementRequest;
 import org.hepi.hepi_sv.recommend.dto.RecommendSupplementResponse;

@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.product.dto;
+package org.hepi.hepi_sv.coupang.dto;
 
 public record ShopProductDTO(
     int productId,

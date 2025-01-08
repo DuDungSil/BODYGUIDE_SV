@@ -1,6 +1,6 @@
-package org.hepi.hepi_sv.product.repository;
+package org.hepi.hepi_sv.coupang.repository;
 
-import org.hepi.hepi_sv.product.entity.ShopProduct;
+import org.hepi.hepi_sv.coupang.entity.ShopProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
