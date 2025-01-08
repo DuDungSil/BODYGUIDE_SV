@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.product.entity;
+package org.hepi.hepi_sv.coupang.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,8 +18,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "SHOP_PRODUCT")
-public class ShopProduct {
+@Table(name = "COUPANG_PRODUCT")
+public class CoupangProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,7 @@ package org.hepi.hepi_sv.exercise.service;
 
 import java.util.List;
 
+import org.hepi.hepi_sv.exercise.enums.MuscleGroupType;
 import org.hepi.hepi_sv.exercise.repository.ExerciseQueryRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +22,15 @@ public class ExerciseMetaService {
     }
 
     // 근육 그룹 관련 힘 가져오기
-    public String getStrengthByMuscleGroup(String muscleGroup) {
-        String strength = exerciseQueryRepository.findStrengthByMuscleGroupName(muscleGroup);
+    public String getStrengthByMuscleGroup(MuscleGroupType muscleGroup) {
+        String strength = exerciseQueryRepository.findStrengthByMuscleGroupName(muscleGroup.getMuscleGroupId());
                 
         return strength;
     }
 
     // 근육 그룹 관련 세부 근육 가져오기
-    public List<String> getDetailMuscleByMuscleGroup(String muscleGroup) {
-        List<String> details = exerciseQueryRepository.findMuscleDetailsByMuscleGroupName(muscleGroup);
+    public List<String> getDetailMuscleByMuscleGroup(MuscleGroupType muscleGroup) {
+        List<String> details = exerciseQueryRepository.findMuscleDetailsByMuscleGroupName(muscleGroup.getMuscleGroupId());
 
         return details;
     }

@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import org.hepi.hepi_sv.nutrition.dto.UserNutritionProfileDTO;
 import org.hepi.hepi_sv.nutrition.service.UserNutritionProfileService;
-import org.hepi.hepi_sv.product.dto.ShopProductDTO;
-import org.hepi.hepi_sv.product.service.ProductRecommendService;
+import org.hepi.hepi_sv.coupang.dto.CoupangProductDTO;
+import org.hepi.hepi_sv.coupang.service.CoupangProductRecommendService;
 import org.hepi.hepi_sv.recommend.dto.RecommendFoodResponse;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class RecommendFoodService {
     
     private final UserNutritionProfileService userNutritionProfileService;
-    private final ProductRecommendService productRecommendService;
+    private final CoupangProductRecommendService coupangProductRecommendService;
     
     public RecommendFoodResponse getRecommendFoodResponse(UUID userId) {
 
@@ -31,9 +31,9 @@ public class RecommendFoodService {
 
         int dietTypeId = userNutritionProfile.dietId() == 5 ? 5 : 1;
 
-        List<ShopProductDTO> carbohydrate = productRecommendService.getRecommendFoodByMajorNutrient(1, dietTypeId);
-        List<ShopProductDTO> protein = productRecommendService.getRecommendFoodByMajorNutrient(2, dietTypeId);
-        List<ShopProductDTO> fat = productRecommendService.getRecommendFoodByMajorNutrient(3, dietTypeId);
+        List<CoupangProductDTO> carbohydrate = coupangProductRecommendService.getRecommendFoodByMajorNutrient(1, dietTypeId);
+        List<CoupangProductDTO> protein = coupangProductRecommendService.getRecommendFoodByMajorNutrient(2, dietTypeId);
+        List<CoupangProductDTO> fat = coupangProductRecommendService.getRecommendFoodByMajorNutrient(3, dietTypeId);
 
         Collections.shuffle(carbohydrate);
         Collections.shuffle(protein);

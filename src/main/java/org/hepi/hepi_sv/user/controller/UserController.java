@@ -2,12 +2,6 @@ package org.hepi.hepi_sv.user.controller;
 
 import java.util.UUID;
 
-import org.hepi.hepi_sv.exercise.dto.UserExerciseStatsRequest;
-import org.hepi.hepi_sv.exercise.dto.UserExerciseStatsResponse;
-import org.hepi.hepi_sv.exercise.service.UserExerciseStatsService;
-import org.hepi.hepi_sv.nutrition.dto.UserNutritionProfileRequest;
-import org.hepi.hepi_sv.nutrition.dto.UserNutritionProfileResponse;
-import org.hepi.hepi_sv.nutrition.service.UserNutritionProfileService;
 import org.hepi.hepi_sv.user.dto.UserProfileRequest;
 import org.hepi.hepi_sv.user.dto.UserProfileResponse;
 import org.hepi.hepi_sv.user.service.UserProfileService;

@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import org.hepi.hepi_sv.nutrition.dto.NutrientProfile;
 import org.hepi.hepi_sv.nutrition.service.NutrientRecommendService;
-import org.hepi.hepi_sv.product.dto.ShopProductDTO;
-import org.hepi.hepi_sv.product.service.ProductRecommendService;
+import org.hepi.hepi_sv.coupang.dto.CoupangProductDTO;
+import org.hepi.hepi_sv.coupang.service.CoupangProductRecommendService;
 import org.hepi.hepi_sv.recommend.dto.PurposeNutrientProfiles;
 import org.hepi.hepi_sv.recommend.dto.RecommendSupplementRequest;
 import org.hepi.hepi_sv.recommend.dto.RecommendSupplementResponse;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class RecommendSupplementService {
     
     private final NutrientRecommendService nutrientRecommendService;
-    private final ProductRecommendService productRecommendService;
+    private final CoupangProductRecommendService coupangProductRecommendService;
     
     public RecommendSupplementResponse getRecommendSupplementResponse(UUID userId, RecommendSupplementRequest request) {
 
@@ -36,10 +36,10 @@ public class RecommendSupplementService {
         List<PurposeNutrientProfiles> purposeNutrientProfiles = getPurposeNutrientProfiles(request.exercisePurposeIds());
 
         // 운동 수준에 따른 상품 추천
-        List<ShopProductDTO> levelProducts = getRecommendSupplementByNutrientProfiles(levelNutrientProfiles);
+        List<CoupangProductDTO> levelProducts = getRecommendSupplementByNutrientProfiles(levelNutrientProfiles);
 
         // 운동 목적에 따른 상품 추천
-        List<ShopProductDTO> purposeProducts = getRecommendSupplementByPurposeRecommends(purposeNutrientProfiles);
+        List<CoupangProductDTO> purposeProducts = getRecommendSupplementByPurposeRecommends(purposeNutrientProfiles);
 
         // 상품 4개만 자르기 ( 수정 필요 )
 
@@ -67,9 +67,9 @@ public class RecommendSupplementService {
     }
 
     // 운동 수준에 따른 상품 추천
-    private List<ShopProductDTO> getRecommendSupplementByNutrientProfiles(List<NutrientProfile> profiles) {
+    private List<CoupangProductDTO> getRecommendSupplementByNutrientProfiles(List<NutrientProfile> profiles) {
 
-        List<ShopProductDTO> list = new ArrayList<>();
+        List<CoupangProductDTO> list = new ArrayList<>();
 
         List<Integer> nutritientId_list = new ArrayList<>();
         for (NutrientProfile profile : profiles) {
@@ -80,9 +80,9 @@ public class RecommendSupplementService {
 
         for (int nutritionId : nutritientId_list) {
 
-            List<ShopProductDTO> shopProducts = productRecommendService.getRecommendSupplementByNutrition(nutritionId);
+            List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementByNutrition(nutritionId);
 
-            for (ShopProductDTO shopProduct : shopProducts) {
+            for (CoupangProductDTO shopProduct : shopProducts) {
                 list.add(shopProduct);
             }
         }
@@ -93,9 +93,9 @@ public class RecommendSupplementService {
     }
 
     // 운동 목적에 따른 상품 추천
-    private List<ShopProductDTO> getRecommendSupplementByPurposeRecommends(List<PurposeNutrientProfiles> purposeProfiles) {
+    private List<CoupangProductDTO> getRecommendSupplementByPurposeRecommends(List<PurposeNutrientProfiles> purposeProfiles) {
 
-        List<ShopProductDTO> list = new ArrayList<>();
+        List<CoupangProductDTO> list = new ArrayList<>();
 
         List<Integer> nutrient_list = new ArrayList<>();
         for (PurposeNutrientProfiles purposeProfile : purposeProfiles) {
@@ -107,8 +107,8 @@ public class RecommendSupplementService {
         nutrient_list.stream().distinct().collect(Collectors.toList());
 
         for (int nutrient : nutrient_list) {
-            List<ShopProductDTO> shopProducts = productRecommendService.getRecommendSupplementByNutrition(nutrient);
-            for (ShopProductDTO shopProduct : shopProducts) {
+            List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementByNutrition(nutrient);
+            for (CoupangProductDTO shopProduct : shopProducts) {
                 list.add(shopProduct);
             }
         }

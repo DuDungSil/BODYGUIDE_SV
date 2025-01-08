@@ -12,12 +12,19 @@ public enum MuscleGroupType {
     SHOULDER(5, "어깨"),
     ARM(6, "팔");
                
-    private final int id;
+    private final int muscleGroupId;
     private final String description;
 
-    public int getId() {
-        return this.id;
+    public int getMuscleGroupId() {
+        return this.muscleGroupId;
     }
 
-
+    public static MuscleGroupType fromId(int id) {
+        for (MuscleGroupType type : MuscleGroupType.values()) {
+            if (type.muscleGroupId == id) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Invalid muscleGroupId: " + id);
+    }
 }

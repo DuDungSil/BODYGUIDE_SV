@@ -1,6 +1,6 @@
-package org.hepi.hepi_sv.product.dto;
+package org.hepi.hepi_sv.coupang.dto;
 
-public record ShopProductDTO(
+public record CoupangProductDTO(
     int productId,
     String name,
     String url,
