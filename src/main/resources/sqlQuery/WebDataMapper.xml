@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.hepi.hepi_sv.web.repository.mybatis.WebDataMapper">
+<mapper namespace="org.bodyguide_sv.web.repository.mybatis.WebDataMapper">
 
     <!-- Nutrition 데이터 수집 -->
 
@@ -48,7 +48,7 @@
                 #{request.overhead.reps},
                 #{request.pushup.reps},
                 #{request.pullup.reps},
-                #{request.supplePurpose, typeHandler=org.hepi.hepi_sv.common.mybatis.handler.JsonTypeHandler},
+                #{request.supplePurpose, typeHandler=org.bodyguide_sv.common.mybatis.handler.JsonTypeHandler},
                 #{clientIp},
                 #{userAgent},
                 now())

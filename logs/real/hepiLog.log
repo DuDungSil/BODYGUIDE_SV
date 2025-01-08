@@ -1,5 +1,5 @@
-2024-08-30 07:49:46 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - Starting HepiSvApplication v0.0.1-SNAPSHOT using Java 17.0.11 with PID 149874 (/home/ubuntu/hepi/HEPI_SV.jar started by root in /home/ubuntu/hepi)
-2024-08-30 07:49:46 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - No active profile set, falling back to 1 default profile: "default"
+2024-08-30 07:49:46 [main] INFO  org.bodyguide_sv.Application - Starting HepiSvApplication v0.0.1-SNAPSHOT using Java 17.0.11 with PID 149874 (/home/ubuntu/hepi/HEPI_SV.jar started by root in /home/ubuntu/hepi)
+2024-08-30 07:49:46 [main] INFO  org.bodyguide_sv.Application - No active profile set, falling back to 1 default profile: "default"
 2024-08-30 07:49:50 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 3573 (https)
 2024-08-30 07:49:50 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-3573"]
 2024-08-30 07:49:50 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
@@ -9,8 +9,8 @@
 2024-08-30 07:49:52 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-3573"]
 2024-08-30 07:49:53 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-3573], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [/root/.keystore] using alias [mysslkey] with trust store [null]
 2024-08-30 07:49:53 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 3573 (https) with context path ''
-2024-08-30 07:49:53 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - Started HepiSvApplication in 9.113 seconds (process running for 10.638)
-2024-08-30 07:49:53 [main] INFO  org.hepi.hepi_sv.HepiSvApplication - ==================== START HEPI SERVER ====================
+2024-08-30 07:49:53 [main] INFO  org.bodyguide_sv.Application - Started HepiSvApplication in 9.113 seconds (process running for 10.638)
+2024-08-30 07:49:53 [main] INFO  org.bodyguide_sv.Application - ==================== START HEPI SERVER ====================
 2024-08-30 07:51:27 [https-jsse-nio-3573-exec-7] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 2024-08-30 07:51:27 [https-jsse-nio-3573-exec-7] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 2024-08-30 07:51:27 [https-jsse-nio-3573-exec-7] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms

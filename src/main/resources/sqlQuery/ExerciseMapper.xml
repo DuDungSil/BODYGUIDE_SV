@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.hepi.hepi_sv.exercise.repository.mybatis.ExerciseMapper">
+<mapper namespace="org.bodyguide_sv.exercise.repository.mybatis.ExerciseMapper">
 
     <!--  Exercise 부분  -->
 
@@ -41,7 +41,7 @@
         WHERE PART = #{PART}
     </select>
 
-    <resultMap id="NutrientProfileMap" type="org.hepi.hepi_sv.nutrition.entity.NutrientProfile">
+    <resultMap id="NutrientProfileMap" type="org.bodyguide_sv.nutrition.entity.NutrientProfile">
         <result column="NUTRITION_NAME" property="name" />
         <result column="NUTRITION_FUNCTION" property="function" />
         <result column="NUTRITION_INTAKE" property="RDI" />
