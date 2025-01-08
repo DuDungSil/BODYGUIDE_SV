@@ -5,10 +5,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.hepi.hepi_sv.calendar.dto.CalendarMemoDTO;
 import org.hepi.hepi_sv.calendar.entity.QUsersCalendarMemoHistory;
 import org.hepi.hepi_sv.calendar.entity.QUsersIntakeHistory;
 import org.hepi.hepi_sv.calendar.entity.QUsersWeightHistory;
+import org.hepi.hepi_sv.calendar.entity.UsersCalendarMemoHistory;
 import org.hepi.hepi_sv.exercise.entity.QUsersExerciseSetHistory;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class CalendarQueryRepository {
 
     private final JPAQueryFactory queryFactory;
+    private final EntityManager entityManager;
 
     public List<String> findMemoDays(UUID userId, String yyyymm) {
         QUsersCalendarMemoHistory qUsersCalendarMemoHistory = QUsersCalendarMemoHistory.usersCalendarMemoHistory;
@@ -129,5 +133,24 @@ public class CalendarQueryRepository {
 //         return new CalendarMemoDTO(selectedDate, note, exercise, intake, weight);
 //     }
 
+    @Transactional
+    public void updateMemo(UUID userId, CalendarMemoDTO memo) {
+        QUsersCalendarMemoHistory qUsersCalendarMemoHistory = QUsersCalendarMemoHistory.usersCalendarMemoHistory;
 
+        queryFactory.update(qUsersCalendarMemoHistory)
+                .set(qUsersCalendarMemoHistory.note, memo.getNote())
+                .where(qUsersCalendarMemoHistory.userId.eq(userId)
+                        .and(qUsersCalendarMemoHistory.noteDate.eq(memo.getSelectedDate())))
+                .execute();
+    }
+
+    @Transactional
+    public void createMemo(UUID userId, CalendarMemoDTO memo) {
+        UsersCalendarMemoHistory entity = new UsersCalendarMemoHistory();
+        entity.setUserId(userId);
+        entity.setNoteDate(memo.getSelectedDate());
+        entity.setNote(memo.getNote());
+
+        entityManager.persist(entity);
+    }
 }

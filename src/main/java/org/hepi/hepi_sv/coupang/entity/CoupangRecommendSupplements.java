@@ -1,4 +1,4 @@
-package org.hepi.hepi_sv.product.entity;
+package org.hepi.hepi_sv.coupang.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,8 +16,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RECOMMEND_SUPPLEMENTS")
-public class RecommendSupplements {
+@Table(name = "COUPANG_RECOMMEND_SUPPLEMENTS")
+public class CoupangRecommendSupplements {
   
     @Id
     @Column(name = "recommend_id")
