@@ -19,5 +19,12 @@ public enum MuscleGroupType {
         return this.muscleGroupId;
     }
 
-
+    public static MuscleGroupType fromId(int id) {
+        for (MuscleGroupType type : MuscleGroupType.values()) {
+            if (type.muscleGroupId == id) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Invalid muscleGroupId: " + id);
+    }
 }

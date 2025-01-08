@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UsersExerciseProfileHistoryRepository extends JpaRepository<UsersExerciseStatsHistory, Long> {
+public interface UsersExerciseStatsHistoryRepository extends JpaRepository<UsersExerciseStatsHistory, Long> {
     
 }

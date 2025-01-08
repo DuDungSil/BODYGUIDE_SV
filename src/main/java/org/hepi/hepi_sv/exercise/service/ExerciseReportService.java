@@ -8,11 +8,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.hepi.hepi_sv.exercise.controller.response.ExerciseReportResponse;
 import org.hepi.hepi_sv.exercise.dto.ExerciseAbility;
 import org.hepi.hepi_sv.exercise.dto.ExerciseAnalysisProfile;
-import org.hepi.hepi_sv.exercise.dto.ExerciseReportResponse;
 import org.hepi.hepi_sv.exercise.dto.MuscleProfile;
 import org.hepi.hepi_sv.exercise.dto.UserExerciseStatsDTO;
+import org.hepi.hepi_sv.exercise.enums.MuscleGroupType;
+import static org.hepi.hepi_sv.exercise.enums.MuscleGroupType.ARM;
+import static org.hepi.hepi_sv.exercise.enums.MuscleGroupType.CORE;
 import org.hepi.hepi_sv.user.dto.UserProfileDTO;
 import org.hepi.hepi_sv.user.service.UserProfileService;
 import org.springframework.stereotype.Service;
@@ -47,12 +50,12 @@ public class ExerciseReportService {
                 userExerciseProfile.squatWeight(), userExerciseProfile.squatReps()));
         ability.setDead(exerciseAnalysisService.analyzeExercise(1, userProfile.gender(), userProfile.weight(),
                 userExerciseProfile.deadWeight(), userExerciseProfile.deadReps()));
-        ability.getDead().setMuscle("코어"); // 현재 전신
+        ability.getDead().setMuscleGroupType(CORE); // 현재 전신
         ability.setOverhead(exerciseAnalysisService.analyzeExercise(150, userProfile.gender(), userProfile.weight(),
                 userExerciseProfile.overheadWeight(), userExerciseProfile.overheadReps()));
         ability.setPushup(exerciseAnalysisService.analyzeExercise(132, userProfile.gender(), userProfile.weight(), 0,
                 userExerciseProfile.pushupReps()));
-        ability.getPushup().setMuscle("팔"); // 현재 가슴       
+        ability.getPushup().setMuscleGroupType(ARM); // 현재 가슴       
         ability.setPullup(exerciseAnalysisService.analyzeExercise(90, userProfile.gender(), userProfile.weight(), 0,
                 userExerciseProfile.pullupReps()));
 
@@ -93,19 +96,19 @@ public class ExerciseReportService {
         profiles.sort(Comparator.comparingDouble(ExerciseAnalysisProfile::getScore));
     
         // 3. 상위 두 가지와 점수 40 미만 부위 식별 (중복 제거)
-        Set<String> targetMuscleGroups = new LinkedHashSet<>();
+        Set<MuscleGroupType> targetMuscleGroups = new LinkedHashSet<>();
         for (int i = 0; i < Math.min(2, profiles.size()); i++) {
-            targetMuscleGroups.add(profiles.get(i).getMuscle());
+            targetMuscleGroups.add(profiles.get(i).getMuscleGroupType());
         }
         for (ExerciseAnalysisProfile profile : profiles) {
             if (profile.getScore() < 40) {
-                targetMuscleGroups.add(profile.getMuscle());
+                targetMuscleGroups.add(profile.getMuscleGroupType());
             }
         }
     
         // 4. 식별된 근육 그룹에 대해 쿼리 수행 (기존 쿼리 활용)
         List<MuscleProfile> result = new ArrayList<>();
-        for (String muscleGroup : targetMuscleGroups) {
+        for (MuscleGroupType muscleGroup : targetMuscleGroups) {
             // 4-1. Strength 가져오기
             String strength = exerciseMetaService.getStrengthByMuscleGroup(muscleGroup);
     

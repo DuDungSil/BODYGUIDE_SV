@@ -1,15 +1,14 @@
 package org.hepi.hepi_sv.exercise.service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hepi.hepi_sv.exercise.controller.request.UserExerciseStatsRequest;
+import org.hepi.hepi_sv.exercise.controller.response.UserExerciseStatsResponse;
 import org.hepi.hepi_sv.exercise.dto.UserExerciseStatsDTO;
-import org.hepi.hepi_sv.exercise.dto.UserExerciseStatsRequest;
-import org.hepi.hepi_sv.exercise.dto.UserExerciseStatsResponse;
 import org.hepi.hepi_sv.exercise.entity.UsersExerciseStats;
 import org.hepi.hepi_sv.exercise.entity.UsersExerciseStatsHistory;
-import org.hepi.hepi_sv.exercise.repository.UsersExerciseProfileHistoryRepository;
-import org.hepi.hepi_sv.exercise.repository.UsersExerciseProfileRepository;
+import org.hepi.hepi_sv.exercise.repository.UsersExerciseStatsHistoryRepository;
+import org.hepi.hepi_sv.exercise.repository.UsersExerciseStatsRepository;
 import org.hepi.hepi_sv.exercise.vo.ExerciseStats;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserExerciseStatsService {
     
-    private final UsersExerciseProfileRepository profileRepository;
-    private final UsersExerciseProfileHistoryRepository profileHistoryRepository;
+    private final UsersExerciseStatsRepository profileRepository;
+    private final UsersExerciseStatsHistoryRepository profileHistoryRepository;
 
     // 생성
     public void createUsersExerciseProfile(UUID userId) {

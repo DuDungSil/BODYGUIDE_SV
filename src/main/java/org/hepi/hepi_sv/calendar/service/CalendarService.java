@@ -37,9 +37,9 @@ public class CalendarService {
         return list;
     }
 
-    public CalendarMemoDTO getCalendarMemoDetail(UUID userId, String yyyymmdd) {
-        CalendarMemoDTO detailDTO = calendarQueryRepository.findCalendarDataBySelectedDate(userId, yyyymmdd);
-        return detailDTO;
-    }
+    // public CalendarMemoDTO getCalendarMemoDetail(UUID userId, String yyyymmdd) {
+    //     CalendarMemoDTO detailDTO = calendarQueryRepository.findCalendarDataBySelectedDate(userId, yyyymmdd);
+    //     return detailDTO;
+    // }
 
 }

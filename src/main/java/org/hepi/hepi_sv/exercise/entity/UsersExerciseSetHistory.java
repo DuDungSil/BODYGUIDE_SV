@@ -6,27 +6,43 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "USERS_EXERCISE_SET_HISTORY")
 public class UsersExerciseSetHistory {
 
     @Id
-    @Column(name = "history_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "history_id", updatable = false, nullable = false)
     private Long historyId;
 
     @Column(name = "user_id")
     private UUID userId;
 
-    @Column(name = "record_at")
-    private LocalDateTime recordAt;
+    @Column(name = "group_id", columnDefinition = "SMALLINT")
+    private int groupId;
+
+    @Column(name = "exercise_date")
+    private LocalDateTime exerciseDate;
 
     @Column(name = "exercise_id", columnDefinition = "SMALLINT")
     private Integer exerciseId;
 
-    @Column(name = "set")
+    @Column(name = "set_number")
     private Integer set;
 
     @Column(name = "weight")
@@ -35,6 +51,13 @@ public class UsersExerciseSetHistory {
     @Column(name = "reps")
     private Integer reps;
 
-    @Column(name = "exercise_date")
-    private LocalDate exerciseDate;
+    @Column(name = "score")
+    private Double score;
+
+    @Column(name = "strength")
+    private Double strength;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+    
 }

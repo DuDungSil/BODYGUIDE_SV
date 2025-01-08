@@ -87,47 +87,47 @@ public class CalendarQueryRepository {
                 .toList();
     }
 
-    public CalendarMemoDTO findCalendarDataBySelectedDate(UUID userId, String yyyymmdd) {
-        QUsersCalendarMemoHistory qUsersCalendarMemoHistory = QUsersCalendarMemoHistory.usersCalendarMemoHistory;
-        QUsersExerciseSetHistory qUsersExerciseSetHistory = QUsersExerciseSetHistory.usersExerciseSetHistory;
-        QUsersIntakeHistory qUsersIntakeHistory = QUsersIntakeHistory.usersIntakeHistory;
-        QUsersWeightHistory qUsersWeightHistory = QUsersWeightHistory.usersWeightHistory;
+//     public CalendarMemoDTO findCalendarDataBySelectedDate(UUID userId, String yyyymmdd) {
+//         QUsersCalendarMemoHistory qUsersCalendarMemoHistory = QUsersCalendarMemoHistory.usersCalendarMemoHistory;
+//         QUsersExerciseSetHistory qUsersExerciseSetHistory = QUsersExerciseSetHistory.usersExerciseSetHistory;
+//         QUsersIntakeHistory qUsersIntakeHistory = QUsersIntakeHistory.usersIntakeHistory;
+//         QUsersWeightHistory qUsersWeightHistory = QUsersWeightHistory.usersWeightHistory;
 
-        // LocalDate로 변환
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate selectedDate = LocalDate.parse(yyyymmdd, formatter);
+//         // LocalDate로 변환
+//         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+//         LocalDate selectedDate = LocalDate.parse(yyyymmdd, formatter);
 
-        // 메모 조회
-        String note = queryFactory.select(qUsersCalendarMemoHistory.note)
-                .from(qUsersCalendarMemoHistory)
-                .where(qUsersCalendarMemoHistory.userId.eq(userId)
-                        .and(qUsersCalendarMemoHistory.noteDate.eq(selectedDate)))
-                .fetchOne();
+//         // 메모 조회
+//         String note = queryFactory.select(qUsersCalendarMemoHistory.note)
+//                 .from(qUsersCalendarMemoHistory)
+//                 .where(qUsersCalendarMemoHistory.userId.eq(userId)
+//                         .and(qUsersCalendarMemoHistory.noteDate.eq(selectedDate)))
+//                 .fetchOne();
 
-        // 운동 기록 합계 조회
-        Double exercise = queryFactory.select(qUsersExerciseSetHistory.weight.sum().coalesce(0.0))
-                .from(qUsersExerciseSetHistory)
-                .where(qUsersExerciseSetHistory.userId.eq(userId)
-                        .and(qUsersExerciseSetHistory.exerciseDate.eq(selectedDate)))
-                .fetchOne();
+//         // 운동 기록 합계 조회
+//         Double exercise = queryFactory.select(qUsersExerciseSetHistory.weight.sum().coalesce(0.0))
+//                 .from(qUsersExerciseSetHistory)
+//                 .where(qUsersExerciseSetHistory.userId.eq(userId)
+//                         .and(qUsersExerciseSetHistory.exerciseDate.eq(selectedDate)))
+//                 .fetchOne();
 
-        // 식사 기록 합계 조회
-        Double intake = queryFactory.select(qUsersIntakeHistory.calory.sum().coalesce(0.0))
-                .from(qUsersIntakeHistory)
-                .where(qUsersIntakeHistory.userId.eq(userId)
-                        .and(qUsersIntakeHistory.intakeDate.eq(selectedDate)))
-                .fetchOne();
+//         // 식사 기록 합계 조회
+//         Double intake = queryFactory.select(qUsersIntakeHistory.calory.sum().coalesce(0.0))
+//                 .from(qUsersIntakeHistory)
+//                 .where(qUsersIntakeHistory.userId.eq(userId)
+//                         .and(qUsersIntakeHistory.intakeDate.eq(selectedDate)))
+//                 .fetchOne();
 
-        // 체중 기록 조회
-        Double weight = queryFactory.select(qUsersWeightHistory.weight.coalesce(0.0))
-                .from(qUsersWeightHistory)
-                .where(qUsersWeightHistory.userId.eq(userId)
-                        .and(qUsersWeightHistory.recordDate.eq(selectedDate)))
-                .fetchOne();
+//         // 체중 기록 조회
+//         Double weight = queryFactory.select(qUsersWeightHistory.weight.coalesce(0.0))
+//                 .from(qUsersWeightHistory)
+//                 .where(qUsersWeightHistory.userId.eq(userId)
+//                         .and(qUsersWeightHistory.recordDate.eq(selectedDate)))
+//                 .fetchOne();
 
-        // DTO로 반환
-        return new CalendarMemoDTO(selectedDate, note, exercise, intake, weight);
-    }
+//         // DTO로 반환
+//         return new CalendarMemoDTO(selectedDate, note, exercise, intake, weight);
+//     }
 
 
 }
