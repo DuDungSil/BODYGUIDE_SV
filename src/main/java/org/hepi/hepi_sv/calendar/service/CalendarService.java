@@ -39,10 +39,10 @@ public class CalendarService {
         return list;
     }
 
-    // public CalendarMemoDTO getCalendarMemoDetail(UUID userId, String yyyymmdd) {
-    //     CalendarMemoDTO detailDTO = calendarQueryRepository.findCalendarDataBySelectedDate(userId, yyyymmdd);
-    //     return detailDTO;
-    // }
+     public CalendarMemoDTO getCalendarMemoDetail(UUID userId, String yyyymmdd) {
+         CalendarMemoDTO detailDTO = calendarQueryRepository.findCalendarDataBySelectedDate(userId, yyyymmdd);
+         return detailDTO;
+     }
 
     public CalendarMemoDTO postMemo(UUID userId, CalendarMemoDTO memoRequest) {
         // yyyymm 생성 (LocalDate의 연도와 월 추출)
@@ -63,6 +63,6 @@ public class CalendarService {
         }
 
         // 최종 저장된 메모 반환
-        return calendarQueryRepository.findMemoDayDetail(userId, yyyymmdd);
+        return calendarQueryRepository.findCalendarDataBySelectedDate(userId, yyyymmdd);
     }
 }

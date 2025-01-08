@@ -60,12 +60,12 @@ public class CalendarController {
     }
 
     // // 해당 날짜 기록 상세
-    // @GetMapping("/detail/{yyyymmdd}")
-    // public ResponseEntity<CalendarMemoDTO> getMemoDayDetail(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String yyyymmdd) {
-    //     UUID userId = UUID.fromString(userDetails.getUsername());
-    //     CalendarMemoDTO calendarMemoDTO = calendarService.getCalendarMemoDetail(userId, yyyymmdd);
-    //     return ResponseEntity.ok(calendarMemoDTO);
-    // }
+     @GetMapping("/detail/{yyyymmdd}")
+     public ResponseEntity<CalendarMemoDTO> getMemoDayDetail(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String yyyymmdd) {
+         UUID userId = UUID.fromString(userDetails.getUsername());
+         CalendarMemoDTO calendarMemoDTO = calendarService.getCalendarMemoDetail(userId, yyyymmdd);
+         return ResponseEntity.ok(calendarMemoDTO);
+     }
 
     // 메모 입력 & 수정
     @PostMapping("/memo")
