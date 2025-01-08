@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/product")
-public class ProductController {
+@RequestMapping("/coupang")
+public class CoupangController {
     
 }

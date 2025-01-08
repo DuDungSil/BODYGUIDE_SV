@@ -10,8 +10,8 @@ import org.hepi.hepi_sv.nutrition.dto.RecommendSource;
 import org.hepi.hepi_sv.nutrition.enums.PAType;
 import org.hepi.hepi_sv.nutrition.service.NutritionAnalysisService;
 import org.hepi.hepi_sv.nutrition.service.SourceRecommendService;
-import org.hepi.hepi_sv.coupang.dto.ShopProductDTO;
-import org.hepi.hepi_sv.coupang.service.ProductRecommendService;
+import org.hepi.hepi_sv.coupang.dto.CoupangProductDTO;
+import org.hepi.hepi_sv.coupang.service.CoupangProductRecommendService;
 import org.hepi.hepi_sv.web.dto.nutrition.WebNutrientRequest;
 import org.hepi.hepi_sv.web.dto.nutrition.WebNutrientResult;
 import org.hepi.hepi_sv.web.dto.nutrition.WebRecommendFood;
@@ -32,7 +32,7 @@ public class WebNutritionService {
     private final ClientIpExtraction clientIpExtraction;
     private final NutritionAnalysisService nutrientAnalysisService;
     private final SourceRecommendService sourceRecommendService;
-    private final ProductRecommendService productRecommendService;
+    private final CoupangProductRecommendService coupangProductRecommendService;
     private final WebNutriInputDataRepository webNutriInputDataRepository;
     private final WebNutriAnalysisDataRepository webNutriAnalysisDataRepository;
 
@@ -116,9 +116,9 @@ public class WebNutritionService {
 
         int dietTypeId = dietType.equals("비건") ? 5 : 1;
 
-        List<ShopProductDTO> carbohydrate = productRecommendService.getRecommendFoodByMajorNutrient(1, dietTypeId);
-        List<ShopProductDTO> protein = productRecommendService.getRecommendFoodByMajorNutrient(2, dietTypeId);
-        List<ShopProductDTO> fat = productRecommendService.getRecommendFoodByMajorNutrient(3, dietTypeId);
+        List<CoupangProductDTO> carbohydrate = coupangProductRecommendService.getRecommendFoodByMajorNutrient(1, dietTypeId);
+        List<CoupangProductDTO> protein = coupangProductRecommendService.getRecommendFoodByMajorNutrient(2, dietTypeId);
+        List<CoupangProductDTO> fat = coupangProductRecommendService.getRecommendFoodByMajorNutrient(3, dietTypeId);
 
         Collections.shuffle(carbohydrate);
         Collections.shuffle(protein);

@@ -16,9 +16,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RECOMMEND_FOOD")
-public class RecommendFood {
-    
+@Table(name = "COUPANG_RECOMMEND_SUPPLEMENTS")
+public class CoupangRecommendSupplements {
+  
     @Id
     @Column(name = "recommend_id")
     private int id;
@@ -26,10 +26,7 @@ public class RecommendFood {
     @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "nutrient_type", columnDefinition = "TINYINT")
-    private int nutrientType;
-
-    @Column(name = "diet_type", columnDefinition = "TINYINT")
-    private int dietType;
+    @Column(name = "related_nutrient_id")
+    private int relatedNutrientId;
 
 }

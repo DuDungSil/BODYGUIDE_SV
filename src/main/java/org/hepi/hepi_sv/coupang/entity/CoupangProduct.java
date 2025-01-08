@@ -18,8 +18,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "SHOP_PRODUCT")
-public class ShopProduct {
+@Table(name = "COUPANG_PRODUCT")
+public class CoupangProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
