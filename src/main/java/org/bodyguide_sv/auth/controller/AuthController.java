@@ -1,5 +1,6 @@
 package org.bodyguide_sv.auth.controller;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -46,32 +48,36 @@ public class AuthController {
     private final UserMetaService userMetaService;
 
     @GetMapping("/callback")
-    public ResponseEntity<String> handleOAuthCallback(
+    public void handleOAuthCallback(
             @RequestParam("access_token") String accessToken,
-            @RequestParam("refresh_token") String refreshToken
+            @RequestParam("refresh_token") String refreshToken,
+            HttpServletResponse response
     ) {
         try {
             // JSON 데이터 생성
             String jsonPayload = String.format(
-                "{\"accessToken\": \"%s\", \"refreshToken\": \"%s\"}", 
-                accessToken, 
+                "{\"accessToken\":\"%s\", \"refreshToken\":\"%s\"}",
+                accessToken,
                 refreshToken
             );
     
             // 앱으로 리디렉션 URL 생성
             String redirectUri = "bodyguide:/oauth2redirect?jsonPayload=" +
-                    URLEncoder.encode(jsonPayload, StandardCharsets.UTF_8.toString());
+                    URLEncoder.encode(jsonPayload, StandardCharsets.UTF_8);
     
             // 로직 처리 (예: 사용자 정보 업데이트, 토큰 저장 등)
-            // userMetaService.updateLastLoginAt(accessToken);
+            //userMetaService.updateLastLoginAt(accessToken);
     
-            // 리디렉션 URL 반환
-            return ResponseEntity.ok(redirectUri);
+            // 앱으로 리디렉션
+            response.sendRedirect(redirectUri);
     
         } catch (Exception e) {
-            // 예외 처리
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("오류 발생: " + e.getMessage());
+            try {
+                // 오류 발생 시 앱으로 오류를 전달하거나 적절한 응답 반환
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "오류 발생: " + e.getMessage());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
     }
 
