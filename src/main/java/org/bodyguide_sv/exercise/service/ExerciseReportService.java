@@ -14,6 +14,7 @@ import org.bodyguide_sv.exercise.dto.ExerciseAnalysisProfile;
 import org.bodyguide_sv.exercise.dto.MuscleProfile;
 import org.bodyguide_sv.exercise.dto.UserExerciseStatsDTO;
 import org.bodyguide_sv.exercise.enums.MuscleGroupType;
+
 import static org.bodyguide_sv.exercise.enums.MuscleGroupType.ARM;
 import static org.bodyguide_sv.exercise.enums.MuscleGroupType.CORE;
 import org.bodyguide_sv.user.dto.UserProfileDTO;

@@ -12,7 +12,7 @@ public enum MuscleGroupType {
     SHOULDER(5, "어깨"),
     ARM(6, "팔");
                
-    private final int muscleGroupId;
+    private final Integer muscleGroupId;
     private final String description;
 
     public int getMuscleGroupId() {

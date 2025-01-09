@@ -1,19 +1,26 @@
 package org.bodyguide_sv.exercise.repository;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bodyguide_sv.exercise.dto.ExerciseAnalysisData;
+import org.bodyguide_sv.exercise.dto.MuscleGroupScoreDto;
 import org.bodyguide_sv.exercise.entity.QExercise;
 import org.bodyguide_sv.exercise.entity.QExercisePurpose;
 import org.bodyguide_sv.exercise.entity.QExerciseThreshold;
 import org.bodyguide_sv.exercise.entity.QMuscle;
 import org.bodyguide_sv.exercise.entity.QMuscleGroup;
 import org.bodyguide_sv.exercise.entity.QMuscleGroupDetail;
+import org.bodyguide_sv.exercise.entity.QUsersExerciseBestScore;
 import org.bodyguide_sv.exercise.enums.MuscleGroupType;
 import org.bodyguide_sv.exercise.enums.ThresholdType;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.SubQueryExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -138,4 +145,42 @@ public class ExerciseQueryRepository {
                 .where(muscleGroup.groupId.eq(muscleGroupId))
                 .fetch();
     }
+
+    public List<MuscleGroupScoreDto> getMaxScoreByMuscleGroup(UUID userId) {
+		QUsersExerciseBestScore bestScore = QUsersExerciseBestScore.usersExerciseBestScore;
+		QExercise exercise = QExercise.exercise;
+		QMuscleGroup muscleGroup = QMuscleGroup.muscleGroup;
+	
+		// 서브쿼리를 사용하여 최대 score 행을 선택
+		QUsersExerciseBestScore subBestScore = new QUsersExerciseBestScore("subBestScore");
+
+		List<Tuple> results = queryFactory.select(
+								muscleGroup.groupId,
+								bestScore.id.exerciseId,
+								bestScore.score
+								)
+								.from(bestScore)
+								.join(exercise).on(bestScore.id.exerciseId.eq(exercise.exerId))
+								.join(muscleGroup).on(exercise.muscleId.eq(muscleGroup.groupId))
+								.where(bestScore.id.userId.eq(userId)
+									.and(bestScore.score.eq(
+											JPAExpressions.select(subBestScore.score.max())
+													.from(subBestScore)
+													.join(exercise).on(subBestScore.id.exerciseId.eq(exercise.exerId))
+													.join(muscleGroup).on(exercise.muscleId.eq(muscleGroup.groupId))
+													.where(subBestScore.id.userId.eq(userId))
+													.groupBy(muscleGroup.groupId)
+			))
+		)
+		.fetch();
+			
+		return results.stream()
+		.map(tuple -> new MuscleGroupScoreDto(
+				MuscleGroupType.fromId(tuple.get(muscleGroup.groupId)), // groupId -> MuscleGroupType
+				tuple.get(bestScore.id.exerciseId), // exerciseId
+				tuple.get(bestScore.score)   // maxScore
+		))
+		.toList();
+    }
+
 }

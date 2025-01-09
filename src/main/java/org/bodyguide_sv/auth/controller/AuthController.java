@@ -1,5 +1,7 @@
 package org.bodyguide_sv.auth.controller;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.bodyguide_sv.auth.dto.InitializeRequest;
@@ -44,15 +46,33 @@ public class AuthController {
     private final UserMetaService userMetaService;
 
     @GetMapping("/callback")
-    public TokenResponse handleOAuthCallback(
+    public ResponseEntity<String> handleOAuthCallback(
             @RequestParam("access_token") String accessToken,
             @RequestParam("refresh_token") String refreshToken
     ) {
-        // 로직 처리 (예: 사용자 정보 업데이트, 토큰 저장 등)
-        // userMetaService.updateLastLoginAt(accessToken);
-
-        // 필요한 응답 반환 (클라이언트에서 필요한 형식으로)
-        return new TokenResponse(accessToken, refreshToken);
+        try {
+            // JSON 데이터 생성
+            String jsonPayload = String.format(
+                "{\"accessToken\": \"%s\", \"refreshToken\": \"%s\"}", 
+                accessToken, 
+                refreshToken
+            );
+    
+            // 앱으로 리디렉션 URL 생성
+            String redirectUri = "bodyguide:/oauth2redirect?jsonPayload=" +
+                    URLEncoder.encode(jsonPayload, StandardCharsets.UTF_8.toString());
+    
+            // 로직 처리 (예: 사용자 정보 업데이트, 토큰 저장 등)
+            // userMetaService.updateLastLoginAt(accessToken);
+    
+            // 리디렉션 URL 반환
+            return ResponseEntity.ok(redirectUri);
+    
+        } catch (Exception e) {
+            // 예외 처리
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("오류 발생: " + e.getMessage());
+        }
     }
 
     @GetMapping("/test")
