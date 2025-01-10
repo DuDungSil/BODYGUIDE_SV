@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-public class UsersExercisePerformance {
+public class UsersExerciseTotalPerformance {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
