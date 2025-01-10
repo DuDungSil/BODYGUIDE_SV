@@ -6906,3 +6906,327 @@ Connection: keep-alive
 2025-01-09 16:04:59 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-01-09 16:04:59 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2025-01-09 16:04:59 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-01-09 17:01:05 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2025-01-09 17:01:05 [main] INFO  org.bodyguide_sv.Application - Starting Application using Java 17.0.11 with PID 18492 (C:\Workspace_Lm\BODYGUIDE_SV\target\classes started by PC in C:\Workspace_Lm\BODYGUIDE_SV)
+2025-01-09 17:01:05 [main] INFO  org.bodyguide_sv.Application - No active profile set, falling back to 1 default profile: "default"
+2025-01-09 17:01:05 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-09 17:01:05 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-01-09 17:01:06 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 78 ms. Found 1 Redis repository interface.
+2025-01-09 17:01:06 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-09 17:01:06 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-09 17:01:06 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data JPA - Could not safely identify store assignment for repository candidate interface org.bodyguide_sv.common.redis.repository.TokenRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: jakarta.persistence.Entity, jakarta.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
+2025-01-09 17:01:06 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 152 ms. Found 23 JPA repository interfaces.
+2025-01-09 17:01:07 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 3573 (https)
+2025-01-09 17:01:07 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["https-jsse-nio-3573"]
+2025-01-09 17:01:07 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-01-09 17:01:07 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-01-09 17:01:07 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-01-09 17:01:07 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2406 ms
+2025-01-09 17:01:08 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-09 17:01:08 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-01-09 17:01:08 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-01-09 17:01:08 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-09 17:01:08 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-01-09 17:01:09 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@74070994
+2025-01-09 17:01:09 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-01-09 17:01:10 [main] INFO  o.h.m.internal.PojoInstantiatorImpl - HHH000182: No default (no-argument) constructor for class: org.bodyguide_sv.exercise.vo.ExerciseStats (class must be instantiated by Interceptor)
+2025-01-09 17:01:10 [main] INFO  o.h.m.internal.PojoInstantiatorImpl - HHH000182: No default (no-argument) constructor for class: org.bodyguide_sv.exercise.vo.ExerciseStats (class must be instantiated by Interceptor)
+2025-01-09 17:01:10 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-09 17:01:10 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 17:01:12 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-09 17:01:13 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-01-09 17:01:13 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2025-01-09 17:01:13 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/error'], Ant [pattern='/error']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2025-01-09 17:01:13 [main] WARN  o.s.s.c.a.web.builders.WebSecurity - You are asking Spring Security to ignore Deferred [Mvc [pattern='/favicon.ico'], Ant [pattern='/favicon.ico']]. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2025-01-09 17:01:14 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["https-jsse-nio-3573"]
+2025-01-09 17:01:14 [main] INFO  o.a.t.u.net.NioEndpoint.certificate - Connector [https-jsse-nio-3573], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\PC\.keystore] using alias [mysslkey] with trust store [null]
+2025-01-09 17:01:14 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 3573 (https) with context path '/'
+2025-01-09 17:01:14 [main] INFO  org.bodyguide_sv.Application - Started Application in 9.558 seconds (process running for 10.119)
+2025-01-09 17:01:14 [main] INFO  org.bodyguide_sv.Application - ==================== START BODYGUIDE SERVER ====================
+2025-01-09 17:01:14 [RMI TCP Connection(1)-10.10.20.53] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-09 17:01:14 [RMI TCP Connection(1)-10.10.20.53] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-01-09 17:01:14 [RMI TCP Connection(1)-10.10.20.53] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-6] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:64101 
+Request URL: https://localhost:3573/swagger-ui/index.html 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+upgrade-insecure-requests: 1
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+sec-fetch-site: none
+sec-fetch-mode: navigate
+sec-fetch-user: ?1
+sec-fetch-dest: document
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-6] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+Execution Time: 24 ms 
+[Headers]: 
+Vary: Origin
+Vary: Origin
+Vary: Origin
+client-ip: 0:0:0:0:0:0:0:1:64101
+Last-Modified: Sat, 02 Dec 2023 17:03:37 GMT
+Accept-Ranges: bytes
+Content-Type: text/html
+Content-Length: 734
+Date: Thu, 09 Jan 2025 08:01:22 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-2] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:64101 
+Request URL: https://localhost:3573/swagger-ui/swagger-ui.css 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+sec-ch-ua-platform: "Windows"
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
+sec-ch-ua-mobile: ?0
+accept: text/css,*/*;q=0.1
+sec-fetch-site: same-origin
+sec-fetch-mode: no-cors
+sec-fetch-dest: style
+referer: https://localhost:3573/swagger-ui/index.html
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-2] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+Execution Time: 11 ms 
+[Headers]: 
+Vary: Origin
+Vary: Origin
+Vary: Origin
+client-ip: 0:0:0:0:0:0:0:1:64101
+Last-Modified: Sat, 02 Dec 2023 17:03:37 GMT
+Accept-Ranges: bytes
+Content-Type: text/css
+Content-Length: 152072
+Date: Thu, 09 Jan 2025 08:01:22 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-2] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:64101 
+Request URL: https://localhost:3573/swagger-ui/index.css 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+sec-ch-ua-platform: "Windows"
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
+sec-ch-ua-mobile: ?0
+accept: text/css,*/*;q=0.1
+sec-fetch-site: same-origin
+sec-fetch-mode: no-cors
+sec-fetch-dest: style
+referer: https://localhost:3573/swagger-ui/index.html
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-3] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:64106 
+Request URL: https://localhost:3573/swagger-ui/swagger-initializer.js 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+sec-ch-ua-platform: "Windows"
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
+sec-ch-ua-mobile: ?0
+accept: */*
+sec-fetch-site: same-origin
+sec-fetch-mode: no-cors
+sec-fetch-dest: script
+referer: https://localhost:3573/swagger-ui/index.html
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-2] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+Execution Time: 2 ms 
+[Headers]: 
+Vary: Origin
+Vary: Origin
+Vary: Origin
+client-ip: 0:0:0:0:0:0:0:1:64101
+Last-Modified: Sat, 02 Dec 2023 17:03:37 GMT
+Accept-Ranges: bytes
+Content-Type: text/css
+Content-Length: 202
+Date: Thu, 09 Jan 2025 08:01:22 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-2] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:64101 
+Request URL: https://localhost:3573/swagger-ui/swagger-ui-bundle.js 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+sec-ch-ua-platform: "Windows"
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
+sec-ch-ua-mobile: ?0
+accept: */*
+sec-fetch-site: same-origin
+sec-fetch-mode: no-cors
+sec-fetch-dest: script
+referer: https://localhost:3573/swagger-ui/index.html
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-10] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:64108 
+Request URL: https://localhost:3573/swagger-ui/swagger-ui-standalone-preset.js 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+sec-ch-ua-platform: "Windows"
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
+sec-ch-ua-mobile: ?0
+accept: */*
+sec-fetch-site: same-origin
+sec-fetch-mode: no-cors
+sec-fetch-dest: script
+referer: https://localhost:3573/swagger-ui/index.html
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-3] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+Execution Time: 11 ms 
+[Headers]: 
+Vary: Origin
+Vary: Origin
+Vary: Origin
+client-ip: 0:0:0:0:0:0:0:1:64106
+Last-Modified: Sat, 02 Dec 2023 17:03:37 GMT
+Cache-Control: no-store
+Accept-Ranges: bytes
+Content-Type: text/javascript
+Content-Length: 615
+Date: Thu, 09 Jan 2025 08:01:22 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-10] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+Execution Time: 16 ms 
+[Headers]: 
+Vary: Origin
+Vary: Origin
+Vary: Origin
+client-ip: 0:0:0:0:0:0:0:1:64108
+Last-Modified: Sat, 02 Dec 2023 17:03:37 GMT
+Accept-Ranges: bytes
+Content-Type: text/javascript
+Content-Length: 230640
+Date: Thu, 09 Jan 2025 08:01:22 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-2] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+Execution Time: 85 ms 
+[Headers]: 
+Vary: Origin
+Vary: Origin
+Vary: Origin
+client-ip: 0:0:0:0:0:0:0:1:64101
+Last-Modified: Sat, 02 Dec 2023 17:03:37 GMT
+Accept-Ranges: bytes
+Content-Type: text/javascript
+Content-Length: 1400247
+Date: Thu, 09 Jan 2025 08:01:22 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-1] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:64101 
+Request URL: https://localhost:3573/v3/api-docs/swagger-config 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+sec-ch-ua-platform: "Windows"
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
+sec-ch-ua-mobile: ?0
+accept: */*
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+sec-fetch-dest: empty
+referer: https://localhost:3573/swagger-ui/index.html
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-1] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+Execution Time: 24 ms 
+[Headers]: 
+client-ip: 0:0:0:0:0:0:0:1:64101
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Thu, 09 Jan 2025 08:01:22 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+
+2025-01-09 17:01:22 [https-jsse-nio-3573-exec-7] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== REQUEST ====================
+Client IP: 0:0:0:0:0:0:0:1:64101 
+Request URL: https://localhost:3573/v3/api-docs 
+HTTP Method: GET 
+[Headers]: 
+host: localhost:3573
+connection: keep-alive
+sec-ch-ua-platform: "Windows"
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+accept: application/json,*/*
+sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"
+sec-ch-ua-mobile: ?0
+sec-fetch-site: same-origin
+sec-fetch-mode: cors
+sec-fetch-dest: empty
+referer: https://localhost:3573/swagger-ui/index.html
+accept-encoding: gzip, deflate, br, zstd
+accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+
+2025-01-09 17:01:23 [https-jsse-nio-3573-exec-7] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 623 ms
+2025-01-09 17:01:23 [https-jsse-nio-3573-exec-7] INFO  o.b.c.config.HttpLoggingInterceptor - ==================== RESPONSE ====================
+Status: 200 
+Execution Time: 645 ms 
+[Headers]: 
+client-ip: 0:0:0:0:0:0:0:1:64101
+Content-Type: application/json
+Content-Length: 28776
+Date: Thu, 09 Jan 2025 08:01:23 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+ 
+
+2025-01-09 17:55:01 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-09 17:55:01 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-01-09 17:55:01 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
