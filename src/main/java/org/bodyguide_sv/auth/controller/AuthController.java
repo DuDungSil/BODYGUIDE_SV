@@ -62,7 +62,7 @@ public class AuthController {
             );
     
             // 앱으로 리디렉션 URL 생성
-            String redirectUri = "bodyguide:/oauth2redirect?jsonPayload=" +
+            String redirectUri = "bodyguide://oauth2redirect?jsonPayload=" +
                     URLEncoder.encode(jsonPayload, StandardCharsets.UTF_8);
     
             // 로직 처리 (예: 사용자 정보 업데이트, 토큰 저장 등)
