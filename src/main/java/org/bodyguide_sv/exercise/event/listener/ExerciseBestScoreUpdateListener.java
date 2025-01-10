@@ -53,6 +53,8 @@ public class ExerciseBestScoreUpdateListener {
         // UsersExerciseMuscleScoreProfile 갱신
         userExerciseMuscleScoreProfileService.updateMuscleScoreProfile(userId, updatedScoreIds);
 
+        // 
+
     }
 
 }
