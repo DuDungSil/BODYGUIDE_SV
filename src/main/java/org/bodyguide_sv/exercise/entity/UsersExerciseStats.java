@@ -37,7 +37,6 @@ public class UsersExerciseStats {
     @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
 
-
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "benchWeight", column = @Column(name = "benchpress_weight")),
