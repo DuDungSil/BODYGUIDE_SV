@@ -36,3 +36,4 @@ build/
 *.properties
 logs/
 logs/hepiLog.log
+*.log
