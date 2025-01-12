@@ -5,19 +5,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import org.bodyguide_sv.calendar.dto.CalendarMemoDTO;
 import org.bodyguide_sv.calendar.entity.QUsersCalendarMemoHistory;
 import org.bodyguide_sv.calendar.entity.QUsersIntakeHistory;
-import org.bodyguide_sv.calendar.entity.QUsersWeightHistory;
 import org.bodyguide_sv.calendar.entity.UsersCalendarMemoHistory;
 import org.bodyguide_sv.exercise.entity.QUsersExerciseSetHistory;
+import org.bodyguide_sv.weight.entity.QUsersWeightHistory;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -128,7 +128,9 @@ public class CalendarQueryRepository {
          Double weight = queryFactory.select(qUsersWeightHistory.weight.coalesce(0.0))
                  .from(qUsersWeightHistory)
                  .where(qUsersWeightHistory.userId.eq(userId)
-                         .and(qUsersWeightHistory.recordDate.eq(selectedDate)))
+                        .and(qUsersExerciseSetHistory.exerciseDate.year().eq(selectedDate.getYear())) // 연도 비교
+                        .and(qUsersExerciseSetHistory.exerciseDate.month().eq(selectedDate.getMonthValue())) // 월 비교
+                        .and(qUsersExerciseSetHistory.exerciseDate.dayOfMonth().eq(selectedDate.getDayOfMonth()))) // 일 비교
                  .fetchOne();
 
          // DTO로 반환

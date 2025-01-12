@@ -7,13 +7,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.bodyguide_sv.exercise.enums.MajorExercise.BENCH_PRESS;
-import static org.bodyguide_sv.exercise.enums.MajorExercise.DEAD_LIFT;
-import static org.bodyguide_sv.exercise.enums.MajorExercise.SQUAT;
-
+import org.bodyguide_sv.exercise.controller.response.ExerciseBigThreeProfileResponse;
+import org.bodyguide_sv.exercise.dto.UpdatedBigThreeWeightDTO;
 import org.bodyguide_sv.exercise.entity.UsersBigThreeProfile;
 import org.bodyguide_sv.exercise.entity.UsersExerciseBestScore;
 import org.bodyguide_sv.exercise.entity.UsersExerciseBestScore.UsersExerciseBestScoreId;
+import static org.bodyguide_sv.exercise.enums.MajorExercise.BENCH_PRESS;
+import static org.bodyguide_sv.exercise.enums.MajorExercise.DEAD_LIFT;
+import static org.bodyguide_sv.exercise.enums.MajorExercise.SQUAT;
 import org.bodyguide_sv.exercise.repository.UsersBigThreeProfileRepository;
 import org.bodyguide_sv.exercise.repository.UsersExerciseBestScoreRepository;
 import org.springframework.stereotype.Service;
@@ -30,11 +31,49 @@ public class UserBigThreeProfileService {
     private final UsersBigThreeProfileRepository usersBigThreeProfileRepository;
     private final UsersExerciseBestScoreRepository usersExerciseBestScoreRepository;
     
+    // 생성
+    public void createUserBigThreeProfile(UUID userId) {
+
+        if (userId == null) {
+            throw new IllegalArgumentException("userId must not be null when creating a exercise profile.");
+        }
+
+        UsersBigThreeProfile newProfile = UsersBigThreeProfile.createDefaultProfile(userId);
+
+        usersBigThreeProfileRepository.save(newProfile);
+
+    }
+
+    // Response 가져오기
+    public ExerciseBigThreeProfileResponse getBigThreeProfileResponse(UUID userId) {
+
+        UsersBigThreeProfile profile = usersBigThreeProfileRepository.findByUserId(userId)
+        .orElseGet(
+                () -> {
+                    UsersBigThreeProfile newProfile = UsersBigThreeProfile.createDefaultProfile(userId);
+                    return usersBigThreeProfileRepository.save(newProfile);
+                        });
+        
+        return new ExerciseBigThreeProfileResponse(
+                        profile.getSquat().getScore(),
+                        profile.getSquat().getWeight(),
+                        profile.getSquat().getReps(),
+                        profile.getSquat().getUpdatedAt(),
+                        profile.getDeadLift().getScore(),
+                        profile.getDeadLift().getWeight(),
+                        profile.getDeadLift().getReps(),
+                        profile.getDeadLift().getUpdatedAt(),
+                        profile.getBenchPress().getScore(),
+                        profile.getBenchPress().getWeight(),
+                        profile.getBenchPress().getReps(),
+                        profile.getBenchPress().getUpdatedAt() );
+    }
+
     @Transactional
-    public void updateBigThreeProfile(UUID userId, List<Integer> exerciseIdList) {
+    public UpdatedBigThreeWeightDTO updateBigThreeProfile(UUID userId, List<Integer> exerciseIdList) {
         Set<Integer> targetIds = Set.of(BENCH_PRESS.getExerId(), SQUAT.getExerId(), DEAD_LIFT.getExerId());
         if (Collections.disjoint(exerciseIdList, targetIds)) {
-            return; 
+            return null; 
         }
 
         // BigThreeProfile 가져오기
@@ -73,9 +112,14 @@ public class UserBigThreeProfileService {
             profile.updateDeadlift(bestScore.getWeight(), bestScore.getReps(), bestScore.getScore());
         }
 
-        log.debug("진행됨");
+        UpdatedBigThreeWeightDTO updatedBigThreeWeightDTO = new UpdatedBigThreeWeightDTO(
+                                                                        profile.getSquat().getWeight(),
+                                                                        profile.getDeadLift().getWeight(),
+                                                                        profile.getBenchPress().getWeight());  
 
         usersBigThreeProfileRepository.save(profile);
+
+        return updatedBigThreeWeightDTO;
     }
 
 }

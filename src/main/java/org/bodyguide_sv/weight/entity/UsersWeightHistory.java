@@ -1,4 +1,4 @@
-package org.bodyguide_sv.calendar.entity;
+package org.bodyguide_sv.weight.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,8 +8,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "USERS_WEIGHT_HISTORY")
 public class UsersWeightHistory {
     
@@ -20,13 +28,10 @@ public class UsersWeightHistory {
     @Column(name = "user_id")
     private UUID userId;
 
-    @Column(name = "record_at")
-    private LocalDateTime recordAt;
-
     @Column(name = "weight")
     private Double weight;
 
     @Column(name = "record_date")
-    private LocalDate recordDate;
+    private LocalDateTime recordDate;
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bodyguide_sv.exercise.dto.ExerciseAnalysisData;
 import org.bodyguide_sv.exercise.dto.ExerciseAnalysisProfile;
+import org.bodyguide_sv.exercise.enums.ExerciseLevel;
 import org.bodyguide_sv.exercise.enums.MuscleGroupType;
 import org.bodyguide_sv.exercise.enums.ThresholdType;
 import org.bodyguide_sv.exercise.repository.ExerciseQueryRepository;
@@ -23,33 +24,33 @@ public class ExerciseAnalysisService {
         return RM1;
     }
 
-    public String getLevel(double score) {
-        double[] thresholds = { 20, 40, 60, 80, 100, 120 };
-        String[] levels = { "입문자", "초보자", "중급자", "숙련자", "고급자", "운동선수" };
-
-        String level = levels[levels.length - 1];
-        for (int i = 0; i < thresholds.length; i++) {
-            if (score < thresholds[i]) {
-                level = levels[i];
-                break;
+    public ExerciseLevel getLevel(double score) {
+        for (ExerciseLevel level : ExerciseLevel.values()) {
+            if (score < level.getMaxScoreThreshold()) {
+                return level; // 해당 점수 범위의 레벨 반환
             }
         }
-
-        return level;
+        // 모든 레벨의 최대값을 초과하면 최고 레벨 반환
+        return ExerciseLevel.ATHLETE;
     }
 
     private double calculateScore(double SP, List<Double> thresholds) {
-        double[] scores = {0, 20, 40, 60, 80, 100, 120};
-        double score = 120;
+        double score = ExerciseLevel.ATHLETE.getMaxScoreThreshold(); // 기본 최대 점수 (120)
     
         for (int i = 0; i < thresholds.size() - 1; i++) {
             if (SP >= thresholds.get(i) && SP < thresholds.get(i + 1)) {
-                score = scores[i] + 20 * (SP - thresholds.get(i)) / (thresholds.get(i + 1) - thresholds.get(i));
+                // Enum에서 현재 레벨과 다음 레벨의 점수 범위를 가져옴
+                double minScore = ExerciseLevel.values()[i].getMinScoreThreshold();
+                double maxScore = ExerciseLevel.values()[i].getMaxScoreThreshold();
+    
+                // 점수를 비율로 계산
+                score = minScore + ((SP - thresholds.get(i)) / (thresholds.get(i + 1) - thresholds.get(i))) * (maxScore - minScore);
                 break;
             }
         }
     
-        return Math.min(score, 120);
+        // 소수점 두 자리까지 반올림
+        return Math.round(score * 100.0) / 100.0;
     }
 
     public ExerciseAnalysisProfile analyzeExercise(int exerciseId, String gender, double bodyWeight, double liftingWeight, int reps) {
@@ -72,7 +73,7 @@ public class ExerciseAnalysisService {
         }
 
         double score = calculateScore(SP, thresholds);
-        String level = getLevel(score);
+        ExerciseLevel level = getLevel(score);
     
         // 임계값으로 평균 계산 ( 나중에 삭제 )
         double average = (thresholdType.getTypeId() == 0) ? thresholds.get(2) : thresholds.get(2) * bodyWeight;

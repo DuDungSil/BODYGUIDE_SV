@@ -1,24 +1,29 @@
 package org.bodyguide_sv.exercise.service;
 
 import java.time.LocalDateTime;
-import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.bodyguide_sv.exercise.controller.request.ExerciseRecordGroupRequest;
-import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupListResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseRecordGroupResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseRecordResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseSetResponse;
 import org.bodyguide_sv.exercise.dto.ExerciseAnalysisProfile;
 import org.bodyguide_sv.exercise.dto.ExerciseRecordGroupDTO;
 import org.bodyguide_sv.exercise.entity.UsersExerciseSetHistory;
 import org.bodyguide_sv.exercise.event.ExerciseRecordChangedEvent;
+import org.bodyguide_sv.exercise.repository.ExerciseQueryRepository;
 import org.bodyguide_sv.exercise.repository.UsersExerciseSetHistoryRepository;
 import org.bodyguide_sv.user.dto.UserProfileDTO;
 import org.bodyguide_sv.user.service.UserProfileService;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -29,33 +34,41 @@ import lombok.RequiredArgsConstructor;
 public class ExerciseRecordService {
     
     private final ApplicationEventPublisher eventPublisher;
+	private final ExerciseQueryRepository exerciseQueryRepository;
     private final UsersExerciseSetHistoryRepository usersExerciseSetHistoryRepository; 
     private final ExerciseAnalysisService exerciseAnalysisService;
     private final UserProfileService userProfileService;
 
-    // // 최근 n일치 ExerciseRecordGroup 조회
-    // public List<ExerciseRecordGroupListResponse> fetchRecentDaysExerciseRecords(UUID userId, int days) {
-    //     LocalDateTime startDate = LocalDateTime.now().minusDays(days);
-    //     List<UsersExerciseSetHistory> entities = usersExerciseSetHistoryRepository
-    //             .findByUserIdAndExerciseDateAfter(userId, startDate);
+    // 최근 n일치 ExerciseRecordGroup 조회
+    public ExerciseRecordGroupSliceResponse fetchRecentDaysExerciseRecords(UUID userId, int days, int page, int size) {
+        // 데이터 조회 (size + 1개로 요청)
+        List<ExerciseRecordGroupResponse> list = exerciseQueryRepository.fetchRecentDaysExerciseRecords(userId, days, page, size);
         
-    //     return entities.stream().map(entity -> exerciseRecordMapper.toDTO(List.of(entity))).toList();
-    // }
+        // 다음 페이지 여부 판단
+        boolean hasNext = list.size() > size;
+        
+        // 반환할 데이터 제한 (size 만큼만 반환)
+        List<ExerciseRecordGroupResponse> responseList = hasNext ? list.subList(0, size) : list;
 
-    // // 특정 yyyy년 mm월 조회 ( 페이지네이션 형식 )
-    // public List<ExerciseRecordGroupListResponse> fetchMonthlyExerciseRecords(UUID userId, int year, int month, int page, int size) {
-    //     Pageable pageable = PageRequest.of(page, size);
-    //     List<UsersExerciseSetHistory> entities = usersExerciseSetHistoryRepository.findByUserIdAndExerciseDateBetween(
-    //         userId,
-    //         LocalDateTime.of(year, month, 1, 0, 0),
-    //         LocalDateTime.of(year, month, YearMonth.of(year, month).lengthOfMonth(), 23, 59, 59),
-    //         pageable
-    //     ).toList();
+        return new ExerciseRecordGroupSliceResponse(page, size, hasNext, toGroupRecords(responseList));
+    }
 
-    //     return entities.stream().map(entity -> exerciseRecordMapper.toDTO(List.of(entity))).toList();
-    // }
+    // 특정 yyyy년 mm월 조회 
+    public ExerciseRecordGroupSliceResponse fetchMonthlyExerciseRecords(UUID userId, int year, int month, int page, int size) {
+        // 데이터 조회 (size + 1개로 요청)
+        List<ExerciseRecordGroupResponse> list = exerciseQueryRepository.fetchMonthlyExerciseRecords(userId, year,
+                month, page, size);
 
-    // save
+        // 다음 페이지 여부 판단
+        boolean hasNext = list.size() > size;
+
+        // 반환할 데이터 제한 (size 만큼만 반환)
+        List<ExerciseRecordGroupResponse> responseList = hasNext ? list.subList(0, size) : list;
+
+        return new ExerciseRecordGroupSliceResponse(page, size, hasNext, toGroupRecords(responseList));
+    }
+
+    // 저장
     public void saveExerciseRecordGroup(UUID userId, ExerciseRecordGroupRequest request) {
 
         LocalDateTime exerciseDate = request.exerciseDate();
@@ -81,7 +94,7 @@ public class ExerciseRecordService {
 
     }
 
-    // update
+    // 업데이트
     public void updateExerciseRecordGroup(UUID userId, ExerciseRecordGroupRequest request) {
 
         LocalDateTime exerciseDate = request.exerciseDate();
@@ -155,7 +168,7 @@ public class ExerciseRecordService {
                                                 double liftingWeight = setRequest.weight();
                                                 int reps = setRequest.reps();
 
-                                                // 분석 서비스
+                                                // 운동 분석 
                                                 ExerciseAnalysisProfile analysisProfile = exerciseAnalysisService
                                                         .analyzeExercise(exerciseId, gender, bodyWeight, liftingWeight,
                                                                 reps);
@@ -199,29 +212,73 @@ public class ExerciseRecordService {
     // 엔티티 -> DTO
     public ExerciseRecordGroupDTO toDTO(List<UsersExerciseSetHistory> entities) {
         return entities.stream()
-            .collect(Collectors.groupingBy(UsersExerciseSetHistory::getGroupId))
-            .entrySet().stream()
-            .map(entry -> new ExerciseRecordGroupDTO(
-                entry.getKey(),
-                entry.getValue().get(0).getExerciseDate(),
-                entry.getValue().stream().collect(Collectors.groupingBy(UsersExerciseSetHistory::getExerciseId))
-                    .entrySet().stream()
-                    .map(exerciseEntry -> new ExerciseRecordGroupDTO.ExerciseRecrod(
-                        exerciseEntry.getKey(),
-                        exerciseEntry.getValue().stream()
-                            .map(history -> new ExerciseRecordGroupDTO.ExerciseSet(
-                                history.getSet(),
-                                history.getWeight(),
-                                history.getReps(),
-                                history.getScore(),
-                                history.getStrength()
-                            ))
-                            .toList()
-                    ))
-                    .toList()
-            ))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("No records found"));
+                .collect(Collectors.groupingBy(UsersExerciseSetHistory::getGroupId))
+                .entrySet().stream()
+                .map(entry -> new ExerciseRecordGroupDTO(
+                        entry.getKey(),
+                        entry.getValue().get(0).getExerciseDate(),
+                        entry.getValue().stream().collect(Collectors.groupingBy(UsersExerciseSetHistory::getExerciseId))
+                                .entrySet().stream()
+                                .map(exerciseEntry -> new ExerciseRecordGroupDTO.ExerciseRecrod(
+                                        exerciseEntry.getKey(),
+                                        exerciseEntry.getValue().stream()
+                                                .map(history -> new ExerciseRecordGroupDTO.ExerciseSet(
+                                                        history.getSet(),
+                                                        history.getWeight(),
+                                                        history.getReps(),
+                                                        history.getScore(),
+                                                        history.getStrength()))
+                                                .toList()))
+                                .toList()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No records found"));
+    }
+
+    // ExerciseRecordGroupResponse 그룹화
+    public List<ExerciseRecordGroupResponse> toGroupRecords(List<ExerciseRecordGroupResponse> originalResponseList) {
+        
+        // Map to hold grouped exercises
+        Map<Integer, Map<LocalDateTime, Map<Integer, List<ExerciseRecordGroupSliceResponse.ExerciseRecordResponse>>>> groupedMap = new HashMap<>();
+
+        // Iterate through each group in the original response
+        for (ExerciseRecordGroupResponse group : originalResponseList) {
+            int groupId = group.groupId();
+            LocalDateTime exerciseDate = group.exerciseDate();
+
+            groupedMap.putIfAbsent(groupId, new HashMap<>());
+            Map<LocalDateTime, Map<Integer, List<ExerciseRecordResponse>>> dateMap = groupedMap.get(groupId);
+
+            dateMap.putIfAbsent(exerciseDate, new HashMap<>());
+            Map<Integer, List<ExerciseRecordResponse>> exerciseMap = dateMap.get(exerciseDate);
+
+            for (ExerciseRecordResponse exercise : group.exercises()) {
+                exerciseMap.putIfAbsent(exercise.exerciseId(), new ArrayList<>());
+                exerciseMap.get(exercise.exerciseId()).add(exercise);
+            }
+        }
+
+        // Convert the grouped map back into the response structure
+        List<ExerciseRecordGroupResponse> groupedResponseList = groupedMap.entrySet().stream()
+            .flatMap(groupEntry -> groupEntry.getValue().entrySet().stream()
+                .map(dateEntry -> new ExerciseRecordGroupSliceResponse.ExerciseRecordGroupResponse(
+                    groupEntry.getKey(),
+                    dateEntry.getKey(),
+                    dateEntry.getValue().entrySet().stream()
+                        .map(exerciseEntry -> new ExerciseRecordGroupSliceResponse.ExerciseRecordResponse(
+                            exerciseEntry.getKey(),
+                            exerciseEntry.getValue().stream()
+                                .flatMap(exercise -> exercise.sets().stream())
+                                .sorted(Comparator.comparingInt(ExerciseSetResponse::set))
+                                .collect(Collectors.toList()),
+                            exerciseEntry.getValue().get(0).prevBestWeight(),
+                            exerciseEntry.getValue().get(0).prevBestReps()
+                        ))
+                        .collect(Collectors.toList())
+                ))
+            )
+            .collect(Collectors.toList());
+
+        return groupedResponseList;
     }
 
 }

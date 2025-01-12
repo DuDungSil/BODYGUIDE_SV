@@ -236,7 +236,7 @@ public class WebExerciseService {
         int totalScore = (int) ((ability.getBench().getScore() + ability.getSquat().getScore()
                 + ability.getDead().getScore() + ability.getOverhead().getScore() + ability.getPushup().getScore()
                 + ability.getPullup().getScore()) / 6);
-        String totalLevel = exerciseAnalysisService.getLevel(totalScore);
+        String totalLevel = exerciseAnalysisService.getLevel(totalScore).getName();
         double topPercent = 100 - (99.0 * totalScore / 120);
         int bigThree = (int) (ability.getBench().getStrength() + ability.getSquat().getStrength()
                 + ability.getDead().getStrength());

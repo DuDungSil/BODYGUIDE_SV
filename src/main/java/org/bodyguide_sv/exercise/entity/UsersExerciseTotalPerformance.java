@@ -50,4 +50,38 @@ public class UsersExerciseTotalPerformance {
     @Column(name = "big_three_updated_at") 
     private LocalDateTime bigThreeUpdatedAt;
 
+    public void updateTotalScore(double newTotalScore) {
+        if (Double.compare(this.totalScore, newTotalScore) != 0) { // 값이 다를 경우만 업데이트
+            this.totalScore = newTotalScore;
+            this.scoreUpdatedAt = LocalDateTime.now();
+        }
+    }
+
+    public void updateExerciseLevel(int newExerciseLevel) {
+        if (this.exerciseLevel != newExerciseLevel) { // 값이 다를 경우만 업데이트
+            this.exerciseLevel = newExerciseLevel;
+            this.levelUpdatedAt = LocalDateTime.now();
+        }
+    }
+
+    public void updateBigThree(Double newBigThree) {
+        if (this.bigThree == null || !this.bigThree.equals(newBigThree)) { // 값이 다를 경우만 업데이트
+            this.bigThree = newBigThree;
+            this.bigThreeUpdatedAt = LocalDateTime.now();
+        }
+    }
+
+
+    public static UsersExerciseTotalPerformance createNewPerformance(UUID userId) {
+        return UsersExerciseTotalPerformance.builder()
+                .userId(userId)
+                .totalScore(0.0)
+                .scoreUpdatedAt(LocalDateTime.now())
+                .exerciseLevel(1)
+                .levelUpdatedAt(LocalDateTime.now())
+                .bigThree(0.0)
+                .bigThreeUpdatedAt(LocalDateTime.now())
+                .build();
+    }
+
 }

@@ -1,9 +1,12 @@
 package org.bodyguide_sv.exercise.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseRecordGroupResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseRecordResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseSetResponse;
 import org.bodyguide_sv.exercise.dto.ExerciseAnalysisData;
 import org.bodyguide_sv.exercise.dto.MuscleGroupScoreDto;
 import org.bodyguide_sv.exercise.entity.QExercise;
@@ -13,13 +16,13 @@ import org.bodyguide_sv.exercise.entity.QMuscle;
 import org.bodyguide_sv.exercise.entity.QMuscleGroup;
 import org.bodyguide_sv.exercise.entity.QMuscleGroupDetail;
 import org.bodyguide_sv.exercise.entity.QUsersExerciseBestScore;
+import org.bodyguide_sv.exercise.entity.QUsersExerciseSetHistory;
 import org.bodyguide_sv.exercise.enums.MuscleGroupType;
 import org.bodyguide_sv.exercise.enums.ThresholdType;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.SubQueryExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -41,6 +44,7 @@ public class ExerciseQueryRepository {
                 .fetch();
     }
 
+    // 운동 분석에 필요한 데이터 가져오기
     public ExerciseAnalysisData findExerciseData(int exerciseId, String gender) {
         QExercise exercise = QExercise.exercise;
         QExerciseThreshold exerciseThreshold = QExerciseThreshold.exerciseThreshold;
@@ -146,41 +150,121 @@ public class ExerciseQueryRepository {
                 .fetch();
     }
 
-    public List<MuscleGroupScoreDto> getMaxScoreByMuscleGroup(UUID userId) {
-		QUsersExerciseBestScore bestScore = QUsersExerciseBestScore.usersExerciseBestScore;
-		QExercise exercise = QExercise.exercise;
-		QMuscleGroup muscleGroup = QMuscleGroup.muscleGroup;
-	
-		// 서브쿼리를 사용하여 최대 score 행을 선택
-		QUsersExerciseBestScore subBestScore = new QUsersExerciseBestScore("subBestScore");
+    // 근육 그룹 그룹화해서 그룹의 최고점수 가져오기
+    public List<MuscleGroupScoreDto> getMaxScoreAndExerciseIdByMuscleGroup(UUID userId) {
+        QUsersExerciseBestScore bestScore = QUsersExerciseBestScore.usersExerciseBestScore;
+        QExercise exercise = QExercise.exercise;
+        QMuscleGroup muscleGroup = QMuscleGroup.muscleGroup;
 
-		List<Tuple> results = queryFactory.select(
-								muscleGroup.groupId,
-								bestScore.id.exerciseId,
-								bestScore.score
-								)
-								.from(bestScore)
-								.join(exercise).on(bestScore.id.exerciseId.eq(exercise.exerId))
-								.join(muscleGroup).on(exercise.muscleId.eq(muscleGroup.groupId))
-								.where(bestScore.id.userId.eq(userId)
-									.and(bestScore.score.eq(
-											JPAExpressions.select(subBestScore.score.max())
-													.from(subBestScore)
-													.join(exercise).on(subBestScore.id.exerciseId.eq(exercise.exerId))
-													.join(muscleGroup).on(exercise.muscleId.eq(muscleGroup.groupId))
-													.where(subBestScore.id.userId.eq(userId))
-													.groupBy(muscleGroup.groupId)
-			))
-		)
-		.fetch();
-			
-		return results.stream()
-		.map(tuple -> new MuscleGroupScoreDto(
-				MuscleGroupType.fromId(tuple.get(muscleGroup.groupId)), // groupId -> MuscleGroupType
-				tuple.get(bestScore.id.exerciseId), // exerciseId
-				tuple.get(bestScore.score)   // maxScore
-		))
-		.toList();
+        // 서브쿼리를 사용하여 최대 score 행을 선택
+        QUsersExerciseBestScore subBestScore = new QUsersExerciseBestScore("subBestScore");
+
+        List<Tuple> results = queryFactory.select(
+                muscleGroup.groupId,
+                bestScore.id.exerciseId,
+                bestScore.score)
+                .from(bestScore)
+                .join(exercise).on(bestScore.id.exerciseId.eq(exercise.exerId))
+                .join(muscleGroup).on(exercise.muscleId.eq(muscleGroup.groupId))
+                .where(bestScore.id.userId.eq(userId)
+                        .and(bestScore.id.in(
+                                JPAExpressions.select(subBestScore.id)
+                                        .from(subBestScore)
+                                        .join(exercise).on(subBestScore.id.exerciseId.eq(exercise.exerId))
+                                        .join(muscleGroup).on(exercise.muscleId.eq(muscleGroup.groupId))
+                                        .where(subBestScore.id.userId.eq(userId))
+                                        .groupBy(muscleGroup.groupId)
+                                        .orderBy(subBestScore.score.desc())
+                                        .limit(1))))
+                .fetch();
+
+        return results.stream()
+                .map(tuple -> new MuscleGroupScoreDto(
+                        MuscleGroupType.fromId(tuple.get(muscleGroup.groupId)), // groupId -> MuscleGroupType
+                        tuple.get(bestScore.id.exerciseId), // exerciseId
+                        tuple.get(bestScore.score) // maxScore
+                ))
+                .toList();
+    }
+
+	// 최근 n일치 ExerciseRecordGroupResponse 리스트 fetch (무한 스크롤 지원)
+    public List<ExerciseRecordGroupResponse> fetchRecentDaysExerciseRecords(UUID userId, int days, int page, int size) {
+            QUsersExerciseSetHistory setHistory = QUsersExerciseSetHistory.usersExerciseSetHistory;
+            QUsersExerciseBestScore bestScore = QUsersExerciseBestScore.usersExerciseBestScore;
+
+            List<ExerciseRecordGroupResponse> results = queryFactory.select(
+                            Projections.constructor(
+                                            ExerciseRecordGroupResponse.class,
+                                            setHistory.groupId,
+                                            setHistory.exerciseDate,
+                                            Projections.list(
+                                                            Projections.constructor(
+                                                                            ExerciseRecordResponse.class,
+                                                                            setHistory.exerciseId,
+                                                                            Projections.list(
+                                                                                            Projections.constructor(
+                                                                                                            ExerciseSetResponse.class,
+                                                                                                            setHistory.set,
+                                                                                                            setHistory.weight,
+                                                                                                            setHistory.reps,
+                                                                                                            setHistory.score,
+                                                                                                            setHistory.strength)),
+                                                                            bestScore.weight,
+                                                                            bestScore.reps))))
+                            .from(setHistory)
+                            .leftJoin(bestScore)
+                            .on(setHistory.userId.eq(bestScore.id.userId)
+                                            .and(setHistory.exerciseId.eq(bestScore.id.exerciseId)))
+                            .where(setHistory.userId.eq(userId)
+                                            .and(setHistory.exerciseDate.after(LocalDateTime.now().minusDays(days))))
+                            .offset(page * size) // OFFSET 설정 (건너뛸 데이터 수)
+                            .limit(size + 1) // LIMIT 설정 (가져올 데이터 수)
+                            .fetch();
+
+            return results;
+    }
+    
+    // 특정 month의 ExerciseRecordGroupResponse 리스트 fetch
+    public List<ExerciseRecordGroupResponse> fetchMonthlyExerciseRecords(UUID userId, int year, int month, int page, int size) {
+        QUsersExerciseSetHistory setHistory = QUsersExerciseSetHistory.usersExerciseSetHistory;
+        QUsersExerciseBestScore bestScore = QUsersExerciseBestScore.usersExerciseBestScore;
+    
+        // 해당 월의 시작일과 종료일 계산
+        LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0);
+        LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusSeconds(1);
+    
+        // QueryDSL로 데이터 조회
+        List<ExerciseRecordGroupResponse> results = queryFactory.select(
+            Projections.constructor(
+                ExerciseRecordGroupResponse.class,
+                setHistory.groupId,
+                setHistory.exerciseDate,
+                Projections.list(
+                        Projections.constructor(
+                                ExerciseRecordResponse.class,
+                                setHistory.exerciseId,
+                                Projections.list(
+                                        Projections.constructor(
+                                                ExerciseSetResponse.class,
+                                                setHistory.set,
+                                                setHistory.weight,
+                                                setHistory.reps,
+                                                setHistory.score,
+                                                setHistory.strength)),
+                                bestScore.weight,
+                                bestScore.reps))))
+            .from(setHistory)
+            .leftJoin(bestScore)
+            .on(setHistory.userId.eq(bestScore.id.userId)
+                .and(setHistory.exerciseId.eq(bestScore.id.exerciseId)))
+            .where(setHistory.userId.eq(userId)
+                .and(setHistory.exerciseDate.between(startOfMonth, endOfMonth))) // 날짜 범위 조건
+			.orderBy(setHistory.groupId.asc(), setHistory.exerciseDate.asc(), setHistory.set.asc())
+			.offset(page * size) // OFFSET 설정 (건너뛸 데이터 수)
+			.limit(size + 1)         // LIMIT 설정 (가져올 데이터 수)
+            .fetch();
+    
+        return results;
     }
 
 }

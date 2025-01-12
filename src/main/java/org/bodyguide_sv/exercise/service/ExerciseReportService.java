@@ -66,7 +66,7 @@ public class ExerciseReportService {
                 + ability.getPullup().getScore()) / 6);
 
         // 운동 수준
-        String totalLevel = exerciseAnalysisService.getLevel(totalScore);
+        String totalLevel = exerciseAnalysisService.getLevel(totalScore).getName();
 
         // 상위 퍼센트
         double topPercent = 100 - (99.0 * totalScore / 120);

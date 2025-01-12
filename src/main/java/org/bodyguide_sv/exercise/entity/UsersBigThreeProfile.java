@@ -52,7 +52,7 @@ public class UsersBigThreeProfile {
         @AttributeOverride(name = "reps", column = @Column(name = "deadlift_reps")),
         @AttributeOverride(name = "updatedAt", column = @Column(name = "deadlift_updated_at"))
     })
-    private BigThreeProfile deadlift;
+    private BigThreeProfile deadLift;
 
     @Embedded
     @AttributeOverrides({
@@ -74,13 +74,13 @@ public class UsersBigThreeProfile {
     }
 
     public void updateDeadlift(Double weight, Integer reps, Double score) {
-        if (deadlift == null) {
-            deadlift = BigThreeProfile.createDefault();
+        if (deadLift == null) {
+            deadLift = BigThreeProfile.createDefault();
         }
-        deadlift.setWeight(weight);
-        deadlift.setReps(reps);
-        deadlift.setScore(score);
-        deadlift.setUpdatedAt(LocalDateTime.now());
+        deadLift.setWeight(weight);
+        deadLift.setReps(reps);
+        deadLift.setScore(score);
+        deadLift.setUpdatedAt(LocalDateTime.now());
     }
 
     public void updateBenchPress(Double weight, Integer reps, Double score) {
@@ -97,7 +97,7 @@ public class UsersBigThreeProfile {
         return UsersBigThreeProfile.builder()
             .userId(userId)
             .squat(BigThreeProfile.createDefault())
-            .deadlift(BigThreeProfile.createDefault())
+            .deadLift(BigThreeProfile.createDefault())
             .benchPress(BigThreeProfile.createDefault())
             .build();
     }
