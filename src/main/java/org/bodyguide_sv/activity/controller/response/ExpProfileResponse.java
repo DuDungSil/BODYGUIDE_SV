@@ -1,4 +1,4 @@
-package org.bodyguide_sv.activity.dto;
+package org.bodyguide_sv.activity.controller.response;
 
 import lombok.Builder;
 

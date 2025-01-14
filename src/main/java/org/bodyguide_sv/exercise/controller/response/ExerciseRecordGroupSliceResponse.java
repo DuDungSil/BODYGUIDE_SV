@@ -12,6 +12,13 @@ public record ExerciseRecordGroupSliceResponse(
     List<ExerciseRecordGroupResponse> recordGroupList
 ) {
 
+    public static record ExerciseRecordGroupListResponseWithHasNext(
+        boolean hasNext,
+        List<ExerciseRecordGroupResponse> recordGroupList
+    ) {
+        
+    }
+
     public static record ExerciseRecordGroupResponse(
         int groupId,
         LocalDateTime exerciseDate,

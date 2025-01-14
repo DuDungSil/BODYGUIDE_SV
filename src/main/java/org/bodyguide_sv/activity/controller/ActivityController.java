@@ -2,11 +2,8 @@ package org.bodyguide_sv.activity.controller;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.activity.dto.ActivityProfileResponse;
-import static org.bodyguide_sv.activity.enums.ActivityType.EXERCISE;
-import org.bodyguide_sv.activity.event.ActivityCompletedEvent;
+import org.bodyguide_sv.activity.controller.response.ActivityProfileResponse;
 import org.bodyguide_sv.activity.service.ActivityService;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,17 +21,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Activity", description = "유저 활동 관련")
 public class ActivityController {
     
-    private final ApplicationEventPublisher eventPublisher;
     private final ActivityService activityService;
-
-    @GetMapping("/test")
-    public ResponseEntity<String> test(@AuthenticationPrincipal UserDetails userDetails) {
-
-        ActivityCompletedEvent event = new ActivityCompletedEvent(UUID.fromString(userDetails.getUsername()), EXERCISE);
-        eventPublisher.publishEvent(event);
-    
-        return ResponseEntity.ok("성공");
-    }
 
     // 유저 활동 기록 가져오기
     @GetMapping("/profile")

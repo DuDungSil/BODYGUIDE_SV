@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import org.bodyguide_sv.exercise.controller.request.ExerciseRecordGroupRequest;
 import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseRecordGroupListResponseWithHasNext;
 import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseRecordGroupResponse;
 import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseRecordResponse;
 import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse.ExerciseSetResponse;
@@ -19,6 +20,7 @@ import org.bodyguide_sv.exercise.dto.ExerciseAnalysisProfile;
 import org.bodyguide_sv.exercise.dto.ExerciseRecordGroupDTO;
 import org.bodyguide_sv.exercise.entity.UsersExerciseSetHistory;
 import org.bodyguide_sv.exercise.event.ExerciseRecordChangedEvent;
+import org.bodyguide_sv.exercise.event.NewExerciseRecordSavedEvent;
 import org.bodyguide_sv.exercise.repository.ExerciseQueryRepository;
 import org.bodyguide_sv.exercise.repository.UsersExerciseSetHistoryRepository;
 import org.bodyguide_sv.user.dto.UserProfileDTO;
@@ -41,31 +43,19 @@ public class ExerciseRecordService {
 
     // 최근 n일치 ExerciseRecordGroup 조회
     public ExerciseRecordGroupSliceResponse fetchRecentDaysExerciseRecords(UUID userId, int days, int page, int size) {
-        // 데이터 조회 (size + 1개로 요청)
-        List<ExerciseRecordGroupResponse> list = exerciseQueryRepository.fetchRecentDaysExerciseRecords(userId, days, page, size);
-        
-        // 다음 페이지 여부 판단
-        boolean hasNext = list.size() > size;
-        
-        // 반환할 데이터 제한 (size 만큼만 반환)
-        List<ExerciseRecordGroupResponse> responseList = hasNext ? list.subList(0, size) : list;
 
-        return new ExerciseRecordGroupSliceResponse(page, size, hasNext, toGroupRecords(responseList));
+        ExerciseRecordGroupListResponseWithHasNext listWithHasNext = exerciseQueryRepository.fetchRecentDaysExerciseRecords(userId, days, page, size);
+
+        return new ExerciseRecordGroupSliceResponse(page, size, listWithHasNext.hasNext(), toGroupRecords(listWithHasNext.recordGroupList()));
     }
 
     // 특정 yyyy년 mm월 조회 
     public ExerciseRecordGroupSliceResponse fetchMonthlyExerciseRecords(UUID userId, int year, int month, int page, int size) {
-        // 데이터 조회 (size + 1개로 요청)
-        List<ExerciseRecordGroupResponse> list = exerciseQueryRepository.fetchMonthlyExerciseRecords(userId, year,
+
+        ExerciseRecordGroupListResponseWithHasNext listWithHasNext = exerciseQueryRepository.fetchMonthlyExerciseRecords(userId, year,
                 month, page, size);
 
-        // 다음 페이지 여부 판단
-        boolean hasNext = list.size() > size;
-
-        // 반환할 데이터 제한 (size 만큼만 반환)
-        List<ExerciseRecordGroupResponse> responseList = hasNext ? list.subList(0, size) : list;
-
-        return new ExerciseRecordGroupSliceResponse(page, size, hasNext, toGroupRecords(responseList));
+        return new ExerciseRecordGroupSliceResponse(page, size, listWithHasNext.hasNext(), toGroupRecords(listWithHasNext.recordGroupList()));
     }
 
     // 저장
@@ -91,6 +81,9 @@ public class ExerciseRecordService {
 
         // 이벤트 발행
         eventPublisher.publishEvent(new ExerciseRecordChangedEvent(userId, changedExerciseIdList));
+
+        // 이벤트 발행
+        eventPublisher.publishEvent(new NewExerciseRecordSavedEvent(userId));
 
     }
 

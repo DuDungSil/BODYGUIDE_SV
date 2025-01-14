@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.bodyguide_sv.activity.dto.ActivityProfileResponse;
+import org.bodyguide_sv.activity.controller.response.ActivityProfileResponse;
 import org.bodyguide_sv.activity.entity.UsersActivityLog;
 import org.bodyguide_sv.activity.entity.UsersActivityProfile;
 import org.bodyguide_sv.activity.enums.ActivityType;

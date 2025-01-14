@@ -18,6 +18,18 @@ public class UserService {
 
     private final UsersRepository usersRepository;
 
+    // 테스트 유저 검색
+    public String getTestUserUUID() {
+        String testProviderId = "12345678";
+    
+        // providerId로 유저 검색
+        Users user = usersRepository.findByProviderId(testProviderId)
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+    
+        // 유저의 UUID 반환
+        return user.getUserId().toString();
+    }
+
     // 유저 정보 가져오기
     public Users getUserById(UUID userId) {
         return usersRepository.findByUserId(userId)

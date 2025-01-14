@@ -2,7 +2,7 @@ package org.bodyguide_sv.activity.service;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.activity.dto.ExpProfileResponse;
+import org.bodyguide_sv.activity.controller.response.ExpProfileResponse;
 import org.bodyguide_sv.activity.entity.LevelInfo;
 import org.bodyguide_sv.activity.entity.UsersExpProfile;
 import org.bodyguide_sv.activity.repository.UsersExpProfileRepository;

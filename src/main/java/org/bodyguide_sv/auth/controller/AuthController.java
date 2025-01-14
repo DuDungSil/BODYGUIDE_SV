@@ -13,6 +13,7 @@ import org.bodyguide_sv.auth.service.TokenService;
 import org.bodyguide_sv.auth.service.UnlinkService;
 import org.bodyguide_sv.user.service.UserMetaService;
 import org.bodyguide_sv.user.service.UserProfileService;
+import org.bodyguide_sv.user.service.UserService;
 import org.bodyguide_sv.user.service.UserSocialTokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,6 +46,7 @@ public class AuthController {
     private final UnlinkService unlinkService;
     private final UserSocialTokenService userProviderTokenService;
     private final UserProfileService userProfileService;
+    private final UserService userService;
     private final UserMetaService userMetaService;
 
     @GetMapping("/callback")
@@ -86,8 +88,7 @@ public class AuthController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> generateTestAccessToken() {
 
-        // 고정된 테스트 사용자 UUID
-        String _testUser = "9609c827-2bd0-4c9b-8b19-06cb1169ea5c";
+        String _testUser = userService.getTestUserUUID();
 
         // 액세스 토큰 생성
         String accessToken = testTokenService.generateTestAccessToken(_testUser, "ROLE_USER");

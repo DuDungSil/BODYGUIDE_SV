@@ -9,7 +9,9 @@ import org.bodyguide_sv.weight.controller.request.WeightRecordRequest;
 import org.bodyguide_sv.weight.controller.response.WeightRecordSliceResponse;
 import org.bodyguide_sv.weight.controller.response.WeightRecordSliceResponse.WeightRecordResponse;
 import org.bodyguide_sv.weight.entity.UsersWeightHistory;
+import org.bodyguide_sv.weight.event.NewWeightRecordSavedEvent;
 import org.bodyguide_sv.weight.repository.UsersWeightHistoryRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class UserWeightRecordService {
     
+    private final ApplicationEventPublisher eventPublisher;
     private final UsersWeightHistoryRepository usersWeightHistoryRepository;
 
     public WeightRecordSliceResponse fetchWeightRecord(UUID userId, int page, int size) {
@@ -58,6 +61,9 @@ public class UserWeightRecordService {
 
         // 저장
         usersWeightHistoryRepository.save(weightRecord);
+
+        // 이벤트 발행
+        eventPublisher.publishEvent(new NewWeightRecordSavedEvent(userId));
     }
 
     @Transactional

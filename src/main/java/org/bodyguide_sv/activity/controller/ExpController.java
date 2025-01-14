@@ -2,7 +2,7 @@ package org.bodyguide_sv.activity.controller;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.activity.dto.ExpProfileResponse;
+import org.bodyguide_sv.activity.controller.response.ExpProfileResponse;
 import org.bodyguide_sv.activity.service.UserExpProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
