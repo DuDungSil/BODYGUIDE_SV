@@ -3,9 +3,9 @@ package org.bodyguide_sv.nutrition.service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.bodyguide_sv.nutrition.controller.request.UserNutritionProfileRequest;
+import org.bodyguide_sv.nutrition.controller.response.UserNutritionProfileResponse;
 import org.bodyguide_sv.nutrition.dto.UserNutritionProfileDTO;
-import org.bodyguide_sv.nutrition.dto.UserNutritionProfileRequest;
-import org.bodyguide_sv.nutrition.dto.UserNutritionProfileResponse;
 import org.bodyguide_sv.nutrition.entity.UsersNutritionProfile;
 import org.bodyguide_sv.nutrition.entity.UsersNutritionProfileHistory;
 import org.bodyguide_sv.nutrition.repository.UsersNutritionProfileHistoryRepository;

@@ -19,7 +19,7 @@ import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceRes
 import org.bodyguide_sv.exercise.dto.ExerciseAnalysisProfile;
 import org.bodyguide_sv.exercise.dto.ExerciseRecordGroupDTO;
 import org.bodyguide_sv.exercise.entity.UsersExerciseSetHistory;
-import org.bodyguide_sv.exercise.event.ExerciseRecordChangedEvent;
+import org.bodyguide_sv.exercise.event.ExerciseRecordChangedWithIdsEvent;
 import org.bodyguide_sv.exercise.event.NewExerciseRecordSavedEvent;
 import org.bodyguide_sv.exercise.repository.ExerciseQueryRepository;
 import org.bodyguide_sv.exercise.repository.UsersExerciseSetHistoryRepository;
@@ -80,7 +80,7 @@ public class ExerciseRecordService {
                 .toList();
 
         // 이벤트 발행
-        eventPublisher.publishEvent(new ExerciseRecordChangedEvent(userId, changedExerciseIdList));
+        eventPublisher.publishEvent(new ExerciseRecordChangedWithIdsEvent(userId, changedExerciseIdList));
 
         // 이벤트 발행
         eventPublisher.publishEvent(new NewExerciseRecordSavedEvent(userId));
@@ -116,7 +116,7 @@ public class ExerciseRecordService {
                 .toList();
 
         // 이벤트 발행
-        eventPublisher.publishEvent(new ExerciseRecordChangedEvent(userId, changedExerciseIdList));
+        eventPublisher.publishEvent(new ExerciseRecordChangedWithIdsEvent(userId, changedExerciseIdList));
 
     }
 
@@ -131,7 +131,7 @@ public class ExerciseRecordService {
         usersExerciseSetHistoryRepository.deleteByUserIdAndExerciseDateAndGroupId(userId, exerciseDate, groupId);
 
         // 이벤트 발행
-        eventPublisher.publishEvent(new ExerciseRecordChangedEvent(userId, deletedExerciseIds));
+        eventPublisher.publishEvent(new ExerciseRecordChangedWithIdsEvent(userId, deletedExerciseIds));
     }
 
     // date 같은 max 그룹id 반환

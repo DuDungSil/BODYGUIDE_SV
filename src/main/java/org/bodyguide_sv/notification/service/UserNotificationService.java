@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.bodyguide_sv.notification.controller.response.UserNotificationResponse;
 import org.bodyguide_sv.notification.dto.UserNotificationDTO;
-import org.bodyguide_sv.notification.dto.UserNotificationResponse;
 import org.bodyguide_sv.notification.entity.UsersNotification;
 import org.bodyguide_sv.notification.entity.UsersNotificationHistory;
 import org.bodyguide_sv.notification.enums.NotificationTemplate;

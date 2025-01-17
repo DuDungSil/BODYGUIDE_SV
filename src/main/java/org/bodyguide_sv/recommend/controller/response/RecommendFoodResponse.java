@@ -1,4 +1,4 @@
-package org.bodyguide_sv.recommend.dto;
+package org.bodyguide_sv.recommend.controller.response;
 
 import java.util.List;
 

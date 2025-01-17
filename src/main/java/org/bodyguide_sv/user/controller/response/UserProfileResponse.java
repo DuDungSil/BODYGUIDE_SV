@@ -1,4 +1,4 @@
-package org.bodyguide_sv.user.dto;
+package org.bodyguide_sv.user.controller.response;
 
 import java.time.LocalDate;
 

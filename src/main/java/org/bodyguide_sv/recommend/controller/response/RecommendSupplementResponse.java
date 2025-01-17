@@ -1,9 +1,10 @@
-package org.bodyguide_sv.recommend.dto;
+package org.bodyguide_sv.recommend.controller.response;
 
 import java.util.List;
 
-import org.bodyguide_sv.nutrition.dto.NutrientProfile;
 import org.bodyguide_sv.coupang.dto.CoupangProductDTO;
+import org.bodyguide_sv.nutrition.dto.NutrientProfile;
+import org.bodyguide_sv.recommend.dto.PurposeNutrientProfiles;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bodyguide_sv.notification.controller.response.SystemNotificationResponse;
 import org.bodyguide_sv.notification.dto.SystemNotificationDTO;
-import org.bodyguide_sv.notification.dto.SystemNotificationResponse;
 import org.bodyguide_sv.notification.entity.SystemNotification;
 import org.bodyguide_sv.notification.repository.SystemNotificationRepository;
 import org.springframework.stereotype.Service;

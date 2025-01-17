@@ -1,4 +1,4 @@
-package org.bodyguide_sv.recommend.dto;
+package org.bodyguide_sv.recommend.controller.request;
 
 import java.util.List;
 
@@ -10,7 +10,9 @@ import jakarta.validation.constraints.Size;
 public record RecommendSupplementRequest(
     @NotNull(message = "exercisePurposeIds는 필수 항목입니다.")
     @Size(min = 1, max = 5, message = "exercisePurposeIds는 최소 1개 이상, 최대 5개까지 입력 가능합니다.")
-    List<Integer> exercisePurposeIds
+    List<Integer> exercisePurposeIds,
+    @NotNull(message = "totalScore는 필수 항목입니다.")
+    Double totalScore
 ) {
     
 }

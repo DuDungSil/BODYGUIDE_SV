@@ -2,8 +2,8 @@ package org.bodyguide_sv.auth.service;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.auth.dto.TokenRequest;
-import org.bodyguide_sv.auth.dto.TokenResponse;
+import org.bodyguide_sv.auth.controller.request.TokenRequest;
+import org.bodyguide_sv.auth.controller.response.TokenResponse;
 import org.bodyguide_sv.auth.exception.TokenException;
 import org.bodyguide_sv.auth.jwt.TokenProvider;
 import static org.bodyguide_sv.common.errorHandler.ErrorCode.INVALID_TOKEN;

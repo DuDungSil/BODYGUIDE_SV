@@ -5,9 +5,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-import org.bodyguide_sv.auth.dto.InitializeRequest;
-import org.bodyguide_sv.auth.dto.TokenRequest;
-import org.bodyguide_sv.auth.dto.TokenResponse;
+import org.bodyguide_sv.auth.controller.request.InitializeRequest;
+import org.bodyguide_sv.auth.controller.request.TokenRequest;
+import org.bodyguide_sv.auth.controller.response.TokenResponse;
 import org.bodyguide_sv.auth.service.TestTokenService;
 import org.bodyguide_sv.auth.service.TokenService;
 import org.bodyguide_sv.auth.service.UnlinkService;

@@ -2,9 +2,9 @@ package org.bodyguide_sv.nutrition.controller;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.nutrition.dto.NutritionReportResponse;
-import org.bodyguide_sv.nutrition.dto.UserNutritionProfileRequest;
-import org.bodyguide_sv.nutrition.dto.UserNutritionProfileResponse;
+import org.bodyguide_sv.nutrition.controller.request.UserNutritionProfileRequest;
+import org.bodyguide_sv.nutrition.controller.response.NutritionReportResponse;
+import org.bodyguide_sv.nutrition.controller.response.UserNutritionProfileResponse;
 import org.bodyguide_sv.nutrition.service.NutritionReportService;
 import org.bodyguide_sv.nutrition.service.UserNutritionProfileService;
 import org.springframework.http.ResponseEntity;

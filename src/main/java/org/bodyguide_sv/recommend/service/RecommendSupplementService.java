@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.bodyguide_sv.nutrition.dto.NutrientProfile;
-import org.bodyguide_sv.nutrition.service.NutrientRecommendService;
 import org.bodyguide_sv.coupang.dto.CoupangProductDTO;
 import org.bodyguide_sv.coupang.service.CoupangProductRecommendService;
+import org.bodyguide_sv.nutrition.dto.NutrientProfile;
+import org.bodyguide_sv.nutrition.service.NutrientRecommendService;
+import org.bodyguide_sv.recommend.controller.request.RecommendSupplementRequest;
+import org.bodyguide_sv.recommend.controller.response.RecommendSupplementResponse;
 import org.bodyguide_sv.recommend.dto.PurposeNutrientProfiles;
-import org.bodyguide_sv.recommend.dto.RecommendSupplementRequest;
-import org.bodyguide_sv.recommend.dto.RecommendSupplementResponse;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -26,14 +26,14 @@ public class RecommendSupplementService {
     
     public RecommendSupplementResponse getRecommendSupplementResponse(UUID userId, RecommendSupplementRequest request) {
 
-        // 유저 db 조회 ? 운동 레포트를 추적할수있는가? ( 구현해야함 )
-        int totalScore = 100; // 테스트용
-
+        List<Integer> exercisePurposeIds = request.exercisePurposeIds();
+        double totalScore = request.totalScore();
+        
         // 운동 수준에 따른 영양 성분 추천
         List<NutrientProfile> levelNutrientProfiles = nutrientRecommendService.getRecommendNutirientForLevel(totalScore);
 
         // 운동 목적에 따른 영양 성분 추천
-        List<PurposeNutrientProfiles> purposeNutrientProfiles = getPurposeNutrientProfiles(request.exercisePurposeIds());
+        List<PurposeNutrientProfiles> purposeNutrientProfiles = getPurposeNutrientProfiles(exercisePurposeIds);
 
         // 운동 수준에 따른 상품 추천
         List<CoupangProductDTO> levelProducts = getRecommendSupplementByNutrientProfiles(levelNutrientProfiles);

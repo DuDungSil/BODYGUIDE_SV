@@ -2,9 +2,9 @@ package org.bodyguide_sv.recommend.controller;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.recommend.dto.RecommendFoodResponse;
-import org.bodyguide_sv.recommend.dto.RecommendSupplementRequest;
-import org.bodyguide_sv.recommend.dto.RecommendSupplementResponse;
+import org.bodyguide_sv.recommend.controller.request.RecommendSupplementRequest;
+import org.bodyguide_sv.recommend.controller.response.RecommendFoodResponse;
+import org.bodyguide_sv.recommend.controller.response.RecommendSupplementResponse;
 import org.bodyguide_sv.recommend.service.RecommendFoodService;
 import org.bodyguide_sv.recommend.service.RecommendSupplementService;
 import org.springframework.http.ResponseEntity;

@@ -2,7 +2,7 @@ package org.bodyguide_sv.auth.handler;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.auth.dto.TokenResponse;
+import org.bodyguide_sv.auth.controller.response.TokenResponse;
 import org.bodyguide_sv.auth.service.TokenService;
 import org.bodyguide_sv.user.service.UserSocialTokenService;
 import org.springframework.security.core.Authentication;

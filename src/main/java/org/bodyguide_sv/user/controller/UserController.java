@@ -2,8 +2,8 @@ package org.bodyguide_sv.user.controller;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.user.dto.UserProfileRequest;
-import org.bodyguide_sv.user.dto.UserProfileResponse;
+import org.bodyguide_sv.user.controller.request.UserProfileRequest;
+import org.bodyguide_sv.user.controller.response.UserProfileResponse;
 import org.bodyguide_sv.user.service.UserProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

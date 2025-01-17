@@ -1,5 +1,6 @@
 package org.bodyguide_sv.exercise.repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -58,5 +59,37 @@ public interface UsersExerciseSetHistoryRepository extends JpaRepository<UsersEx
         @Param("userId") UUID userId,
         @Param("exerciseId") int exerciseId
     );
+
+    // date로 검색
+    @Query(value = """
+            SELECT * FROM USERS_EXERCISE_SET_HISTORY 
+            WHERE user_id = :userId
+            AND DATE(exercise_date) = :exerciseDate """, nativeQuery = true)
+    List<UsersExerciseSetHistory> findByUserIdAndExerciseDate(UUID userId,
+            @Param("exerciseDate") LocalDate exerciseDate);
+
+    // 년, 주로 검색
+    @Query(value = """
+            SELECT * FROM USERS_EXERCISE_SET_HISTORY 
+            WHERE user_id = :userId
+            AND YEAR(exercise_date) = :year
+            AND WEEK(exercise_date, 1) = :week """, nativeQuery = true)
+    List<UsersExerciseSetHistory> findByUserIdAndYearAndWeek(
+        @Param("userId") UUID userId,
+        @Param("year") int year,
+        @Param("week") int week
+    );
+
+    // 년, 월로 검색
+    @Query(value = """
+            SELECT * FROM USERS_EXERCISE_SET_HISTORY 
+            WHERE user_id = :userId
+            AND YEAR(exercise_date) = :year
+            AND MONTH(exercise_date) = :month """, nativeQuery = true)
+    List<UsersExerciseSetHistory> findByUserIdAndYearAndMonth(
+        @Param("userId") UUID userId,
+        @Param("year") int year,
+        @Param("month") int month
+);
 
 }

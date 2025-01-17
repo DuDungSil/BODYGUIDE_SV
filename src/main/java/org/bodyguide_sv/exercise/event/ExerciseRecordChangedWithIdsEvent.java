@@ -6,13 +6,13 @@ import java.util.UUID;
 import lombok.Getter;
 
 @Getter
-public class ExerciseRecordChangedEvent {
+public class ExerciseRecordChangedWithIdsEvent {
     
     private final UUID userId;
 
     private final List<Integer> changedExerciseIdList;
 
-    public ExerciseRecordChangedEvent(UUID userId, List<Integer> changedExerciseIdList) {
+    public ExerciseRecordChangedWithIdsEvent(UUID userId, List<Integer> changedExerciseIdList) {
         this.userId = userId;
         this.changedExerciseIdList = changedExerciseIdList;
     }

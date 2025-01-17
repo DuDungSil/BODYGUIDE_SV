@@ -3,8 +3,8 @@ package org.bodyguide_sv.notification.controller;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bodyguide_sv.notification.dto.SystemNotificationResponse;
-import org.bodyguide_sv.notification.dto.UserNotificationResponse;
+import org.bodyguide_sv.notification.controller.response.SystemNotificationResponse;
+import org.bodyguide_sv.notification.controller.response.UserNotificationResponse;
 import static org.bodyguide_sv.notification.enums.NotificationTemplate.WEIGHT_COTINUOUS_RECORD;
 import static org.bodyguide_sv.notification.enums.NotificationType.MESSAGE;
 import org.bodyguide_sv.notification.event.NotificationSendEvent;

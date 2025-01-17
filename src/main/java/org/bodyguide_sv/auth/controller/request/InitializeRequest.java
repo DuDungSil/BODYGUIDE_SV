@@ -1,4 +1,4 @@
-package org.bodyguide_sv.auth.dto;
+package org.bodyguide_sv.auth.controller.request;
 
 import java.time.LocalDate;
 

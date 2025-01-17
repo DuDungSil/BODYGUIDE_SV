@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.bodyguide_sv.exercise.dto.UpdatedBigThreeWeightDTO;
 import org.bodyguide_sv.exercise.dto.UpdatedMuscleScoreDTO;
 import org.bodyguide_sv.exercise.event.ExerciseBestScoreChangedEvent;
-import org.bodyguide_sv.exercise.event.ExerciseRecordChangedEvent;
+import org.bodyguide_sv.exercise.event.ExerciseRecordChangedWithIdsEvent;
 import org.bodyguide_sv.exercise.service.ExerciseBestScoreService;
 import org.bodyguide_sv.exercise.service.UserBigThreeProfileService;
 import org.bodyguide_sv.exercise.service.UserExerciseMuscleScoreProfileService;
@@ -28,7 +28,7 @@ public class ExerciseBestScoreUpdateListener {
 
     @Async 
     @EventListener
-    public void handleExerciseRecordChangedEvent(ExerciseRecordChangedEvent event) {
+    public void handleExerciseRecordChangedEvent(ExerciseRecordChangedWithIdsEvent event) {
         UUID userId = event.getUserId();
         List<Integer> changedExerciseIdList = event.getChangedExerciseIdList();
 

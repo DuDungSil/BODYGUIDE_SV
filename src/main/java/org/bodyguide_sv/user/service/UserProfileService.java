@@ -3,10 +3,10 @@ package org.bodyguide_sv.user.service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.bodyguide_sv.auth.dto.InitializeRequest;
+import org.bodyguide_sv.auth.controller.request.InitializeRequest;
+import org.bodyguide_sv.user.controller.request.UserProfileRequest;
+import org.bodyguide_sv.user.controller.response.UserProfileResponse;
 import org.bodyguide_sv.user.dto.UserProfileDTO;
-import org.bodyguide_sv.user.dto.UserProfileRequest;
-import org.bodyguide_sv.user.dto.UserProfileResponse;
 import org.bodyguide_sv.user.entity.UsersProfile;
 import org.bodyguide_sv.user.repository.UsersProfileRepository;
 import org.springframework.stereotype.Service;

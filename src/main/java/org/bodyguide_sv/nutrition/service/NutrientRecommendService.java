@@ -14,10 +14,10 @@ public class NutrientRecommendService {
     
     private final NutritionQueryRepository nutritionQueryRepository;
 
-    // 운동 수준에 따른 추천 ( 0 <= totalScore <= 120)
-    public List<NutrientProfile> getRecommendNutirientForLevel(int totalScore) {
+    // 운동 수준에 따른 추천 
+    public List<NutrientProfile> getRecommendNutirientForLevel(double totalScore) {
 
-        int level = (totalScore / 20) + 1;
+        int level = (int)((totalScore / 20) + 1);
         if (level >= 7) {
             level = 6;
         }

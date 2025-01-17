@@ -2,7 +2,7 @@ package org.bodyguide_sv.nutrition.service;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.nutrition.dto.NutritionReportResponse;
+import org.bodyguide_sv.nutrition.controller.response.NutritionReportResponse;
 import org.bodyguide_sv.nutrition.dto.UserNutritionProfileDTO;
 import org.bodyguide_sv.user.dto.UserProfileDTO;
 import org.bodyguide_sv.user.service.UserProfileService;

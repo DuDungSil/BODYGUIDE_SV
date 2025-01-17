@@ -1,6 +1,7 @@
-package org.bodyguide_sv.nutrition.dto;
+package org.bodyguide_sv.nutrition.controller.response;
 
-public record UserNutritionProfileRequest(
+
+public record UserNutritionProfileResponse(
     int pa,
     int dietId,      
     Double targetWeight,

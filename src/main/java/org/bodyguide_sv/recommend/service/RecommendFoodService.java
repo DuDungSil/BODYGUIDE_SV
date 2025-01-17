@@ -4,11 +4,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import org.bodyguide_sv.nutrition.dto.UserNutritionProfileDTO;
-import org.bodyguide_sv.nutrition.service.UserNutritionProfileService;
 import org.bodyguide_sv.coupang.dto.CoupangProductDTO;
 import org.bodyguide_sv.coupang.service.CoupangProductRecommendService;
-import org.bodyguide_sv.recommend.dto.RecommendFoodResponse;
+import org.bodyguide_sv.nutrition.dto.UserNutritionProfileDTO;
+import org.bodyguide_sv.nutrition.service.UserNutritionProfileService;
+import org.bodyguide_sv.recommend.controller.response.RecommendFoodResponse;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
