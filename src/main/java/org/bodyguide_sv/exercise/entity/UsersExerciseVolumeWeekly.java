@@ -32,7 +32,7 @@ public class UsersExerciseVolumeWeekly {
     @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
 
-    @Column(name = "year" , columnDefinition = "TINYINT")
+    @Column(name = "year" , columnDefinition = "smallint")
     private Integer year;
 
     @Column(name = "week" , columnDefinition = "TINYINT")
