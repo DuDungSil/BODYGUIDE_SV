@@ -66,7 +66,7 @@ private final CustomAccessTokenResponseClient accessTokenResponseClient;
                                         new AntPathRequestMatcher("/auth/callback"),
                                         new AntPathRequestMatcher("/auth/refresh"),
                                         new AntPathRequestMatcher("/auth/test"),                        
-                                        new AntPathRequestMatcher("/web/**"),
+                                        new AntPathRequestMatcher("/web/**")
                                 ).permitAll()
                                 
                                 // GUEST만 접근 가능한 엔드포인트
