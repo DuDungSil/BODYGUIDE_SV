@@ -19,10 +19,11 @@ import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceRes
 import org.bodyguide_sv.exercise.dto.ExerciseAnalysisProfile;
 import org.bodyguide_sv.exercise.dto.ExerciseRecordGroupDTO;
 import org.bodyguide_sv.exercise.entity.UsersExerciseSetHistory;
+import org.bodyguide_sv.exercise.event.ExerciseRecordChangedWithDateEvent;
 import org.bodyguide_sv.exercise.event.ExerciseRecordChangedWithIdsEvent;
 import org.bodyguide_sv.exercise.event.NewExerciseRecordSavedEvent;
-import org.bodyguide_sv.exercise.repository.ExerciseQueryRepository;
 import org.bodyguide_sv.exercise.repository.UsersExerciseSetHistoryRepository;
+import org.bodyguide_sv.exercise.repository.custom.ExerciseQueryRepository;
 import org.bodyguide_sv.user.dto.UserProfileDTO;
 import org.bodyguide_sv.user.service.UserProfileService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -81,6 +82,9 @@ public class ExerciseRecordService {
 
         // 이벤트 발행
         eventPublisher.publishEvent(new ExerciseRecordChangedWithIdsEvent(userId, changedExerciseIdList));
+
+        // 이벤트 발행
+        eventPublisher.publishEvent(new ExerciseRecordChangedWithDateEvent(userId, exerciseDate));
 
         // 이벤트 발행
         eventPublisher.publishEvent(new NewExerciseRecordSavedEvent(userId));
@@ -166,12 +170,16 @@ public class ExerciseRecordService {
                                                         .analyzeExercise(exerciseId, gender, bodyWeight, liftingWeight,
                                                                 reps);
 
+                                                // 맨몸운동일시 weight 0 처리
+                                                double weight = analysisProfile.getThresholdType().getTypeId() == 0 ? 0
+                                                        : setRequest.weight();
+
                                                 double score = analysisProfile.getScore();
                                                 double strength = analysisProfile.getStrength();
-
+                                                
                                                 return new ExerciseRecordGroupDTO.ExerciseSet(
                                                         setRequest.set(),
-                                                        setRequest.weight(),
+                                                        weight,
                                                         setRequest.reps(),
                                                         score,
                                                         strength);

@@ -3,6 +3,7 @@ package org.bodyguide_sv.auth.service;
 import java.util.Collections;
 
 import org.bodyguide_sv.auth.jwt.TokenProvider;
+import org.bodyguide_sv.user.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,6 +17,17 @@ import lombok.RequiredArgsConstructor;
 public class TestTokenService {
 
     private final TokenProvider tokenProvider;
+    private final UserService userService;
+
+    public String getTestAccessToken() {
+
+        // 테스트 유저 조회
+        String _testUser = userService.getTestUserUUID();
+
+        // 액세스 토큰 반환
+        return generateTestAccessToken(_testUser, "ROLE_USER");
+        
+    }
 
     /**
      * Generate a test access token.

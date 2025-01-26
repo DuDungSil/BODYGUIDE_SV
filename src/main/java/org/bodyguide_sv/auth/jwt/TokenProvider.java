@@ -188,4 +188,17 @@ public class TokenProvider {
                 .collect(Collectors.toList());
     }
 
+    // 액세스토큰에서 sub 반환
+    public String getSubjectFromAccessToken(String accessToken) {
+        if (!StringUtils.hasText(accessToken)) {
+            throw new TokenException(INVALID_TOKEN);
+        }
+        Claims claims = parseClaims(accessToken);
+
+        // 액세스 토큰 검증
+        validateTokenType(claims, "ACCESS");
+
+        return claims.getSubject(); // sub 값 반환
+    }
+
 }

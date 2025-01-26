@@ -10,6 +10,7 @@ import org.bodyguide_sv.weight.controller.response.WeightRecordSliceResponse;
 import org.bodyguide_sv.weight.controller.response.WeightRecordSliceResponse.WeightRecordResponse;
 import org.bodyguide_sv.weight.entity.UsersWeightHistory;
 import org.bodyguide_sv.weight.event.NewWeightRecordSavedEvent;
+import org.bodyguide_sv.weight.event.WeightUpdatedEvent;
 import org.bodyguide_sv.weight.repository.UsersWeightHistoryRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -29,6 +30,7 @@ public class UserWeightRecordService {
     private final ApplicationEventPublisher eventPublisher;
     private final UsersWeightHistoryRepository usersWeightHistoryRepository;
 
+    // 조회
     public WeightRecordSliceResponse fetchWeightRecord(UUID userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("recordDate").descending());
         Slice<UsersWeightHistory> recordsSlice = usersWeightHistoryRepository.findByUserId(userId, pageable);
@@ -49,23 +51,28 @@ public class UserWeightRecordService {
         );
     }
 
-
+    // 저장
     @Transactional
     public void saveWeightRecord(UUID userId, WeightRecordRequest request) {
+        double newWeight = request.weight();
+
         // UsersWeightHistory 엔티티 생성
         UsersWeightHistory weightRecord = UsersWeightHistory.builder()
-            .userId(userId)
-            .weight(request.weight())
-            .recordDate(request.recordAt() != null ? request.recordAt() : LocalDateTime.now())
-            .build();
+                .userId(userId)
+                .weight(newWeight)
+                .recordDate(request.recordAt() != null ? request.recordAt() : LocalDateTime.now())
+                .build();
 
         // 저장
         usersWeightHistoryRepository.save(weightRecord);
 
         // 이벤트 발행
+        eventPublisher.publishEvent(new WeightUpdatedEvent(userId));
+
         eventPublisher.publishEvent(new NewWeightRecordSavedEvent(userId));
     }
 
+    // 삭제
     @Transactional
     public void deleteWeightRecord(UUID userId, Long historyId) {
         try {
@@ -76,6 +83,10 @@ public class UserWeightRecordService {
             }
             // 레코드가 존재하면 삭제
             usersWeightHistoryRepository.deleteById(historyId);
+            
+            // 이벤트 발행
+            eventPublisher.publishEvent(new WeightUpdatedEvent(userId));
+
         } catch (EmptyResultDataAccessException e) {
             throw new IllegalArgumentException("No weight record found with historyId: " + historyId, e);
         }

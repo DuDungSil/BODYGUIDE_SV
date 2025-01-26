@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.bodyguide_sv.exercise.dto.MuscleGroupScoreDto;
 import org.bodyguide_sv.exercise.dto.UpdatedMuscleScoreDTO;
 import org.bodyguide_sv.exercise.entity.UsersMuscleScoreProfile;
-import org.bodyguide_sv.exercise.repository.ExerciseQueryRepository;
 import org.bodyguide_sv.exercise.repository.UsersMuscleScoreProfileRepository;
+import org.bodyguide_sv.exercise.repository.custom.ExerciseQueryRepository;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;

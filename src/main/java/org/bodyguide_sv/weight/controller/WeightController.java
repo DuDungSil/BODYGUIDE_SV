@@ -11,13 +11,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class WeightController {
 
     @PostMapping("/record")
     @Operation(summary = "체중 기록 저장", description = "체중 기록 저장 하기")
-    public ResponseEntity<String> recordWeightRecord(@AuthenticationPrincipal UserDetails userDetails, @RequestBody WeightRecordRequest request) {
+    public ResponseEntity<String> recordWeightRecord(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody WeightRecordRequest request) {
         UUID userId = UUID.fromString(userDetails.getUsername());
         userWeightRecordService.saveWeightRecord(userId, request);
 

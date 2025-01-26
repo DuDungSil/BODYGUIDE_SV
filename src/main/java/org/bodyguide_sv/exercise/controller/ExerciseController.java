@@ -9,9 +9,13 @@ import org.bodyguide_sv.exercise.controller.response.ExerciseBigThreeProfileResp
 import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse;
 import org.bodyguide_sv.exercise.controller.response.ExerciseReportResponse;
 import org.bodyguide_sv.exercise.controller.response.ExerciseTotalPerformanceResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseVolumeDailySliceResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseVolumeMonthlySliceResponse;
+import org.bodyguide_sv.exercise.controller.response.ExerciseVolumeWeeklySliceResponse;
 import org.bodyguide_sv.exercise.controller.response.UserExerciseStatsResponse;
 import org.bodyguide_sv.exercise.service.ExerciseRecordService;
 import org.bodyguide_sv.exercise.service.ExerciseReportService;
+import org.bodyguide_sv.exercise.service.ExerciseVolumeService;
 import org.bodyguide_sv.exercise.service.UserBigThreeProfileService;
 import org.bodyguide_sv.exercise.service.UserExerciseStatsService;
 import org.bodyguide_sv.exercise.service.UserExerciseTotalPerformanceService;
@@ -37,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Exercise", description = "운동 관련")
 public class ExerciseController {
     
+    private final ExerciseVolumeService exerciseVolumeService;
     private final UserExerciseTotalPerformanceService userExerciseTotalPerformanceService;
     private final UserBigThreeProfileService userBigThreeProfileService;
     private final ExerciseRecordService exerciseRecordService;
@@ -102,7 +107,38 @@ public class ExerciseController {
     public ResponseEntity<ExerciseTotalPerformanceResponse> getExerciseTotalPerformance(
             @AuthenticationPrincipal UserDetails userDetails) {
         UUID userId = UUID.fromString(userDetails.getUsername());
-        ExerciseTotalPerformanceResponse response = userExerciseTotalPerformanceService.getTotalPerformanceResponse(userId);
+        ExerciseTotalPerformanceResponse response = userExerciseTotalPerformanceService
+                .getTotalPerformanceResponse(userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/volume/daily")
+    @Operation(summary = "일별 운동 볼륨 조회", description = "일별 운동 볼륨 조회")
+    public ResponseEntity<ExerciseVolumeDailySliceResponse> getExerciseVolumeDaily(
+            @AuthenticationPrincipal UserDetails userDetails, @RequestParam int page, @RequestParam int size) {
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        ExerciseVolumeDailySliceResponse response = exerciseVolumeService
+                .getVolumeDailySliceResponse(userId, page, size);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/volume/weekly")
+    @Operation(summary = "주별 운동 볼륨 조회", description = "주별 운동 볼륨 조회")
+    public ResponseEntity<ExerciseVolumeWeeklySliceResponse> getExerciseVolumeWeekly(
+            @AuthenticationPrincipal UserDetails userDetails, @RequestParam int page, @RequestParam int size) {
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        ExerciseVolumeWeeklySliceResponse response = exerciseVolumeService
+                .getVolumeWeeklySliceResponse(userId, page, size);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/volume/monthly")
+    @Operation(summary = "월별 운동 볼륨 조회", description = "월별 운동 볼륨 조회")
+    public ResponseEntity<ExerciseVolumeMonthlySliceResponse> getExerciseVolumeMonthly(
+            @AuthenticationPrincipal UserDetails userDetails, @RequestParam int page, @RequestParam int size) {
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        ExerciseVolumeMonthlySliceResponse response = exerciseVolumeService
+                .getVolumeMonthlySliceResponse(userId, page, size);
         return ResponseEntity.ok(response);
     }
 

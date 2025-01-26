@@ -57,4 +57,9 @@ public class UsersProfile {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    public void updateWeight(double newWeight){
+        this.weight = newWeight;
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }

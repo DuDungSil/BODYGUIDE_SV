@@ -118,9 +118,6 @@ public class TokenService {
         // Redis 갱신
         saveOrUpdate(userID, newRefreshToken);
 
-        // 유저 로그인 시간 기록
-        userMetaService.updateLastLoginAt(userID);
-
         log.info("Token reissued for userID: {}", userID);
 
         return new TokenResponse(newAccessToken, newRefreshToken);
@@ -144,4 +141,9 @@ public class TokenService {
         return new TokenResponse(newAccessToken, newRefreshToken);
     }
     
+    // 액세스토큰으로부터 userId 반환
+    public UUID getUserIdFromAccessToken(String accessToken) {
+        String sub = tokenProvider.getSubjectFromAccessToken(accessToken);
+        return UUID.fromString(sub);
+    }
 }

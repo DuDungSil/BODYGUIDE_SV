@@ -12,6 +12,7 @@ import org.bodyguide_sv.exercise.entity.UsersExerciseBestScore.UsersExerciseBest
 import org.bodyguide_sv.exercise.event.ExerciseBestScoreChangedEvent;
 import org.bodyguide_sv.exercise.repository.UsersExerciseBestScoreRepository;
 import org.bodyguide_sv.exercise.repository.UsersExerciseSetHistoryRepository;
+import org.bodyguide_sv.exercise.repository.custom.UsersExerciseSetHistoryCustomRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class ExerciseBestScoreService {
     
     private final ApplicationEventPublisher eventPublisher;
+    private final UsersExerciseSetHistoryCustomRepository usersExerciseSetHistoryCustomRepository;
     private final UsersExerciseBestScoreRepository usersExerciseBestScoreRepository;
     private final UsersExerciseSetHistoryRepository usersExerciseSetHistoryRepository;
 
@@ -59,7 +61,7 @@ public class ExerciseBestScoreService {
 
     private boolean updateBestWeightAndReps(UUID userId, int exerciseId) {
         // DTO로 weight와 reps 가져오기
-        MaxWeightAndRepsDTO maxWeightAndReps = usersExerciseSetHistoryRepository.findMaxWeightAndRepsByUserIdAndExerciseId(userId, exerciseId);
+        MaxWeightAndRepsDTO maxWeightAndReps = usersExerciseSetHistoryCustomRepository.findMaxWeightAndRepsByUserIdAndExerciseId(userId, exerciseId);
 
         if (maxWeightAndReps == null) {
             return false; // 데이터가 없으면 갱신되지 않음
@@ -68,7 +70,7 @@ public class ExerciseBestScoreService {
         // Best Score 엔티티 조회
         UsersExerciseBestScoreId bestScoreId = new UsersExerciseBestScoreId(userId, exerciseId);
         UsersExerciseBestScore bestScore = usersExerciseBestScoreRepository.findById(bestScoreId)
-            .orElse(UsersExerciseBestScore.createNew(userId, exerciseId));
+                .orElse(UsersExerciseBestScore.createNew(userId, exerciseId));
 
         // 기존 값과 비교
         boolean updated = false;
