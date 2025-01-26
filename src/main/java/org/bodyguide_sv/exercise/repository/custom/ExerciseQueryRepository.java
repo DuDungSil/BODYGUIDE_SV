@@ -1,4 +1,4 @@
-package org.bodyguide_sv.exercise.repository;
+package org.bodyguide_sv.exercise.repository.custom;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,7 +48,7 @@ public class ExerciseQueryRepository {
     }
 
     // 운동 분석에 필요한 데이터 가져오기
-    public ExerciseAnalysisData findExerciseData(int exerciseId, String gender) {
+    public ExerciseAnalysisData findExerciseAnalysisData(int exerciseId, String gender) {
         QExercise exercise = QExercise.exercise;
         QExerciseThreshold exerciseThreshold = QExerciseThreshold.exerciseThreshold;
         QMuscle muscle = QMuscle.muscle;

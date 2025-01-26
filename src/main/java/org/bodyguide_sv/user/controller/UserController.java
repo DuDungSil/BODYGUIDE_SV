@@ -29,8 +29,8 @@ public class UserController {
     @GetMapping("/profile")
     @Operation(summary = "유저 기본 프로필 조회", description = "유저 기본 프로필 정보를 조회")
     public ResponseEntity<UserProfileResponse> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
-        UserProfileResponse userProfileResponse = userProfileService.getUserProfileResponse(UUID.fromString(userDetails.getUsername()));
-        return ResponseEntity.ok(userProfileResponse);
+        UserProfileResponse response = userProfileService.getUserProfileResponse(UUID.fromString(userDetails.getUsername()));
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/profile")

@@ -3,7 +3,7 @@ package org.bodyguide_sv.exercise.service;
 import java.util.List;
 
 import org.bodyguide_sv.exercise.enums.MuscleGroupType;
-import org.bodyguide_sv.exercise.repository.ExerciseQueryRepository;
+import org.bodyguide_sv.exercise.repository.custom.ExerciseQueryRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

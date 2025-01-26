@@ -1,19 +1,16 @@
 package org.bodyguide_sv.auth.controller;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.bodyguide_sv.auth.controller.request.InitializeRequest;
 import org.bodyguide_sv.auth.controller.request.TokenRequest;
 import org.bodyguide_sv.auth.controller.response.TokenResponse;
+import org.bodyguide_sv.auth.service.OAuthCallbackService;
+import org.bodyguide_sv.auth.service.RefreshService;
 import org.bodyguide_sv.auth.service.TestTokenService;
 import org.bodyguide_sv.auth.service.TokenService;
 import org.bodyguide_sv.auth.service.UnlinkService;
-import org.bodyguide_sv.user.service.UserMetaService;
 import org.bodyguide_sv.user.service.UserProfileService;
-import org.bodyguide_sv.user.service.UserService;
 import org.bodyguide_sv.user.service.UserSocialTokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,59 +39,40 @@ public class AuthController {
 
     private final TestTokenService testTokenService; // 개발용
 
+    private final RefreshService refreshService;
     private final TokenService tokenService;
     private final UnlinkService unlinkService;
-    private final UserSocialTokenService userProviderTokenService;
+    private final UserSocialTokenService userSocialTokenService;
     private final UserProfileService userProfileService;
-    private final UserService userService;
-    private final UserMetaService userMetaService;
-
-    @GetMapping("/callback")
-    public void handleOAuthCallback(
-            @RequestParam("access_token") String accessToken,
-            @RequestParam("refresh_token") String refreshToken,
-            HttpServletResponse response
-    ) {
-        try {
-            // JSON 데이터 생성
-            String jsonPayload = String.format(
-                "{\"accessToken\":\"%s\", \"refreshToken\":\"%s\"}",
-                accessToken,
-                refreshToken
-            );
-    
-            // 앱으로 리디렉션 URL 생성
-            String redirectUri = "bodyguide://oauth2redirect?jsonPayload=" +
-                    URLEncoder.encode(jsonPayload, StandardCharsets.UTF_8);
-    
-            // 로직 처리 (예: 사용자 정보 업데이트, 토큰 저장 등)
-            //userMetaService.updateLastLoginAt(accessToken);
-    
-            // 앱으로 리디렉션
-            response.sendRedirect(redirectUri);
-    
-        } catch (Exception e) {
-            try {
-                // 오류 발생 시 앱으로 오류를 전달하거나 적절한 응답 반환
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "오류 발생: " + e.getMessage());
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        }
-    }
+    private final OAuthCallbackService oAuthCallbackService;
 
     @GetMapping("/test")
     @Operation(summary = "테스트용 액세스 토큰 발급 ( 인증 X )", description = "테스트용 액세스 토큰 발급")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> generateTestAccessToken() {
 
-        String _testUser = userService.getTestUserUUID();
-
         // 액세스 토큰 생성
-        String accessToken = testTokenService.generateTestAccessToken(_testUser, "ROLE_USER");
+        String accessToken = testTokenService.getTestAccessToken();
 
         // 액세스 토큰 반환
         return ResponseEntity.ok(accessToken);
+    }
+
+    @GetMapping("/callback")
+    @Operation(summary = "OAuth 소셜 로그인 성공시 callback", description = "OAuth 소셜 로그인 성공시 액세스토큰, 리프레시토큰 응답")
+    public void handleOAuthCallback(
+            @RequestParam("access_token") String accessToken,
+            @RequestParam("refresh_token") String refreshToken,
+            HttpServletResponse response
+    ) {
+        oAuthCallbackService.processCallback(accessToken, refreshToken, response);
+    }
+
+    @PostMapping("/refresh")
+    @Operation(summary = "토큰 재발급 ( 인증 X )", description = "클라이언트로부터 리프레시 토큰을 전달받아 유저 리프레시 토큰 저장소에서 검증 후 새로운 액세스 토큰, 리프레시 토큰을 재발급")
+    public ResponseEntity<TokenResponse> refreshToken(@Valid @RequestBody TokenRequest request) {
+        TokenResponse response = refreshService.tokenRefresh(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/initialize")
@@ -115,17 +93,8 @@ public class AuthController {
     @Operation(summary = "로그아웃", description = "유저 리프레시 토큰 저장소의 리프레시 토큰을 제거")
     public ResponseEntity<Void> logout(@AuthenticationPrincipal UserDetails userDetails) {
         tokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
-        userProviderTokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
+        userSocialTokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/refresh")
-    @Operation(summary = "토큰 재발급 ( 인증 X )", description = "클라이언트로부터 리프레시 토큰을 전달받아 유저 리프레시 토큰 저장소에서 검증 후 새로운 액세스 토큰, 리프레시 토큰을 재발급")
-    public ResponseEntity<TokenResponse> refreshToken(@Valid @RequestBody TokenRequest tokenRequest) {
-
-        TokenResponse tokenResponse = tokenService.reissueTokenResponse(tokenRequest);
-
-        return ResponseEntity.ok(tokenResponse);
     }
 
     @GetMapping("/unlink")
@@ -133,7 +102,7 @@ public class AuthController {
     public ResponseEntity<String> unlink(@AuthenticationPrincipal UserDetails userDetails) {
         unlinkService.unlink(UUID.fromString(userDetails.getUsername()));
         tokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
-        userProviderTokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
+        userSocialTokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
         return ResponseEntity.ok("성공");
     }
 

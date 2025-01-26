@@ -34,7 +34,7 @@ public class UserProfileService {
         usersProfileRepository.save(usersProfile);
     }
 
-    // 업데이트
+    // 부분 업데이트
     public void updateUserProfile(UUID userId, UserProfileRequest request) {
 
         // 1. 기존 프로필 조회
@@ -69,9 +69,9 @@ public class UserProfileService {
 
         // 4. 저장
         usersProfileRepository.save(usersProfile);
-        
+
     }
-    
+
     // Response 가져오기
     public UserProfileResponse getUserProfileResponse(UUID userId) {
         UsersProfile usersProfile = usersProfileRepository.findByUserId(userId)
@@ -80,7 +80,7 @@ public class UserProfileService {
         return convertToResponse(usersProfile);
     }
     
-    // 프로필 초기화
+    // 프로필 초기화 ( 온보딩 )
     public void initializeUserProfile(UUID userId, InitializeRequest request) {
 
         // 1. 기존 프로필 조회

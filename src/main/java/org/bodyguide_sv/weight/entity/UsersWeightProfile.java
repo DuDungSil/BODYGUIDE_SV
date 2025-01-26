@@ -1,5 +1,7 @@
 package org.bodyguide_sv.weight.entity;
 
+import static org.mockito.ArgumentMatchers.nullable;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -19,13 +21,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS_WEIGHT_HISTORY")
-public class UsersWeightHistory {
+@Table(name = "USERS_WEIGHT_PROFILE")
+public class UsersWeightProfile {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "history_id")
-    private Long historyId;
+    @Column(name = "profile_id")
+    private Long profileId;
 
     @Column(name = "user_id")
     private UUID userId;
@@ -35,5 +37,18 @@ public class UsersWeightHistory {
 
     @Column(name = "record_date")
     private LocalDateTime recordDate;
+
+    public void updateWeight(Double weight, LocalDateTime recordDate) {
+        this.weight = weight;
+        this.recordDate = recordDate;
+    }
+
+    public static UsersWeightProfile create(UUID userId) {
+        return UsersWeightProfile.builder()
+                                    .userId(userId)
+                                    .weight(null)
+                                    .recordDate(null)
+                                    .build();
+    }
 
 }

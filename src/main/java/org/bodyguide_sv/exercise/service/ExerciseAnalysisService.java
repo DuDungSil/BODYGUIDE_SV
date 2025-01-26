@@ -1,6 +1,5 @@
 package org.bodyguide_sv.exercise.service;
 
-import java.time.Duration;
 import java.util.List;
 
 import org.bodyguide_sv.exercise.dto.ExerciseAnalysisData;
@@ -8,8 +7,6 @@ import org.bodyguide_sv.exercise.dto.ExerciseAnalysisProfile;
 import org.bodyguide_sv.exercise.enums.ExerciseLevel;
 import org.bodyguide_sv.exercise.enums.MuscleGroupType;
 import org.bodyguide_sv.exercise.enums.ThresholdType;
-import org.bodyguide_sv.exercise.repository.ExerciseQueryRepository;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -18,8 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ExerciseAnalysisService {
 
-    private final ExerciseQueryRepository exerciseQueryRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final ExerciseInfoService exerciseInfoService;
 
     // 1RM 계산식
     private double getRM1(double liftingWeight, int Reps) {
@@ -65,7 +61,7 @@ public class ExerciseAnalysisService {
             double liftingWeight, int reps) {
 
         // redis 처리 필요
-        ExerciseAnalysisData exerciseData = getExerciseData(exerciseId, gender);
+        ExerciseAnalysisData exerciseData = exerciseInfoService.getExerciseAnalysisData(exerciseId, gender);
         List<Double> thresholds = exerciseData.thresholds();
         MuscleGroupType muscleGroupType = exerciseData.muscleGroupType();
         ThresholdType thresholdType = exerciseData.thresholdType();
@@ -90,6 +86,7 @@ public class ExerciseAnalysisService {
         ExerciseAnalysisProfile profile = new ExerciseAnalysisProfile();
         profile.setExerId(exerciseId);
         profile.setMuscleGroupType(muscleGroupType);
+        profile.setThresholdType(thresholdType);
         profile.setScore(score);
         profile.setLevel(level);
         profile.setStrength(Math.floor(strength));
@@ -98,29 +95,5 @@ public class ExerciseAnalysisService {
         return profile;
     }
 
-    // 운동 분석 전용 데이터 가져오기 & 캐싱
-    private ExerciseAnalysisData getExerciseData(int exerciseId, String gender) {
-        String cacheKey = "exerciseData:" + exerciseId + ":" + gender;
-
-        // Redis에서 데이터 조회
-        ExerciseAnalysisData cachedData = (ExerciseAnalysisData) redisTemplate.opsForValue().get(cacheKey);
-        if (cachedData != null) {
-            return cachedData; // 캐시 데이터 반환
-        }
-
-        // DB에서 데이터 조회
-        ExerciseAnalysisData exerciseData = exerciseQueryRepository.findExerciseData(exerciseId, gender);
-
-        // Redis에 데이터 저장
-        redisTemplate.opsForValue().set(cacheKey, exerciseData, Duration.ofHours(1));
-
-        return exerciseData;
-    }
-
-    // 캐싱 파일 삭제
-    public void invalidateCache(int exerciseId, String gender) {
-        String cacheKey = "exerciseData:" + exerciseId + ":" + gender;
-        redisTemplate.delete(cacheKey);
-    }
 
 }
