@@ -2,8 +2,9 @@ package org.bodyguide_sv.user.service;
 
 import java.util.UUID;
 
-import org.bodyguide_sv.auth.dto.OAuth2UserInfo;
 import org.bodyguide_sv.auth.enums.SocialProvider;
+import org.bodyguide_sv.user.dto.OAuth2UserInfo;
+import org.bodyguide_sv.user.dto.UserDTO;
 import org.bodyguide_sv.user.entity.Users;
 import org.bodyguide_sv.user.event.UserRegisterEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,7 +25,7 @@ public class UserRegistrationService {
     private final UserSocialTokenService userSocialTokenService;
 
     // 유저 정보 로드
-    public Users loadUser(OAuth2UserInfo oAuth2UserInfo) {
+    public UserDTO loadUser(OAuth2UserInfo oAuth2UserInfo) {
         SocialProvider provider = oAuth2UserInfo.provider();
         String providerId = oAuth2UserInfo.providerId();
         String name = oAuth2UserInfo.name();
@@ -39,7 +40,14 @@ public class UserRegistrationService {
             user = userService.updateUserNameAndEmail(user.getUserId(), name, email);
         }
 
-        return user != null ? user : registUser(oAuth2UserInfo);
+        return new UserDTO(
+                user.getUserId(),
+                user.getRole(),
+                user.getProvider(),
+                user.getProviderId(),
+                user.getEmail(),
+                user.getName()
+            );
     }
 
     // 회원가입
@@ -61,8 +69,4 @@ public class UserRegistrationService {
         return user;
     }
 
-    // 유저 삭제
-    public void deletionUser() {
-        // 메타에 삭제 표시 (구현 필요)
-    }
 }

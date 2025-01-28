@@ -20,7 +20,7 @@ public class KakaoUnlinkService {
 
     @Value("${kakao.admin-key}")
     private String adminKey;
-
+    
     @Value("${kakao.unlink-uri}")
     private String unlinkUrl;
 

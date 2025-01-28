@@ -2,10 +2,10 @@ package org.bodyguide_sv.auth.service;
 
 import java.util.Map;
 
-import org.bodyguide_sv.auth.dto.OAuth2UserInfo;
 import org.bodyguide_sv.auth.dto.PrincipalDetails;
 import org.bodyguide_sv.auth.enums.SocialProvider;
-import org.bodyguide_sv.user.entity.Users;
+import org.bodyguide_sv.user.dto.OAuth2UserInfo;
+import org.bodyguide_sv.user.dto.UserDTO;
 import org.bodyguide_sv.user.service.UserRegistrationService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -40,10 +40,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(socialProvider, oAuth2UserAttributes);
 
         // 5. 회원가입 및 로그인
-        Users user = userRegistrationService.loadUser(oAuth2UserInfo);
+        UserDTO userDTO = userRegistrationService.loadUser(oAuth2UserInfo);
 
         // 6. OAuth2User로 반환 
-        return new PrincipalDetails(user, oAuth2UserAttributes, userNameAttributeName);
+        return new PrincipalDetails(userDTO, oAuth2UserAttributes, userNameAttributeName);
     }
     
 }

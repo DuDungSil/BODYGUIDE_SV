@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.bodyguide_sv.auth.controller.request.InitializeRequest;
 import org.bodyguide_sv.auth.controller.request.TokenRequest;
 import org.bodyguide_sv.auth.controller.response.TokenResponse;
+import org.bodyguide_sv.auth.service.InitializeService;
+import org.bodyguide_sv.auth.service.LogoutService;
 import org.bodyguide_sv.auth.service.OAuthCallbackService;
 import org.bodyguide_sv.auth.service.RefreshService;
 import org.bodyguide_sv.auth.service.TestTokenService;
@@ -39,11 +41,10 @@ public class AuthController {
 
     private final TestTokenService testTokenService; // 개발용
 
+    private final InitializeService initializeService;
+    private final LogoutService logoutService;
     private final RefreshService refreshService;
-    private final TokenService tokenService;
     private final UnlinkService unlinkService;
-    private final UserSocialTokenService userSocialTokenService;
-    private final UserProfileService userProfileService;
     private final OAuthCallbackService oAuthCallbackService;
 
     @GetMapping("/test")
@@ -76,34 +77,28 @@ public class AuthController {
     }
 
     @PostMapping("/initialize")
-    @Operation(summary = "GUEST 권한 계정 초기화", description = "계정 초기 데이터를 입력받아 계정 프로필을 초기화 후 GUEST -> USER 권한 상승")
+    @Operation(summary = "GUEST 권한 계정 초기화 ( 온보딩 )", description = "계정 초기 데이터를 입력받아 계정 프로필을 초기화 후 GUEST -> USER 권한 상승")
     public ResponseEntity<TokenResponse> initialize(@AuthenticationPrincipal UserDetails userDetails,
         @Valid @RequestBody InitializeRequest request) {
-
-        // 프로필 입력
-        userProfileService.initializeUserProfile(UUID.fromString(userDetails.getUsername()), request);
-
-        // 유저 권한 상승 후 새 토큰 반환
-        TokenResponse tokenResponse = tokenService.upgradeUserRoleWithToken(UUID.fromString(userDetails.getUsername()));
-
-        return ResponseEntity.ok(tokenResponse);
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        TokenResponse response =  initializeService.initialize(userId, request);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/logout")
     @Operation(summary = "로그아웃", description = "유저 리프레시 토큰 저장소의 리프레시 토큰을 제거")
     public ResponseEntity<Void> logout(@AuthenticationPrincipal UserDetails userDetails) {
-        tokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
-        userSocialTokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        logoutService.logout(userId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/unlink")
-    @Operation(summary = "회원 탈퇴", description = "미완성")
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴")
     public ResponseEntity<String> unlink(@AuthenticationPrincipal UserDetails userDetails) {
-        unlinkService.unlink(UUID.fromString(userDetails.getUsername()));
-        tokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
-        userSocialTokenService.deleteRefreshToken(UUID.fromString(userDetails.getUsername()));
-        return ResponseEntity.ok("성공");
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        unlinkService.unlink(userId);
+        return ResponseEntity.ok("회원 탈퇴 성공");
     }
 
 }

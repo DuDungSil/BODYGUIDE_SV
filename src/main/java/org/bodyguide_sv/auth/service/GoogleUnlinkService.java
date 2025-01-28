@@ -37,7 +37,8 @@ public class GoogleUnlinkService {
     public void unlink(UUID userId) {
         // 리프레시 토큰 get
         String socialRefreshToken = userProviderTokenService.getSocialRefreshToken(userId);
-        // 예외처리 1. refreshToken이 null일 경우
+
+        // 예외처리 refreshToken이 null일 경우
 
         // 프로바이더로부터 액세스토큰 get
         String socialAccessToken = getSocialAccessToken(socialRefreshToken);
@@ -46,7 +47,7 @@ public class GoogleUnlinkService {
         unlinkFromGoogle(socialAccessToken);
     }
     
-    private String getSocialAccessToken(String refreshToken) {
+    private String getSocialAccessToken(String socialRefreshToken) {
         try {
             // HTTP 요청을 생성 (Apache HttpClient, RestTemplate, 또는 WebClient를 사용할 수 있음)
             RestTemplate restTemplate = new RestTemplate();
@@ -55,7 +56,7 @@ public class GoogleUnlinkService {
             MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
             requestParams.add("client_id", clientId); // Google 클라이언트 ID
             requestParams.add("client_secret", clientSecret); // Google 클라이언트 Secret
-            requestParams.add("refresh_token", refreshToken); // 리프레시 토큰
+            requestParams.add("refresh_token", socialRefreshToken); // 리프레시 토큰
             requestParams.add("grant_type", "refresh_token");
 
             // HTTP 요청 헤더 설정

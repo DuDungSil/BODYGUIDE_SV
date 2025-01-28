@@ -1,5 +1,6 @@
 package org.bodyguide_sv.user.entity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.bodyguide_sv.auth.enums.SocialProvider;
@@ -49,5 +50,20 @@ public class Users{
     
     @Column(name = "name")
     private String name;
+
+    @Column(name = "is_delete", nullable = false)
+    private Boolean isDelete;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public void deleteUser() {
+        this.isDelete = true;
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public void upgradeRole() {
+        this.role = Role.USER;
+    }
 
 }

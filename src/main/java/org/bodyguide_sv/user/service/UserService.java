@@ -48,6 +48,13 @@ public class UserService {
         return usersRepository.save(user);
     }
 
+    // 유저 삭제
+    public void deleteUser(UUID userId) {
+        Users user = getUserById(userId);
+        user.deleteUser();
+        usersRepository.save(user);
+    }
+
     // 유저 이름, 이메일 업데이트
     @Transactional
     public Users updateUserNameAndEmail(UUID userId, String name, String email) {
@@ -71,7 +78,7 @@ public class UserService {
             throw new IllegalStateException("User role is not GUEST, cannot upgrade role.");
         }
 
-        user.setRole(Role.USER); // 권한 변경
+        user.upgradeRole(); // 권한 변경
         
         return saveUser(user); // 변경된 유저 저장
     }

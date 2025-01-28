@@ -1,4 +1,4 @@
-package org.bodyguide_sv.auth.dto;
+package org.bodyguide_sv.user.dto;
 
 import static org.bodyguide_sv.common.errorHandler.ErrorCode.ILLEGAL_REGISTRATION_PROVIDER;
 
@@ -60,6 +60,8 @@ public record OAuth2UserInfo(
                 .name(name)
                 .email(email)
                 .role(Role.GUEST)
+                .isDelete(false)
+                .deletedAt(null)
                 .build();
     }
 

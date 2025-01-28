@@ -15,25 +15,19 @@ public class UserMetaService {
     
     private final UsersMetaRepository usersMetaRepository;
 
+    // 생성
     public void createUsersMeta(UUID userId) {
 
         if (userId == null) {
             throw new IllegalArgumentException("userId must not be null when creating a profile.");
         }
 
-        LocalDateTime dateTime = LocalDateTime.now();
-
-        UsersMeta usersMeta = UsersMeta.builder()
-                .userId(userId)
-                .createdAt(dateTime)
-                .lastLoginAt(dateTime)
-                .updatedAt(dateTime)
-                .isDelete(false)
-                .build();
+        UsersMeta usersMeta = UsersMeta.create(userId);
 
         usersMetaRepository.save(usersMeta);
     }
 
+    // 추천 경로 업데이트
     public void updateSource(UUID userId, String source) {
 
         // 1. 기존 메타 조회
@@ -48,6 +42,7 @@ public class UserMetaService {
 
     }
     
+    // 마지막 로그인 시간 업데이트
     public void updateLastLoginAt(UUID userId) {
         
         // 1. 기존 메타 조회

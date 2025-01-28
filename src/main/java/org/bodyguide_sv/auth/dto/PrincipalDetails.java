@@ -4,14 +4,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import org.bodyguide_sv.user.entity.Users;
+import org.bodyguide_sv.user.dto.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public record PrincipalDetails(
-        Users user,
+        UserDTO user,
         Map<String, Object> attributes,
         String attributeKey) implements OAuth2User, UserDetails {
 
@@ -28,7 +28,7 @@ public record PrincipalDetails(
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(
-                new SimpleGrantedAuthority(user.getRole().getKey()));
+                new SimpleGrantedAuthority(user.role().getKey()));
     }
 
     @Override
@@ -38,7 +38,7 @@ public record PrincipalDetails(
 
     @Override
     public String getUsername() {
-        return user.getUserId().toString();
+        return user.userId().toString();
     }
 
     @Override

@@ -6,8 +6,8 @@ import org.bodyguide_sv.auth.enums.SocialProvider;
 import org.bodyguide_sv.auth.exception.AuthException;
 import static org.bodyguide_sv.common.errorHandler.ErrorCode.ILLEGAL_REGISTRATION_PROVIDER;
 import org.bodyguide_sv.user.entity.Users;
-import org.bodyguide_sv.user.service.UserRegistrationService;
 import org.bodyguide_sv.user.service.UserService;
+import org.bodyguide_sv.user.service.UserSocialTokenService;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -17,27 +17,36 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UnlinkService {
     
-    private final UserService usernService;
-    private final UserRegistrationService userRegistrationService;
+    private final UserSocialTokenService userSocialTokenService;
+    private final LogoutService logoutService;
+    private final UserService userService;
     private final KakaoUnlinkService kakaoUnlinkService;
     private final GoogleUnlinkService googleUnlinkService;
+    private final AppleUnlinkService appleUnlinkService;
 
     @Transactional
     public void unlink(UUID userId) {
         // povider, provider id 확인
-        Users user = usernService.getUserById(userId);
+        Users user = userService.getUserById(userId);
         SocialProvider provider = user.getProvider();
         String providerId = user.getProviderId();
 
         // provider 서비스 연결 끊기
-        switch (provider) { 
+        switch (provider) {
             case GOOGLE -> googleUnlinkService.unlink(userId);
             case KAKAO -> kakaoUnlinkService.unlink(providerId);
+            case APPLE -> appleUnlinkService.unlink(userId);
             default -> throw new AuthException(ILLEGAL_REGISTRATION_PROVIDER);
         }
 
-        // 유저 기록 del 추가
-        userRegistrationService.deletionUser();
+        // 로그아웃
+        logoutService.logout(userId);
+
+        // 유저 delete 처리 
+        userService.deleteUser(userId);
+
+        // db 소셜 리프레시 토큰 제거
+        userSocialTokenService.deleteRefreshToken(userId);
     }
 
 }
