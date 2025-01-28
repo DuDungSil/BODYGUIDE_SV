@@ -25,7 +25,7 @@ jobs:
     - name: Create application.properties from Secret
       run: |
         mkdir -p config
-        echo "${{ secrets.PROPERTIE }}" | base64 --decode > config/application.properties
+        echo "${{ secrets.PROPERTIE }}" > config/application.properties
 
     # 4. Maven으로 빌드
     - name: Build with Maven
