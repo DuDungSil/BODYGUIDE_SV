@@ -13,7 +13,6 @@ import static org.bodyguide_sv.common.errorHandler.ErrorCode.TOKEN_NOT_FOUND;
 import org.bodyguide_sv.common.redis.entity.Token;
 import org.bodyguide_sv.common.redis.repository.TokenRepository;
 import org.bodyguide_sv.user.entity.Users;
-import org.bodyguide_sv.user.service.UserMetaService;
 import org.bodyguide_sv.user.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 public class TokenService {
 
     private final UserService userService;
-    private final UserMetaService userMetaService;
     private final TokenRepository tokenRepository;
     private final TokenProvider tokenProvider;
 

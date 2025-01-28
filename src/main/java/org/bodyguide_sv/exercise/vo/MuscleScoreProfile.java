@@ -14,13 +14,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Embeddable
 public class MuscleScoreProfile {
-    private Integer exerciseId;         // 운동 ID
+    private Integer exerciseId; // 운동 ID
+    private Double weight;
+    private Integer reps;
     private Double score;           // 점수 (120점 넘을 수 있음)
     private LocalDateTime updatedAt; // 마지막 업데이트 일자
     
     public static MuscleScoreProfile createDefault() {
         return MuscleScoreProfile.builder()
             .exerciseId(null)
+            .weight(0.0)
+            .reps(0)
             .score(0.0)
             .updatedAt(LocalDateTime.now())
             .build();

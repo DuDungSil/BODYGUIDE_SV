@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bodyguide_sv.exercise.dto.MaxScoreAndWeightAndRepsDTO;
 import org.bodyguide_sv.exercise.dto.MaxWeightAndRepsDTO;
 import org.bodyguide_sv.exercise.entity.UsersExerciseBestScore;
 import org.bodyguide_sv.exercise.entity.UsersExerciseBestScore.UsersExerciseBestScoreId;
@@ -26,7 +27,6 @@ public class ExerciseBestScoreService {
     private final ApplicationEventPublisher eventPublisher;
     private final UsersExerciseSetHistoryCustomRepository usersExerciseSetHistoryCustomRepository;
     private final UsersExerciseBestScoreRepository usersExerciseBestScoreRepository;
-    private final UsersExerciseSetHistoryRepository usersExerciseSetHistoryRepository;
 
     // BestScore 갱신
     @Transactional
@@ -85,10 +85,15 @@ public class ExerciseBestScoreService {
 
     private boolean updateBestScoreForExercise(UUID userId, int exerciseId) {
         // 가장 큰 score 가져오기
-        Double maxScore = usersExerciseSetHistoryRepository.findMaxScoreByUserIdAndExerciseId(userId, exerciseId);
-        if (maxScore == null) {
+        MaxScoreAndWeightAndRepsDTO scoreAndWeightAndReps = usersExerciseSetHistoryCustomRepository.findMaxScoreByUserIdAndExerciseId(userId, exerciseId);
+
+        if (scoreAndWeightAndReps == null) {
             return false; // 데이터가 없으면 갱신되지 않음
         }
+
+        Double scoreWeight = scoreAndWeightAndReps.weight();
+        Integer scoreReps = scoreAndWeightAndReps.reps();
+        Double maxScore = scoreAndWeightAndReps.score();
 
         // Best Score 엔티티 조회
         UsersExerciseBestScoreId bestScoreId = new UsersExerciseBestScoreId(userId, exerciseId);
@@ -98,7 +103,7 @@ public class ExerciseBestScoreService {
         // 기존 값과 비교
         boolean updated = false;
         if (!maxScore.equals(bestScore.getScore())) {
-            bestScore.updateScore(maxScore);
+            bestScore.updateScore(scoreWeight, scoreReps, maxScore);
             usersExerciseBestScoreRepository.save(bestScore);
             updated = true; // 갱신됨
         }

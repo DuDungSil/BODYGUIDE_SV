@@ -1,9 +1,9 @@
 package org.bodyguide_sv.weight.service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
+import org.bodyguide_sv.weight.dto.UserWeightProfileDTO;
 import org.bodyguide_sv.weight.entity.UsersWeightHistory;
 import org.bodyguide_sv.weight.entity.UsersWeightProfile;
 import org.bodyguide_sv.weight.repository.UsersWeightHistoryRepository;
@@ -19,6 +19,14 @@ public class UserWeightProfileService {
     
     private final UsersWeightProfileRepository usersWeightProfileRepository;
     private final UsersWeightHistoryRepository usersWeightHistoryRepository;
+
+    // dto 가져오기
+    public UserWeightProfileDTO getWeightProfile(UUID userId) {
+        // 유저의 Weight Profile 가져오기 또는 생성
+        UsersWeightProfile profile = usersWeightProfileRepository.findByUserId(userId)
+                .orElse(UsersWeightProfile.create(userId));
+        return new UserWeightProfileDTO(profile.getWeight(), profile.getRecordDate());
+    }
 
     // 업데이트
     @Transactional

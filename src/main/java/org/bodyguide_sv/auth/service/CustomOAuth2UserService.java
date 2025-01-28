@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.bodyguide_sv.auth.dto.OAuth2UserInfo;
 import org.bodyguide_sv.auth.dto.PrincipalDetails;
+import org.bodyguide_sv.auth.enums.SocialProvider;
 import org.bodyguide_sv.user.entity.Users;
 import org.bodyguide_sv.user.service.UserRegistrationService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -29,13 +30,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         
         // 2. resistrationId 가져오기 (third-party id)
         String provider = userRequest.getClientRegistration().getRegistrationId();
+        SocialProvider socialProvider = SocialProvider.fromCode(provider);
 
         // 3. userNameAttributeName 가져오기
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
         // 4. 유저 정보 dto 생성
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(provider, oAuth2UserAttributes);
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(socialProvider, oAuth2UserAttributes);
 
         // 5. 회원가입 및 로그인
         Users user = userRegistrationService.loadUser(oAuth2UserInfo);

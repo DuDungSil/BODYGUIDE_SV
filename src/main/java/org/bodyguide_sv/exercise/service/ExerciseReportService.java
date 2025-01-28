@@ -1,24 +1,16 @@
 package org.bodyguide_sv.exercise.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.bodyguide_sv.exercise.controller.response.ExerciseReportResponse;
-import org.bodyguide_sv.exercise.dto.ExerciseAbility;
-import org.bodyguide_sv.exercise.dto.ExerciseAnalysisProfile;
-import org.bodyguide_sv.exercise.dto.MuscleProfile;
-import org.bodyguide_sv.exercise.dto.UserExerciseStatsDTO;
+import org.bodyguide_sv.exercise.dto.*;
+import org.bodyguide_sv.exercise.dto.UserMuscleScoreProfileDTO.MuscleScore;
 import org.bodyguide_sv.exercise.enums.MuscleGroupType;
-
-import static org.bodyguide_sv.exercise.enums.MuscleGroupType.ARM;
-import static org.bodyguide_sv.exercise.enums.MuscleGroupType.CORE;
 import org.bodyguide_sv.user.dto.UserProfileDTO;
 import org.bodyguide_sv.user.service.UserProfileService;
+import org.bodyguide_sv.weight.dto.UserWeightProfileDTO;
+import org.bodyguide_sv.weight.service.UserWeightProfileService;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -26,104 +18,96 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class ExerciseReportService {
-    
+
     private final UserProfileService userProfileService;
-    private final UserExerciseStatsService userExerciseProfileService;
     private final ExerciseAnalysisService exerciseAnalysisService;
     private final ExerciseMetaService exerciseMetaService;
+    private final UserWeightProfileService userWeightProfileService;
+    private final UserExerciseMuscleScoreProfileService userExerciseMuscleScoreProfileService;
 
     public ExerciseReportResponse getReportResponse(UUID userId) {
-
-        // 1. db 에서 프로필 가져오기
-
-        // db 에서 유저 프로필 가져오기
+        // 1. 프로필 가져오기
         UserProfileDTO userProfile = userProfileService.getUserProfileDTO(userId);
-        // db 에서 운동 프로필 가져오기
-        UserExerciseStatsDTO userExerciseProfile = userExerciseProfileService.getUserExerciseProfileDTO(userId);
+        UserWeightProfileDTO weightProfile = userWeightProfileService.getWeightProfile(userId);
+        UserMuscleScoreProfileDTO muscleScoreProfile = userExerciseMuscleScoreProfileService.getUserMuscleScoreProfileDTO(userId);
 
-        // 2. 분석
+        String gender = userProfile.gender();
+        double userWeight = Optional.ofNullable(weightProfile.weight()).orElse(userProfile.weight());
 
-        // 종목별 수행능력
-        ExerciseAbility ability = new ExerciseAbility();
-        ability.setBench(exerciseAnalysisService.analyzeExercise(120, userProfile.gender(), userProfile.weight(),
-                userExerciseProfile.benchWeight(), userExerciseProfile.benchReps()));
-        ability.setSquat(exerciseAnalysisService.analyzeExercise(251, userProfile.gender(), userProfile.weight(),
-                userExerciseProfile.squatWeight(), userExerciseProfile.squatReps()));
-        ability.setDead(exerciseAnalysisService.analyzeExercise(1, userProfile.gender(), userProfile.weight(),
-                userExerciseProfile.deadWeight(), userExerciseProfile.deadReps()));
-        ability.getDead().setMuscleGroupType(CORE); // 현재 전신
-        ability.setOverhead(exerciseAnalysisService.analyzeExercise(150, userProfile.gender(), userProfile.weight(),
-                userExerciseProfile.overheadWeight(), userExerciseProfile.overheadReps()));
-        ability.setPushup(exerciseAnalysisService.analyzeExercise(132, userProfile.gender(), userProfile.weight(), 0,
-                userExerciseProfile.pushupReps()));
-        ability.getPushup().setMuscleGroupType(ARM); // 현재 가슴       
-        ability.setPullup(exerciseAnalysisService.analyzeExercise(90, userProfile.gender(), userProfile.weight(), 0,
-                userExerciseProfile.pullupReps()));
+        // 2. 분석 수행
+        ExerciseMuscleAbility ability = analyzeMuscleAbility(muscleScoreProfile, gender, userWeight);
 
-        // 운동 총 점수
-        int totalScore = (int) ((ability.getBench().getScore() + ability.getSquat().getScore()
-                + ability.getDead().getScore() + ability.getOverhead().getScore() + ability.getPushup().getScore()
-                + ability.getPullup().getScore()) / 6);
+        // 3. 총 점수 계산
+        int totalScore = calculateTotalScore(ability);
 
-        // 운동 수준
+        // 4. 운동 수준과 상위 퍼센트 계산
         String totalLevel = exerciseAnalysisService.getLevel(totalScore).getName();
-
-        // 상위 퍼센트
         double topPercent = 100 - (99.0 * totalScore / 120);
 
-        // 3대 중량
-        int bigThree = (int) (ability.getBench().getStrength() + ability.getSquat().getStrength()
-                + ability.getDead().getStrength());
+        // 5. 약한 부위 식별
+        List<MuscleProfile> weakMuscles = identifyWeakMuscles(ability);
 
-        // 상대적으로 약한 부위
-        List<MuscleProfile> weekMuscle = getWeekBodyPartList(ability);
-
-        return new ExerciseReportResponse(totalScore, totalLevel, topPercent, bigThree, ability, weekMuscle);
+        return new ExerciseReportResponse(totalScore, totalLevel, topPercent, ability, weakMuscles);
     }
 
-    // 상대적으로 약한 부위
-    private List<MuscleProfile> getWeekBodyPartList(ExerciseAbility ability) {
-        // 1. 모든 운동 프로필 수집
-        List<ExerciseAnalysisProfile> profiles = Arrays.asList(
-            ability.getBench(),
-            ability.getSquat(),
-            ability.getDead(),
-            ability.getOverhead(),
-            ability.getPushup(),
-            ability.getPullup()
+    private ExerciseMuscleAbility analyzeMuscleAbility(UserMuscleScoreProfileDTO profile, String gender, double userWeight) {
+        return new ExerciseMuscleAbility(
+            analyzeProfile(profile.core(), gender, userWeight),
+            analyzeProfile(profile.lowerBody(), gender, userWeight),
+            analyzeProfile(profile.back(), gender, userWeight),
+            analyzeProfile(profile.chest(), gender, userWeight),
+            analyzeProfile(profile.shoulder(), gender, userWeight),
+            analyzeProfile(profile.arm(), gender, userWeight)
         );
-    
-        // 2. 점수 기준 정렬
-        profiles.sort(Comparator.comparingDouble(ExerciseAnalysisProfile::getScore));
-    
-        // 3. 상위 두 가지와 점수 40 미만 부위 식별 (중복 제거)
-        Set<MuscleGroupType> targetMuscleGroups = new LinkedHashSet<>();
-        for (int i = 0; i < Math.min(2, profiles.size()); i++) {
-            targetMuscleGroups.add(profiles.get(i).getMuscleGroupType());
-        }
-        for (ExerciseAnalysisProfile profile : profiles) {
-            if (profile.getScore() < 40) {
-                targetMuscleGroups.add(profile.getMuscleGroupType());
-            }
-        }
-    
-        // 4. 식별된 근육 그룹에 대해 쿼리 수행 (기존 쿼리 활용)
-        List<MuscleProfile> result = new ArrayList<>();
-        for (MuscleGroupType muscleGroup : targetMuscleGroups) {
-            // 4-1. Strength 가져오기
-            String strength = exerciseMetaService.getStrengthByMuscleGroup(muscleGroup);
-    
-            // 4-2. 세부 근육 부위 가져오기
-            List<String> details = exerciseMetaService.getDetailMuscleByMuscleGroup(muscleGroup);
-    
-            // 4-3. DTO 생성 및 결과에 추가
-            MuscleProfile dto = new MuscleProfile();
-            dto.setStrength(strength);
-            dto.setDetails(details);
-            result.add(dto);
-        }
-    
-        return result;
     }
 
+    private ExerciseAnalysisProfile analyzeProfile(MuscleScore muscleScore, String gender, double userWeight) {
+        if (muscleScore == null || muscleScore.exerciseId() == null) {
+            return null;
+        }
+        return exerciseAnalysisService.analyzeExercise(
+            muscleScore.exerciseId(), gender, userWeight, muscleScore.weight(), muscleScore.reps()
+        );
+    }
+
+    private int calculateTotalScore(ExerciseMuscleAbility ability) {
+        return (int) Arrays.asList(
+            ability.core(), ability.lowerBody(), ability.back(),
+            ability.chest(), ability.shoulder(), ability.arm()
+        ).stream()
+            .mapToDouble(profile -> Optional.ofNullable(profile).map(ExerciseAnalysisProfile::getScore).orElse(0.0))
+            .average()
+            .orElse(0.0);
+    }
+
+    private List<MuscleProfile> identifyWeakMuscles(ExerciseMuscleAbility ability) {
+        // 1. 모든 프로필 수집 및 점수 정렬
+        List<ExerciseAnalysisProfile> sortedProfiles = Arrays.asList(
+            ability.core(), ability.lowerBody(), ability.back(),
+            ability.chest(), ability.shoulder(), ability.arm()
+        ).stream()
+            .filter(Objects::nonNull)
+            .sorted(Comparator.comparingDouble(ExerciseAnalysisProfile::getScore))
+            .collect(Collectors.toList());
+
+        // 2. 약한 부위 식별
+        Set<MuscleGroupType> weakGroups = new LinkedHashSet<>();
+        sortedProfiles.stream().limit(2).forEach(p -> weakGroups.add(p.getMuscleGroupType()));
+        sortedProfiles.stream().filter(p -> p.getScore() < 40).forEach(p -> weakGroups.add(p.getMuscleGroupType()));
+
+        // 3. 근육 정보 생성
+        return weakGroups.stream()
+            .map(this::createMuscleProfile)
+            .collect(Collectors.toList());
+    }
+
+    private MuscleProfile createMuscleProfile(MuscleGroupType muscleGroup) {
+        String strength = exerciseMetaService.getStrengthByMuscleGroup(muscleGroup);
+        List<String> details = exerciseMetaService.getDetailMuscleByMuscleGroup(muscleGroup);
+
+        MuscleProfile profile = new MuscleProfile();
+        profile.setStrength(strength);
+        profile.setDetails(details);
+        return profile;
+    }
 }

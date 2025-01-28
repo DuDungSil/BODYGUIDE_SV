@@ -29,22 +29,24 @@ public class GoogleUnlinkService {
     private String clientSecret;
 
     @Value("${spring.security.oauth2.client.provider.google.token-uri}")
-    private String  tokenUrl;
+    private String tokenUrl;
+
+    @Value("${google.unlink-uri}")
+    private String unlinkUrl;
 
     public void unlink(UUID userId) {
         // 리프레시 토큰 get
-        String refreshToken = userProviderTokenService.getRefreshToken(userId);
+        String socialRefreshToken = userProviderTokenService.getSocialRefreshToken(userId);
         // 예외처리 1. refreshToken이 null일 경우
-        //         2. 유효기간이 지난경우                   => 재인증 필요
 
         // 프로바이더로부터 액세스토큰 get
-        String AccessToken = getAccessToken(refreshToken);
+        String socialAccessToken = getSocialAccessToken(socialRefreshToken);
 
-        // 탈퇴
-        unlinkFromProvider(AccessToken);
+        // 구글 탈퇴
+        unlinkFromGoogle(socialAccessToken);
     }
     
-    private String getAccessToken(String refreshToken) {
+    private String getSocialAccessToken(String refreshToken) {
         try {
             // HTTP 요청을 생성 (Apache HttpClient, RestTemplate, 또는 WebClient를 사용할 수 있음)
             RestTemplate restTemplate = new RestTemplate();
@@ -77,11 +79,8 @@ public class GoogleUnlinkService {
         }
     }
     
-    private void unlinkFromProvider(String accessToken) {
+    private void unlinkFromGoogle(String accessToken) {
         try {
-            // Google Unlink URL
-            String unlinkUrl = "https://accounts.google.com/o/oauth2/revoke";
-    
             // HTTP 요청을 생성
             RestTemplate restTemplate = new RestTemplate();
     

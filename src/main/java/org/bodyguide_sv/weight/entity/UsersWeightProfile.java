@@ -1,7 +1,5 @@
 package org.bodyguide_sv.weight.entity;
 
-import static org.mockito.ArgumentMatchers.nullable;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 

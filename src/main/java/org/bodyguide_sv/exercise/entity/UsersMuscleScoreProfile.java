@@ -39,6 +39,8 @@ public class UsersMuscleScoreProfile {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "exerciseId", column = @Column(name = "core_exercise_id", columnDefinition = "SMALLINT")),
+        @AttributeOverride(name = "weight", column = @Column(name = "core_weight")),
+        @AttributeOverride(name = "reps", column = @Column(name = "core_reps")),
         @AttributeOverride(name = "score", column = @Column(name = "core_score")),
         @AttributeOverride(name = "updatedAt", column = @Column(name = "core_updated_at"))
     })
@@ -47,6 +49,8 @@ public class UsersMuscleScoreProfile {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "exerciseId", column = @Column(name = "lower_body_exercise_id", columnDefinition = "SMALLINT")),
+        @AttributeOverride(name = "weight", column = @Column(name = "lower_body_weight")),
+        @AttributeOverride(name = "reps", column = @Column(name = "lower_body_reps")),
         @AttributeOverride(name = "score", column = @Column(name = "lower_body_score")),
         @AttributeOverride(name = "updatedAt", column = @Column(name = "lower_body_updated_at"))
     })
@@ -55,6 +59,8 @@ public class UsersMuscleScoreProfile {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "exerciseId", column = @Column(name = "back_exercise_id", columnDefinition = "SMALLINT")),
+        @AttributeOverride(name = "weight", column = @Column(name = "back_weight")),
+        @AttributeOverride(name = "reps", column = @Column(name = "back_reps")),
         @AttributeOverride(name = "score", column = @Column(name = "back_score")),
         @AttributeOverride(name = "updatedAt", column = @Column(name = "back_updated_at"))
     })
@@ -63,6 +69,8 @@ public class UsersMuscleScoreProfile {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "exerciseId", column = @Column(name = "chest_exercise_id", columnDefinition = "SMALLINT")),
+        @AttributeOverride(name = "weight", column = @Column(name = "chest_weight")),
+        @AttributeOverride(name = "reps", column = @Column(name = "chest_reps")),
         @AttributeOverride(name = "score", column = @Column(name = "chest_score")),
         @AttributeOverride(name = "updatedAt", column = @Column(name = "chest_updated_at"))
     })
@@ -71,6 +79,8 @@ public class UsersMuscleScoreProfile {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "exerciseId", column = @Column(name = "shoulder_exercise_id", columnDefinition = "SMALLINT")),
+        @AttributeOverride(name = "weight", column = @Column(name = "shoulder_weight")),
+        @AttributeOverride(name = "reps", column = @Column(name = "shoulder_reps")),
         @AttributeOverride(name = "score", column = @Column(name = "shoulder_score")),
         @AttributeOverride(name = "updatedAt", column = @Column(name = "shoulder_updated_at"))
     })
@@ -79,6 +89,8 @@ public class UsersMuscleScoreProfile {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "exerciseId", column = @Column(name = "arm_exercise_id", columnDefinition = "SMALLINT")),
+        @AttributeOverride(name = "weight", column = @Column(name = "arm_weight")),
+        @AttributeOverride(name = "reps", column = @Column(name = "arm_reps")),
         @AttributeOverride(name = "score", column = @Column(name = "arm_score")),
         @AttributeOverride(name = "updatedAt", column = @Column(name = "arm_last_updated"))
     })

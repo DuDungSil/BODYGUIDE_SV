@@ -3,6 +3,7 @@ package org.bodyguide_sv.user.service;
 import java.util.UUID;
 
 import org.bodyguide_sv.auth.dto.OAuth2UserInfo;
+import org.bodyguide_sv.auth.enums.SocialProvider;
 import org.bodyguide_sv.user.entity.Users;
 import org.bodyguide_sv.user.event.UserRegisterEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,7 +25,7 @@ public class UserRegistrationService {
 
     // 유저 정보 로드
     public Users loadUser(OAuth2UserInfo oAuth2UserInfo) {
-        String provider = oAuth2UserInfo.provider();
+        SocialProvider provider = oAuth2UserInfo.provider();
         String providerId = oAuth2UserInfo.providerId();
         String name = oAuth2UserInfo.name();
         String email = oAuth2UserInfo.email();

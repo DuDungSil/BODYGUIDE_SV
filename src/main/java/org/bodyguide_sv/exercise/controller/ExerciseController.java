@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.bodyguide_sv.exercise.controller.request.ExerciseRecordGroupRequest;
-import org.bodyguide_sv.exercise.controller.request.UserExerciseStatsRequest;
 import org.bodyguide_sv.exercise.controller.response.ExerciseBigThreeProfileResponse;
 import org.bodyguide_sv.exercise.controller.response.ExerciseRecordGroupSliceResponse;
 import org.bodyguide_sv.exercise.controller.response.ExerciseReportResponse;
@@ -12,19 +11,16 @@ import org.bodyguide_sv.exercise.controller.response.ExerciseTotalPerformanceRes
 import org.bodyguide_sv.exercise.controller.response.ExerciseVolumeDailySliceResponse;
 import org.bodyguide_sv.exercise.controller.response.ExerciseVolumeMonthlySliceResponse;
 import org.bodyguide_sv.exercise.controller.response.ExerciseVolumeWeeklySliceResponse;
-import org.bodyguide_sv.exercise.controller.response.UserExerciseStatsResponse;
 import org.bodyguide_sv.exercise.service.ExerciseRecordService;
 import org.bodyguide_sv.exercise.service.ExerciseReportService;
 import org.bodyguide_sv.exercise.service.ExerciseVolumeService;
 import org.bodyguide_sv.exercise.service.UserBigThreeProfileService;
-import org.bodyguide_sv.exercise.service.UserExerciseStatsService;
 import org.bodyguide_sv.exercise.service.UserExerciseTotalPerformanceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +41,6 @@ public class ExerciseController {
     private final UserExerciseTotalPerformanceService userExerciseTotalPerformanceService;
     private final UserBigThreeProfileService userBigThreeProfileService;
     private final ExerciseRecordService exerciseRecordService;
-    private final UserExerciseStatsService userExerciseStatsService;
     private final ExerciseReportService exerciseReportService;
 
     @PostMapping("/record")
@@ -140,25 +135,6 @@ public class ExerciseController {
         ExerciseVolumeMonthlySliceResponse response = exerciseVolumeService
                 .getVolumeMonthlySliceResponse(userId, page, size);
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/stats")
-    @Operation(summary = "유저 운동 스탯 조회", description = "유저 운동 스탯 정보를 조회")
-    public ResponseEntity<UserExerciseStatsResponse> getExerciseProfile(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        UUID userId = UUID.fromString(userDetails.getUsername());
-        UserExerciseStatsResponse userExerciseProfileResponse = userExerciseStatsService
-                .getUserExerciseProfileResponse(userId);
-        return ResponseEntity.ok(userExerciseProfileResponse);
-    }
-
-    @PatchMapping("/stats")
-    @Operation(summary = "유저 운동 스탯 부분 업데이트", description = "유저 운동 스탯 정보를 부분 업데이트")
-    public ResponseEntity<String> updateExerciseProfile(@AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody UserExerciseStatsRequest request) {
-        UUID userId = UUID.fromString(userDetails.getUsername());
-        userExerciseStatsService.updateUserExerciseProfile(userId, request);
-        return ResponseEntity.ok("유저 운동 스탯 업데이트 완료");
     }
 
     @GetMapping("/analysis/report")

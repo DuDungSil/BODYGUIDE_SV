@@ -153,7 +153,7 @@ public class ExerciseQueryRepository {
                 .fetch();
     }
 
-    // 근육 그룹 그룹화해서 그룹의 최고점수 가져오기
+    // 근육 그룹 그룹화해서 그룹의 최고점수, 무게, 횟수 가져오기
     public List<MuscleGroupScoreDto> getMaxScoreAndExerciseIdByMuscleGroup(UUID userId) {
         QUsersExerciseBestScore bestScore = QUsersExerciseBestScore.usersExerciseBestScore;
         QExercise exercise = QExercise.exercise;
@@ -165,6 +165,8 @@ public class ExerciseQueryRepository {
         List<Tuple> results = queryFactory.select(
                 muscleGroup.groupId,
                 bestScore.id.exerciseId,
+                bestScore.scoreWeight,
+                bestScore.scoreReps,
                 bestScore.score)
                 .from(bestScore)
                 .join(exercise).on(bestScore.id.exerciseId.eq(exercise.exerId))
@@ -185,6 +187,8 @@ public class ExerciseQueryRepository {
                 .map(tuple -> new MuscleGroupScoreDto(
                         MuscleGroupType.fromId(tuple.get(muscleGroup.groupId)), // groupId -> MuscleGroupType
                         tuple.get(bestScore.id.exerciseId), // exerciseId
+                        tuple.get(bestScore.scoreWeight),
+                        tuple.get(bestScore.scoreReps),
                         tuple.get(bestScore.score) // maxScore
                 ))
                 .toList();
