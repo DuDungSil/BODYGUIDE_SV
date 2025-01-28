@@ -2,6 +2,7 @@ package org.bodyguide_sv.user.service;
 
 import java.util.UUID;
 
+import org.bodyguide_sv.auth.enums.SocialProvider;
 import org.bodyguide_sv.common.errorHandler.ErrorCode;
 import org.bodyguide_sv.user.Exception.UserException;
 import org.bodyguide_sv.user.entity.Users;
@@ -37,7 +38,7 @@ public class UserService {
     }
 
     // 프로바이더와 ID로 유저 검색
-    public Users getUserByProvider(String provider, String providerId) {
+    public Users getUserByProvider(SocialProvider provider, String providerId) {
         return usersRepository.findByProviderAndProviderId(provider, providerId)
                 .orElse(null); // Optional 사용하지 않고 null 반환
     }

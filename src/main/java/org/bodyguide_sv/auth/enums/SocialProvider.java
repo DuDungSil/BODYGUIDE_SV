@@ -14,4 +14,14 @@ public enum SocialProvider {
         this.isSaveRefreshToken = isSaveRefreshToken;
     }
 
+    // 코드값으로 SocialProvider 찾기
+    public static SocialProvider fromCode(String providerName) {
+        for (SocialProvider provider : values()) {
+            if (provider.providerName.equals(providerName)) {
+                return provider;
+            }
+        }
+        throw new IllegalArgumentException("Invalid code for SocialProvider: " + providerName);
+    }
+
 }

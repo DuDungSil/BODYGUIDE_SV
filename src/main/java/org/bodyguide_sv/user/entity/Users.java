@@ -2,6 +2,7 @@ package org.bodyguide_sv.user.entity;
 
 import java.util.UUID;
 
+import org.bodyguide_sv.auth.enums.SocialProvider;
 import org.bodyguide_sv.user.enums.Role;
 
 import jakarta.persistence.Column;
@@ -34,10 +35,11 @@ public class Users{
 
     @Enumerated(EnumType.STRING) // Enum을 문자열로 저장
     @Column(name = "role")
-    private Role role = Role.USER; // 기본값을 USER로 설정
+    private Role role; 
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "provider")
-    private String provider;
+    private SocialProvider provider;
 
     @Column(name = "provider_id")
     private String providerId;

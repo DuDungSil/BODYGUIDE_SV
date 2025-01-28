@@ -41,11 +41,4 @@ public interface UsersExerciseSetHistoryRepository extends JpaRepository<UsersEx
         @Param("groupId") int groupId
     );
 
-    @Query("SELECT MAX(h.score) FROM UsersExerciseSetHistory h " +
-       "WHERE h.userId = :userId AND h.exerciseId = :exerciseId")
-    Double findMaxScoreByUserIdAndExerciseId(
-        @Param("userId") UUID userId,
-        @Param("exerciseId") int exerciseId
-    );
-
 }

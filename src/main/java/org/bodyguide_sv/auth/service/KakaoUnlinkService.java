@@ -1,9 +1,5 @@
 package org.bodyguide_sv.auth.service;
 
-import java.util.Map;
-import java.util.UUID;
-
-import org.bodyguide_sv.user.service.UserSocialTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,72 +16,35 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class KakaoUnlinkService {
 
-    private final UserSocialTokenService userProviderTokenService;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private String clientId;
+    @Value("${kakao.admin-key}")
+    private String adminKey;
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
-    private String clientSecret;
+    @Value("${kakao.unlink-uri}")
+    private String unlinkUrl;
 
-    @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
-    private String tokenUrl;
+    public void unlink(String providerId) {
 
-    public void unlink(UUID userId) {
-        // 리프레시 토큰 가져오기
-        String refreshToken = userProviderTokenService.getRefreshToken(userId);
+        // 카카오 API를 통해 연결 끊기 ( 어드민 키 이용 )
+        unlinkFromKakao(providerId);
 
-        if (refreshToken == null) {
-            throw new RuntimeException("Refresh token not found for user ID: " + userId);
-        }
-
-        // 액세스 토큰 갱신
-        String accessToken = getAccessToken(refreshToken);
-
-        // 카카오 API를 통해 연결 끊기
-        unlinkFromProvider(accessToken);
     }
 
-    private String getAccessToken(String refreshToken) {
+    private void unlinkFromKakao(String providerId) {
         try {
-            // 요청 파라미터 설정
-            MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-            requestParams.add("client_id", clientId);
-            requestParams.add("client_secret", clientSecret);
-            requestParams.add("refresh_token", refreshToken);
-            requestParams.add("grant_type", "refresh_token");
 
             // HTTP 요청 헤더 설정
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            headers.add("Authorization", "KakaoAK " + adminKey); // KakaoAK 키 설정
 
-            HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestParams, headers);
+            // HTTP 요청 본문 설정
+            MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+            body.add("target_id_type", "user_id");
+            body.add("target_id", providerId);
 
-            // 토큰 갱신 요청
-            ResponseEntity<Map> response = restTemplate.postForEntity(tokenUrl, requestEntity, Map.class);
-
-            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                return (String) response.getBody().get("access_token");
-            } else {
-                throw new RuntimeException("Failed to refresh access token: " + response.getStatusCode());
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error occurred while refreshing access token", e);
-        }
-    }
-
-    private void unlinkFromProvider(String accessToken) {
-        try {
-            // 카카오 Unlink API URL
-            String unlinkUrl = "https://kapi.kakao.com/v1/user/unlink";
-
-            // HTTP 요청 헤더 설정
-            HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth(accessToken); // Bearer 토큰 설정
-
-            HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+            HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
 
             // API 요청
             ResponseEntity<String> response = restTemplate.postForEntity(unlinkUrl, requestEntity, String.class);
@@ -100,4 +59,5 @@ public class KakaoUnlinkService {
             throw new RuntimeException("Error occurred while unlinking provider", e);
         }
     }
+
 }

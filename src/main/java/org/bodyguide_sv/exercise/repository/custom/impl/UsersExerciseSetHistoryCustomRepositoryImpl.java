@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import org.bodyguide_sv.exercise.dto.MaxScoreAndWeightAndRepsDTO;
 import org.bodyguide_sv.exercise.dto.MaxWeightAndRepsDTO;
 import org.bodyguide_sv.exercise.entity.QUsersExerciseSetHistory;
 import org.bodyguide_sv.exercise.entity.UsersExerciseSetHistory;
@@ -28,16 +29,30 @@ public class UsersExerciseSetHistoryCustomRepositoryImpl implements UsersExercis
         QUsersExerciseSetHistory history = QUsersExerciseSetHistory.usersExerciseSetHistory;
 
         return queryFactory.select(
-                                Projections.constructor(MaxWeightAndRepsDTO.class, history.weight, history.reps)
-                            )
-                           .from(history)
-                           .where(
-                               history.userId.eq(userId),
-                               history.exerciseId.eq(exerciseId)
-                           )
-                           .orderBy(history.weight.desc(), history.reps.desc())
-                           .limit(1)
-                           .fetchOne();
+                Projections.constructor(MaxWeightAndRepsDTO.class, history.weight, history.reps))
+                .from(history)
+                .where(
+                        history.userId.eq(userId),
+                        history.exerciseId.eq(exerciseId))
+                .orderBy(history.weight.desc(), history.reps.desc())
+                .limit(1)
+                .fetchOne();
+    }
+    
+    @Override
+    public MaxScoreAndWeightAndRepsDTO findMaxScoreByUserIdAndExerciseId(UUID userId, int exerciseId) {
+        QUsersExerciseSetHistory history = QUsersExerciseSetHistory.usersExerciseSetHistory;
+
+        return queryFactory.select(
+            Projections.constructor(MaxScoreAndWeightAndRepsDTO.class, history.weight, history.reps, history.score))
+            .from(history)
+            .where(
+                    history.userId.eq(userId),
+                    history.exerciseId.eq(exerciseId))
+            .orderBy(history.score.desc())
+            .limit(1)
+            .fetchOne();
+
     }
 
     @Override

@@ -37,6 +37,12 @@ public class UsersExerciseBestScore {
     @Column(name = "weight_updated_at") 
     private LocalDateTime weightUpdatedAt;
 
+    @Column(name = "score_weight") 
+    private Double scoreWeight;
+
+    @Column(name = "score_reps") 
+    private int scoreReps;
+
     @Column(name = "score") 
     private Double score;
 
@@ -46,10 +52,12 @@ public class UsersExerciseBestScore {
     public static UsersExerciseBestScore createNew(UUID userId, int exerciseId) {
         return UsersExerciseBestScore.builder()
             .id(new UsersExerciseBestScoreId(userId, exerciseId))
-            .weight(0.0) // default weight
-            .reps(0)     // default reps
+            .weight(0.0)
+            .reps(0)    
             .weightUpdatedAt(LocalDateTime.now())
-            .score(0.0)  // default score
+            .scoreWeight(0.0)
+            .scoreReps(0)
+            .score(0.0) 
             .scoreUpdatedAt(LocalDateTime.now())
             .build();
     }
@@ -60,7 +68,9 @@ public class UsersExerciseBestScore {
         this.weightUpdatedAt = LocalDateTime.now();
     }
 
-    public void updateScore(Double score) {
+    public void updateScore(Double scoreWeight, int scoreReps, Double score) {
+        this.scoreWeight = scoreWeight;
+        this.scoreReps = scoreReps;
         this.score = score;
         this.scoreUpdatedAt = LocalDateTime.now();
     }

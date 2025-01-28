@@ -1,6 +1,5 @@
 package org.bodyguide_sv.user.service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.bodyguide_sv.user.entity.UsersSocialToken;
@@ -22,16 +21,13 @@ public class UserSocialTokenService {
             throw new IllegalArgumentException("userId must not be null");
         }
 
-        UsersSocialToken usersProviderToken = UsersSocialToken.builder()
-                                        .userId(userId)
-                                        .updatedAt(LocalDateTime.now())
-                                        .build();
+        UsersSocialToken usersProviderToken = UsersSocialToken.create(userId);
 
         usersSocialTokenRepository.save(usersProviderToken);
     }
 
     // 리프레시 토큰 가져오기
-    public String getRefreshToken(UUID userId) {
+    public String getSocialRefreshToken(UUID userId) {
 
         UsersSocialToken usersProviderToken = usersSocialTokenRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User provider token not found with user_id: " + userId));
@@ -42,10 +38,9 @@ public class UserSocialTokenService {
     // 리프레시 토큰 업데이트
     public void updateRefreshToken(UUID userId, String newRefreshToken) {
         UsersSocialToken usersProviderToken = usersSocialTokenRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("User provider token not found with user_id: " + userId));
+                .orElseGet(() -> UsersSocialToken.create(userId));
 
         usersProviderToken.setRefreshToken(newRefreshToken);
-        // usersProviderToken.setExpiresAt(expiresAt);
         usersSocialTokenRepository.save(usersProviderToken);
     }
 
@@ -55,7 +50,6 @@ public class UserSocialTokenService {
                 .orElseThrow(() -> new RuntimeException("User provider token not found with user_id: " + userId));
 
         usersProviderToken.setRefreshToken(null);
-        usersProviderToken.setExpiresAt(null);
         usersSocialTokenRepository.save(usersProviderToken);
     }
 

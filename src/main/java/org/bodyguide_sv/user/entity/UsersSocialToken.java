@@ -32,13 +32,17 @@ public class UsersSocialToken {
     @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
 
-    @Column(name = "expires_at")
-    private LocalDateTime expiresAt;
-
     @Column(name = "refresh_token")
     private String refreshToken;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public static UsersSocialToken create(UUID userId) {
+        return UsersSocialToken.builder()
+                .userId(userId)
+                .updatedAt(LocalDateTime.now())
+                .build();
+    }
 
 }
