@@ -23,7 +23,7 @@ import org.bodyguide_sv.exercise.event.ExerciseRecordChangedWithDateEvent;
 import org.bodyguide_sv.exercise.event.ExerciseRecordChangedWithIdsEvent;
 import org.bodyguide_sv.exercise.event.NewExerciseRecordSavedEvent;
 import org.bodyguide_sv.exercise.repository.UsersExerciseSetHistoryRepository;
-import org.bodyguide_sv.exercise.repository.custom.ExerciseQueryRepository;
+import org.bodyguide_sv.exercise.repository.custom.UsersExerciseSetHistoryCustomRepository;
 import org.bodyguide_sv.user.dto.UserProfileDTO;
 import org.bodyguide_sv.user.service.UserProfileService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class ExerciseRecordService {
     
     private final ApplicationEventPublisher eventPublisher;
-	private final ExerciseQueryRepository exerciseQueryRepository;
+    private final UsersExerciseSetHistoryCustomRepository usersExerciseSetHistoryCustomRepository;
     private final UsersExerciseSetHistoryRepository usersExerciseSetHistoryRepository; 
     private final ExerciseAnalysisService exerciseAnalysisService;
     private final UserProfileService userProfileService;
@@ -45,15 +45,16 @@ public class ExerciseRecordService {
     // 최근 n일치 ExerciseRecordGroup 조회
     public ExerciseRecordGroupSliceResponse fetchRecentDaysExerciseRecords(UUID userId, int days, int page, int size) {
 
-        ExerciseRecordGroupListResponseWithHasNext listWithHasNext = exerciseQueryRepository.fetchRecentDaysExerciseRecords(userId, days, page, size);
+        ExerciseRecordGroupListResponseWithHasNext listWithHasNext = usersExerciseSetHistoryCustomRepository.fetchRecentDaysExerciseRecords(userId, days, page, size);
 
         return new ExerciseRecordGroupSliceResponse(page, size, listWithHasNext.hasNext(), toGroupRecords(listWithHasNext.recordGroupList()));
     }
 
+    
     // 특정 yyyy년 mm월 조회 
     public ExerciseRecordGroupSliceResponse fetchMonthlyExerciseRecords(UUID userId, int year, int month, int page, int size) {
 
-        ExerciseRecordGroupListResponseWithHasNext listWithHasNext = exerciseQueryRepository.fetchMonthlyExerciseRecords(userId, year,
+        ExerciseRecordGroupListResponseWithHasNext listWithHasNext = usersExerciseSetHistoryCustomRepository.fetchMonthlyExerciseRecords(userId, year,
                 month, page, size);
 
         return new ExerciseRecordGroupSliceResponse(page, size, listWithHasNext.hasNext(), toGroupRecords(listWithHasNext.recordGroupList()));

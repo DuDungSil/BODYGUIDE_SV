@@ -42,12 +42,13 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                             authToken.getAuthorizedClientRegistrationId(),
                             authToken.getName()
                     );
-
-            // 리프레시 토큰 가져오기
-            String socialRefreshToken = authorizedClient.getRefreshToken().getTokenValue();
-
-            // 필요 시 DB 저장
-            userSocialTokenService.updateRefreshToken(userId, socialRefreshToken);
+            
+            if (authorizedClient.getRefreshToken() != null) {
+                // 소셜 리프레시 토큰 가져오기
+                String socialRefreshToken = authorizedClient.getRefreshToken().getTokenValue();
+                // db에 소셜 리프레시 토큰 저장
+                userSocialTokenService.updateRefreshToken(userId, socialRefreshToken);
+            }
 
             // TokenResponse 생성
             TokenResponse tokenResponse = tokenService.generateTokenResponse(authentication);

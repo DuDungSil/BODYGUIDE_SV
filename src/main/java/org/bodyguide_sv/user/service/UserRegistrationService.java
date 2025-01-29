@@ -63,8 +63,7 @@ public class UserRegistrationService {
         userSocialTokenService.createUserProviderToken(userId);
 
         // 이벤트 발행
-        UserRegisterEvent event = new UserRegisterEvent(userId);
-        eventPublisher.publishEvent(event);
+        eventPublisher.publishEvent(new UserRegisterEvent(userId));
 
         return user;
     }
