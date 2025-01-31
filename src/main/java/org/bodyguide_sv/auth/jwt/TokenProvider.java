@@ -12,7 +12,7 @@ import static org.bodyguide_sv.common.errorHandler.ErrorCode.INVALID_JWT_SIGNATU
 import static org.bodyguide_sv.common.errorHandler.ErrorCode.INVALID_TOKEN;
 import static org.bodyguide_sv.common.errorHandler.ErrorCode.USER_NOT_FOUND;
 import org.bodyguide_sv.user.Exception.UserException;
-import org.bodyguide_sv.user.entity.Users;
+import org.bodyguide_sv.user.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -168,15 +168,15 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, refreshToken, authorities);
     }
 
-    // 유저 엔티티로 인증 객체 생성
-    public Authentication createAuthenticationFromUser(Users user) {
-        if (user == null) {
+    // 유저DTO로 인증 객체 생성
+    public Authentication createAuthenticationFromUser(UserDTO userDTO) {
+        if (userDTO == null) {
             throw new UserException(USER_NOT_FOUND);
         }
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().name()));
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userDTO.role().name()));
 
         return new UsernamePasswordAuthenticationToken(
-                user.getUserId().toString(),
+                userDTO.userId().toString(),
                 null,
                 authorities);
     }

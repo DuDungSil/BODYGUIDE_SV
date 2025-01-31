@@ -8,12 +8,12 @@ import org.bodyguide_sv.auth.controller.response.TokenResponse;
 import org.bodyguide_sv.auth.service.InitializeService;
 import org.bodyguide_sv.auth.service.LogoutService;
 import org.bodyguide_sv.auth.service.OAuthCallbackService;
+import org.bodyguide_sv.auth.service.RecoveryAccountService;
+import org.bodyguide_sv.auth.service.RecoveryCallbackService;
+import org.bodyguide_sv.auth.service.RecreateAccountService;
 import org.bodyguide_sv.auth.service.RefreshService;
 import org.bodyguide_sv.auth.service.TestTokenService;
-import org.bodyguide_sv.auth.service.TokenService;
 import org.bodyguide_sv.auth.service.UnlinkService;
-import org.bodyguide_sv.user.service.UserProfileService;
-import org.bodyguide_sv.user.service.UserSocialTokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,21 +41,20 @@ public class AuthController {
 
     private final TestTokenService testTokenService; // 개발용
 
+    private final RecoveryAccountService recoveryAccountService;
+    private final RecreateAccountService recreateAccountService;
     private final InitializeService initializeService;
     private final LogoutService logoutService;
     private final RefreshService refreshService;
     private final UnlinkService unlinkService;
     private final OAuthCallbackService oAuthCallbackService;
+    private final RecoveryCallbackService recoveryCallbackService;
 
     @GetMapping("/test")
     @Operation(summary = "테스트용 액세스 토큰 발급 ( 인증 X )", description = "테스트용 액세스 토큰 발급")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> generateTestAccessToken() {
-
-        // 액세스 토큰 생성
         String accessToken = testTokenService.getTestAccessToken();
-
-        // 액세스 토큰 반환
         return ResponseEntity.ok(accessToken);
     }
 
@@ -67,6 +66,15 @@ public class AuthController {
             HttpServletResponse response
     ) {
         oAuthCallbackService.processCallback(accessToken, refreshToken, response);
+    }
+
+    @GetMapping("/callback/recovery")
+    @Operation(summary = "OAuth 소셜 로그인 계정 복구 callback", description = "계정 복구시 액세스토큰 응답")
+    public void handleOAuthRecoveryCallback(
+            @RequestParam("access_token") String accessToken,
+            HttpServletResponse response
+    ) {
+        recoveryCallbackService.processCallback(accessToken, response);
     }
 
     @PostMapping("/refresh")
@@ -101,4 +109,19 @@ public class AuthController {
         return ResponseEntity.ok("회원 탈퇴 성공");
     }
 
+    @GetMapping("/recovery/confirm")
+    @Operation(summary = "계정 복구 동의", description = "이전 계정으로 복구 한 후 TokenResponse 반환")
+    public ResponseEntity<TokenResponse> accountRecovery(@AuthenticationPrincipal UserDetails userDetails) {
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        TokenResponse response = recoveryAccountService.recoveryAccount(userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/recovery/reject")
+    @Operation(summary = "계정 복구 거부 ( 새로운 계정 생성 )", description = "새로운 계정 생성 후 재 로그인")
+    public ResponseEntity<String> accountCreate(@AuthenticationPrincipal UserDetails userDetails) {
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        recreateAccountService.recreateAccount(userId);
+        return ResponseEntity.ok("기존 계정 삭제 완료. 다시 로그인해 주세요");
+    }
 }

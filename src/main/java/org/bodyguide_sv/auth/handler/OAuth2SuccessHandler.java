@@ -3,6 +3,7 @@ package org.bodyguide_sv.auth.handler;
 import java.util.UUID;
 
 import org.bodyguide_sv.auth.controller.response.TokenResponse;
+import org.bodyguide_sv.auth.dto.PrincipalDetails;
 import org.bodyguide_sv.auth.service.TokenService;
 import org.bodyguide_sv.user.service.UserSocialTokenService;
 import org.springframework.security.core.Authentication;
@@ -29,20 +30,24 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException, java.io.IOException {
-                
-        if (authentication instanceof OAuth2AuthenticationToken authToken) {
 
-            // 사용자 ID 추출 (OAuth2AuthenticationToken의 이름 또는 속성에서 가져오기)
-            String userIdString = authToken.getName(); // 일반적으로 OAuth2 인증의 "sub" (사용자 고유 ID)
-            UUID userId = UUID.fromString(userIdString);
+        if (authentication.getPrincipal() instanceof PrincipalDetails principalDetails) {
+
+            UUID userId = principalDetails.getUserDTO().userId();
+
+            // 유저가 delete 상태일 경우
+            if (principalDetails.isDeleted()) {
+                String accessToken = tokenService.generateAccessTokenByUserId(userId);
+                // 리디렉션
+                redirectRecoveryCallback(response, accessToken);
+                return;
+            }
 
             // 클라이언트 ID와 사용자를 기반으로 OAuth2AuthorizedClient 가져오기
-            OAuth2AuthorizedClient authorizedClient =
-                    authorizedClientService.loadAuthorizedClient(
-                            authToken.getAuthorizedClientRegistrationId(),
-                            authToken.getName()
-                    );
-            
+            OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
+                    ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId(),
+                    authentication.getName());
+
             if (authorizedClient.getRefreshToken() != null) {
                 // 소셜 리프레시 토큰 가져오기
                 String socialRefreshToken = authorizedClient.getRefreshToken().getTokenValue();
@@ -53,18 +58,44 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             // TokenResponse 생성
             TokenResponse tokenResponse = tokenService.generateTokenResponse(authentication);
 
-            // 클라이언트가 요청할 URL 설정
-            String redirectUrl = String.format(
-                    "/auth/callback?access_token=%s&refresh_token=%s",
-                    tokenResponse.accessToken(),
-                    tokenResponse.refreshToken()
-            );
-
-            // 리다이렉션
-            response.sendRedirect(redirectUrl);
+            // 리디렉션
+            redirectSuccessCallback(response, tokenResponse);
 
         } else {
             throw new IllegalArgumentException("Authentication is not OAuth2AuthenticationToken");
         }
+    }
+    
+    private void redirectSuccessCallback(HttpServletResponse response, TokenResponse tokenResponse) throws IOException {
+
+        // 클라이언트가 요청할 URL 설정
+        String redirectUrl = String.format(
+                "/auth/callback?access_token=%s&refresh_token=%s",
+                tokenResponse.accessToken(),
+                tokenResponse.refreshToken());
+
+        // 리다이렉션
+        try {
+            response.sendRedirect(redirectUrl);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    
+    private void redirectRecoveryCallback(HttpServletResponse response, String accessToken) throws IOException {
+
+        // 클라이언트가 요청할 URL 설정
+        String redirectUrl = String.format(
+                "/auth/callback/recovery?access_token=%s",
+                accessToken);
+
+        // 리다이렉션
+        try {
+            response.sendRedirect(redirectUrl);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

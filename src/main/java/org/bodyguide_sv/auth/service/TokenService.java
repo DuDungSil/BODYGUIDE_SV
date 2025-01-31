@@ -12,7 +12,7 @@ import static org.bodyguide_sv.common.errorHandler.ErrorCode.TOKEN_MISMATCHED;
 import static org.bodyguide_sv.common.errorHandler.ErrorCode.TOKEN_NOT_FOUND;
 import org.bodyguide_sv.common.redis.entity.Token;
 import org.bodyguide_sv.common.redis.repository.TokenRepository;
-import org.bodyguide_sv.user.entity.Users;
+import org.bodyguide_sv.user.dto.UserDTO;
 import org.bodyguide_sv.user.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -126,7 +126,7 @@ public class TokenService {
     public TokenResponse upgradeUserRoleWithToken(UUID userID) {
 
         // 유저 권한 변경 
-        Users updatedUser = userService.upgradeUserRole(userID);
+        UserDTO updatedUser = userService.upgradeUserRole(userID);
 
         // 새로운 토큰 발급
         Authentication authentication = tokenProvider.createAuthenticationFromUser(updatedUser);
@@ -139,6 +139,24 @@ public class TokenService {
         return new TokenResponse(newAccessToken, newRefreshToken);
     }
     
+    // userDTO로 토큰 Response 반환
+    public TokenResponse generateTokenResponseByUserDTO(UserDTO userDTO) {
+
+        Authentication authentication = tokenProvider.createAuthenticationFromUser(userDTO);
+        String newAccessToken = tokenProvider.generateAccessToken(authentication);
+        String newRefreshToken = tokenProvider.generateRefreshToken(authentication);
+        
+        return new TokenResponse(newAccessToken, newRefreshToken);
+    }
+
+    // userId로 액세스 토큰 생성
+    @Transactional
+    public String generateAccessTokenByUserId(UUID userId) {
+        UserDTO userDTO = userService.getUserById(userId);
+        Authentication authentication = tokenProvider.createAuthenticationFromUser(userDTO);
+        return tokenProvider.generateAccessToken(authentication);
+    }
+
     // 액세스토큰으로부터 userId 반환
     public UUID getUserIdFromAccessToken(String accessToken) {
         String sub = tokenProvider.getSubjectFromAccessToken(accessToken);

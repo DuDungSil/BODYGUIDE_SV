@@ -11,10 +11,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public record PrincipalDetails(
-        UserDTO user,
+        UserDTO userDTO,
         Map<String, Object> attributes,
         String attributeKey) implements OAuth2User, UserDetails {
 
+    public UserDTO getUserDTO() {
+        return userDTO;
+    }
+
+    public Boolean isDeleted() {
+        return userDTO.isDelete(); 
+    }
+        
     @Override
     public String getName() {
         return attributes.get(attributeKey).toString();
@@ -28,7 +36,7 @@ public record PrincipalDetails(
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(
-                new SimpleGrantedAuthority(user.role().getKey()));
+                new SimpleGrantedAuthority(userDTO.role().getKey()));
     }
 
     @Override
@@ -38,7 +46,7 @@ public record PrincipalDetails(
 
     @Override
     public String getUsername() {
-        return user.userId().toString();
+        return userDTO.userId().toString();
     }
 
     @Override

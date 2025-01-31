@@ -11,7 +11,8 @@ public record UserDTO(
     SocialProvider provider,
     String providerId,
     String email,
-    String name
+    String name,
+    Boolean isDelete
 ) {
     
 }

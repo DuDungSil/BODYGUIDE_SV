@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.bodyguide_sv.auth.enums.SocialProvider;
 import org.bodyguide_sv.auth.exception.AuthException;
 import static org.bodyguide_sv.common.errorHandler.ErrorCode.ILLEGAL_REGISTRATION_PROVIDER;
-import org.bodyguide_sv.user.entity.Users;
+import org.bodyguide_sv.user.dto.UserDTO;
 import org.bodyguide_sv.user.service.UserService;
 import org.bodyguide_sv.user.service.UserSocialTokenService;
 import org.springframework.stereotype.Service;
@@ -27,9 +27,9 @@ public class UnlinkService {
     @Transactional
     public void unlink(UUID userId) {
         // povider, provider id 확인
-        Users user = userService.getUserById(userId);
-        SocialProvider provider = user.getProvider();
-        String providerId = user.getProviderId();
+        UserDTO user = userService.getUserById(userId);
+        SocialProvider provider = user.provider();
+        String providerId = user.providerId();
 
         // provider 서비스 연결 끊기
         switch (provider) {

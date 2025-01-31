@@ -15,7 +15,7 @@ public class UserSocialTokenService {
     private final UsersSocialTokenRepository usersSocialTokenRepository;
 
     // db 생성
-    public void createUserProviderToken(UUID userId) {
+    public void createUserSocialToken(UUID userId) {
 
         if (userId == null) {
             throw new IllegalArgumentException("userId must not be null");

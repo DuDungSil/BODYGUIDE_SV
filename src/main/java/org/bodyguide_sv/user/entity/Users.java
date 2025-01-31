@@ -57,9 +57,26 @@ public class Users{
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    public Boolean isDeleted() {
+        return isDelete;
+    }
+
+    public void hardDeleteUser() {
+        this.role = Role.GUEST;
+        this.provider = null;
+        this.providerId = null;
+        this.email = null;
+        this.name = null;
+    }
+
     public void deleteUser() {
         this.isDelete = true;
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void recoveryUser() {
+        this.isDelete = false;
+        this.deletedAt = null;
     }
 
     public void upgradeRole() {

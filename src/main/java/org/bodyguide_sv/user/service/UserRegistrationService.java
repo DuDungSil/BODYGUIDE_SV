@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.bodyguide_sv.auth.enums.SocialProvider;
 import org.bodyguide_sv.user.dto.OAuth2UserInfo;
 import org.bodyguide_sv.user.dto.UserDTO;
-import org.bodyguide_sv.user.entity.Users;
 import org.bodyguide_sv.user.event.UserRegisterEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class UserRegistrationService {
     private final UserMetaService userMetaService;
     private final UserSocialTokenService userSocialTokenService;
 
-    // 유저 정보 로드
+    // 유저 정보 로드 
     public UserDTO loadUser(OAuth2UserInfo oAuth2UserInfo) {
         SocialProvider provider = oAuth2UserInfo.provider();
         String providerId = oAuth2UserInfo.providerId();
@@ -32,40 +31,32 @@ public class UserRegistrationService {
         String email = oAuth2UserInfo.email();
 
         // 유저가 존재할 경우 로드, 없으면 회원가입
-        Users user = userService.getUserByProvider(provider, providerId);
-        user = user != null ? user : registUser(oAuth2UserInfo);
+        UserDTO userDTO = userService.getUserByProvider(provider, providerId);
+        userDTO = userDTO != null ? userDTO : registUser(oAuth2UserInfo);
 
         // 유저 이메일, 이름 검증 후 다를 시 업데이트
-        if ( !user.getName().equals(name) || !user.getEmail().equals(email) ) {
-            user = userService.updateUserNameAndEmail(user.getUserId(), name, email);
+        if ( !userDTO.name().equals(name) || !userDTO.email().equals(email) ) {
+            userDTO = userService.updateUserNameAndEmail(userDTO.userId(), name, email);
         }
 
-        return new UserDTO(
-                user.getUserId(),
-                user.getRole(),
-                user.getProvider(),
-                user.getProviderId(),
-                user.getEmail(),
-                user.getName()
-            );
+        return userDTO;
     }
 
     // 회원가입
     @Transactional
-    private Users registUser(OAuth2UserInfo oAuth2UserInfo) {
+    private UserDTO registUser(OAuth2UserInfo oAuth2UserInfo) {
         // 프로필, 메타도 같이 생성 (트랜잭션 처리)
-        Users user = oAuth2UserInfo.toEntity();
-        user = userService.saveUser(user);
-        UUID userId = user.getUserId();
+        UserDTO userDTO = userService.createUser(oAuth2UserInfo);
+        UUID userId = userDTO.userId();
 
         userProfileService.createUserProfile(userId);
         userMetaService.createUsersMeta(userId);
-        userSocialTokenService.createUserProviderToken(userId);
+        userSocialTokenService.createUserSocialToken(userId);
 
         // 이벤트 발행
         eventPublisher.publishEvent(new UserRegisterEvent(userId));
 
-        return user;
+        return userDTO;
     }
 
 }
