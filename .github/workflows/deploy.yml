@@ -26,19 +26,35 @@ jobs:
       run: |
         mkdir -p config
         echo "${{ secrets.PROPERTIE }}" > config/application.yml
+    
+    # 4. Gradle 캐시 설정
+    - name: Cache Gradle packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
-    # 4. Gradle로 빌드
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.gradle/wrapper
+        key: gradle-wrapper-${{ runner.os }}-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+        restore-keys: gradle-wrapper-${{ runner.os }}-
+
+    # 5. Gradle로 빌드
     - name: Build with Gradle
       run: |
         chmod +x gradlew
-        ./gradlew clean build -x test
+        ./gradlew clean build -x test --parallel --build-cache --configure-on-demand --no-daemon
 
-    # 5. Docker 이미지 빌드
+    # 6. Docker 이미지 빌드
     - name: Build Docker Image
       run: |
         docker build -t dudungsil540/bodyguide-sv:latest .
 
-    # 6. Docker Hub로 푸시
+    # 7. Docker Hub로 푸시
     - name: Push Docker Image to Docker Hub
       uses: docker/login-action@v2
       with:
@@ -47,7 +63,7 @@ jobs:
     - run: |
         docker push dudungsil540/bodyguide-sv:latest
 
-    # 7. 배포 (API 서버만 업데이트)
+    # 8. 배포 (API 서버만 업데이트)
     - name: Execute remote command over SSH
       uses: appleboy/ssh-action@v0.1.8
       with:
