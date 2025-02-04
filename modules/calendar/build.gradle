@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':common')
+    implementation project(':exercise')
+    implementation project(':nutrition')
+    implementation project(':weight')
+}

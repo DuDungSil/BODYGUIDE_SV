@@ -1,0 +1,22 @@
+dependencies {
+    implementation project(':common')
+    implementation project(':auth')
+    implementation project(':user')
+    implementation project(':exercise')
+    implementation project(':weight')
+    implementation project(':nutrition')
+    implementation project(':activity')
+    implementation project(':calendar')
+    implementation project(':notification')
+    implementation project(':recommend')
+    implementation project(':coupang')
+    implementation project(':cart')
+    implementation project(':web')
+    // implementation project(':api-gateway')
+}
+
+application {
+
+    mainClass.set("org.bodyguide_sv.AppApplication")
+    
+}
