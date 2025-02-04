@@ -15,6 +15,10 @@ application {
     mainClass.set("org.bodyguide_sv.AppApplication")
 }
 
+bootJar {
+    mainClass.set("org.bodyguide_sv.AppApplication")
+}
+
 sourceSets {
     main {
         java.srcDirs("app/src/main/resources") 
