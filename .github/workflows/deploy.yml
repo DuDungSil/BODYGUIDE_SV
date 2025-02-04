@@ -21,15 +21,17 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
          
-    # 3. config 폴더 생성 및 application.properties 작성
-    - name: Create application.properties from Secret
+    # 3. config 폴더 생성 및 application.yml 작성
+    - name: Create application.yml from Secret
       run: |
         mkdir -p config
-        echo "${{ secrets.PROPERTIE }}" > config/application.properties
+        echo "${{ secrets.PROPERTIE }}" > config/application.yml
 
-    # 4. Maven으로 빌드
-    - name: Build with Maven
-      run: mvn clean package -DskipTests
+    # 4. Gradle로 빌드
+    - name: Build with Gradle
+      run: |
+        chmod +x gradlew
+        ./gradlew clean build -x test
 
     # 5. Docker 이미지 빌드
     - name: Build Docker Image
