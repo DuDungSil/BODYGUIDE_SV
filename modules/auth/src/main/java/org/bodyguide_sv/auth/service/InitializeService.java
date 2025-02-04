@@ -13,22 +13,22 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class InitializeService {
-    
+
     private final TokenService tokenService;
     private final UserProfileService userProfileService;
 
     // 계정 초기화 ( 온보딩 )
     // GUEST -> USER
     public TokenResponse initialize(UUID userId, InitializeRequest request) {
-        
+
         // `InitializeRequest`를 `InitializeProfileDTO`로 변환
         InitializeProfileDTO profileDTO = new InitializeProfileDTO(
-            request.nickname(),
-            request.gender(),
-            request.height(),
-            request.weight(),
-            request.birthDate(),
-            request.source() 
+                request.nickname(),
+                request.gender(),
+                request.height(),
+                request.weight(),
+                request.birthDate(),
+                request.source()
         );
 
         // 프로필 입력
