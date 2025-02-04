@@ -42,5 +42,8 @@ logs/hepiLog.log
 # Ignore Gradle project-specific cache directory
 .gradle
 
-# Ignore Gradle build output directory
-build
+# Ignore Gradle build output directory (but keep wrapper files)
+build/
+!gradle/wrapper/gradle-wrapper.properties
+!gradlew
+!gradlew.bat
