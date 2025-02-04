@@ -8,7 +8,7 @@ WORKDIR /app
 RUN apk add --no-cache tzdata
 
 # JAR 파일 복사
-COPY build/libs/BODYGUIDE_SV-1.0.jar app.jar
+COPY app/build/libs/app.jar app.jar
 
 # 환경 변수 설정
 ENV APP_ENV=production
