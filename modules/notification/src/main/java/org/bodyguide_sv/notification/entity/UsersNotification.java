@@ -23,11 +23,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "USERS_NOTIFICATION")
 public class UsersNotification {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
-    private Long id;
+    private Long notificationId;
 
     @Column(name = "receiver_id")
     private UUID receiverId;
@@ -54,7 +54,7 @@ public class UsersNotification {
     private LocalDateTime expiresAt;
 
     public void markAsRead() {
-        if (!Boolean.TRUE.equals(this.isRead)) { 
+        if (!Boolean.TRUE.equals(this.isRead)) {
             this.isRead = true;
             this.readAt = LocalDateTime.now();
         }

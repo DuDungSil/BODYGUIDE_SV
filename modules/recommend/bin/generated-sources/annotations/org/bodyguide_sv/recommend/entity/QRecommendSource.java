@@ -1,4 +1,4 @@
-package org.bodyguide_sv.nutrition.entity;
+package org.bodyguide_sv.recommend.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QRecommendSource extends EntityPathBase<RecommendSource> {
 
-    private static final long serialVersionUID = -1671782306L;
+    private static final long serialVersionUID = -1248886086L;
 
     public static final QRecommendSource recommendSource = new QRecommendSource("recommendSource");
 

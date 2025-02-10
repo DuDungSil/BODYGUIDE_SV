@@ -11,19 +11,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.bodyguide_sv.common.util.ClientIpExtraction;
-import org.bodyguide_sv.exercise.dto.ExerciseAbility;
 import org.bodyguide_sv.exercise.dto.ExerciseAnalysisProfile;
 import org.bodyguide_sv.exercise.dto.MuscleProfile;
 import org.bodyguide_sv.exercise.enums.MuscleGroupType;
-
 import static org.bodyguide_sv.exercise.enums.MuscleGroupType.ARM;
 import static org.bodyguide_sv.exercise.enums.MuscleGroupType.CORE;
+
 import org.bodyguide_sv.exercise.service.ExerciseAnalysisService;
 import org.bodyguide_sv.exercise.service.ExerciseMetaService;
 import org.bodyguide_sv.nutrition.dto.NutrientProfile;
-import org.bodyguide_sv.nutrition.service.NutrientRecommendService;
+import org.bodyguide_sv.recommend.service.RecommendNutrientService;
 import org.bodyguide_sv.coupang.dto.CoupangProductDTO;
 import org.bodyguide_sv.coupang.service.CoupangProductRecommendService;
+import org.bodyguide_sv.web.dto.exercise.WebExerciseAbility;
 import org.bodyguide_sv.web.dto.exercise.WebExerciseRequest;
 import org.bodyguide_sv.web.dto.exercise.WebExerciseResult;
 import org.bodyguide_sv.web.dto.exercise.WebPurposeRecommend;
@@ -44,7 +44,7 @@ public class WebExerciseService {
     private final ClientIpExtraction clientIpExtraction;
     private final ExerciseAnalysisService exerciseAnalysisService;
     private final ExerciseMetaService exerciseMetaService;
-    private final NutrientRecommendService nutrientRecommendService;
+    private final RecommendNutrientService recommendNutrientService;
     private final CoupangProductRecommendService coupangProductRecommendService;
     private final WebExerInputDataRepository webExerInputDataRepository;
     private final WebExerAnalysisDataRepository webExerAnalysisDataRepository;
@@ -99,20 +99,20 @@ public class WebExerciseService {
     }
 
     // 상대적으로 낮은 부위
-    public List<MuscleProfile> getWeekBodyPartList(ExerciseAbility ability) {
+    public List<MuscleProfile> getWeekBodyPartList(WebExerciseAbility ability) {
         // 1. 모든 운동 프로필 수집
         List<ExerciseAnalysisProfile> profiles = Arrays.asList(
-            ability.getBench(),
-            ability.getSquat(),
-            ability.getDead(),
-            ability.getOverhead(),
-            ability.getPushup(),
-            ability.getPullup()
+                ability.getBench(),
+                ability.getSquat(),
+                ability.getDead(),
+                ability.getOverhead(),
+                ability.getPushup(),
+                ability.getPullup()
         );
-    
+
         // 2. 점수 기준 정렬
         profiles.sort(Comparator.comparingDouble(ExerciseAnalysisProfile::getScore));
-    
+
         // 3. 상위 두 가지와 점수 40 미만 부위 식별 (중복 제거)
         Set<MuscleGroupType> targetMuscleGroups = new LinkedHashSet<>();
         for (int i = 0; i < Math.min(2, profiles.size()); i++) {
@@ -123,23 +123,23 @@ public class WebExerciseService {
                 targetMuscleGroups.add(profile.getMuscleGroupType());
             }
         }
-    
+
         // 4. 식별된 근육 그룹에 대해 쿼리 수행 (기존 쿼리 활용)
         List<MuscleProfile> result = new ArrayList<>();
         for (MuscleGroupType muscleGroup : targetMuscleGroups) {
             // 4-1. Strength 가져오기
             String strength = exerciseMetaService.getStrengthByMuscleGroup(muscleGroup);
-    
+
             // 4-2. 세부 근육 부위 가져오기
             List<String> details = exerciseMetaService.getDetailMuscleByMuscleGroup(muscleGroup);
-    
+
             // 4-3. DTO 생성 및 결과에 추가
             MuscleProfile dto = new MuscleProfile();
             dto.setStrength(strength);
             dto.setDetails(details);
             result.add(dto);
         }
-    
+
         return result;
     }
 
@@ -153,7 +153,7 @@ public class WebExerciseService {
             WebPurposeRecommend recommend = new WebPurposeRecommend();
 
             // db 쿼리 키 : purpose
-            List<NutrientProfile> profiles = nutrientRecommendService.getRecommendNutirientForPurpose(purpose);
+            List<NutrientProfile> profiles = recommendNutrientService.getRecommendNutirientForPurpose(purpose);
 
             recommend.setPurpose(purpose);
             recommend.setProfiles(profiles);
@@ -192,32 +192,32 @@ public class WebExerciseService {
 
     // 운동 목적에 따른 상품 추천
     private List<CoupangProductDTO> getRecommendSupplementByPurposeRecommends(List<WebPurposeRecommend> recommends) {
-        
-            List<CoupangProductDTO> list = new ArrayList<>();
 
-            List<Integer> nutrient_list = new ArrayList<>();
-            for (WebPurposeRecommend recommend : recommends) {
-                for (NutrientProfile profile : recommend.getProfiles()) {
-                    nutrient_list.add(profile.getId());
-                }
-            }
-    
-            nutrient_list.stream().distinct().collect(Collectors.toList());
-    
-            for (int nutrient : nutrient_list) {
-                List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementByNutrition(nutrient);
-                for (CoupangProductDTO shopProduct : shopProducts) {
-                    list.add(shopProduct);
-                }
-            }
-    
-            Collections.shuffle(list);
+        List<CoupangProductDTO> list = new ArrayList<>();
 
-            return list;
+        List<Integer> nutrient_list = new ArrayList<>();
+        for (WebPurposeRecommend recommend : recommends) {
+            for (NutrientProfile profile : recommend.getProfiles()) {
+                nutrient_list.add(profile.getId());
+            }
+        }
+
+        nutrient_list.stream().distinct().collect(Collectors.toList());
+
+        for (int nutrient : nutrient_list) {
+            List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementByNutrition(nutrient);
+            for (CoupangProductDTO shopProduct : shopProducts) {
+                list.add(shopProduct);
+            }
+        }
+
+        Collections.shuffle(list);
+
+        return list;
     }
 
     public WebExerciseResult getExerciseAnalysis(WebExerciseRequest request, HttpServletRequest servletRequest) {
-        ExerciseAbility ability = new ExerciseAbility();
+        WebExerciseAbility ability = new WebExerciseAbility();
         ability.setBench(exerciseAnalysisService.analyzeExercise(120, request.getSex(), request.getWeight(),
                 request.getBench().getWeight(), request.getBench().getReps()));
         ability.setSquat(exerciseAnalysisService.analyzeExercise(251, request.getSex(), request.getWeight(),
@@ -243,18 +243,18 @@ public class WebExerciseService {
 
         List<MuscleProfile> muscleDTOs = getWeekBodyPartList(ability);
 
-        List<NutrientProfile> profiles = nutrientRecommendService.getRecommendNutirientForLevel(totalScore);
+        List<NutrientProfile> profiles = recommendNutrientService.getRecommendNutirientForLevel(totalScore);
         List<WebPurposeRecommend> recommends = getRecommendNutirientForPurpose(request.getSupplePurpose());
-                
+
         List<CoupangProductDTO> levelProducts = getRecommendSupplementByNutrientProfiles(profiles);
         List<CoupangProductDTO> purposeProducts = getRecommendSupplementByPurposeRecommends(recommends);
 
         WebExerciseResult result = new WebExerciseResult();
         result.setAbility(ability);
-        result.setTotalScore((double)totalScore);
+        result.setTotalScore((double) totalScore);
         result.setTotalLevel(totalLevel);
         result.setTopPercent((int) topPercent);
-        result.setBigThree((double)bigThree);
+        result.setBigThree((double) bigThree);
         result.setWeekMuscles(muscleDTOs);
         result.setLevelRecommends(profiles);
         result.setPurposeRecommends(recommends);

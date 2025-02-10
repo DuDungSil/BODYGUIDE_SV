@@ -9,7 +9,7 @@ import org.bodyguide_sv.nutrition.dto.MealNutrientComposition;
 import org.bodyguide_sv.nutrition.dto.RecommendSource;
 import org.bodyguide_sv.nutrition.enums.PAType;
 import org.bodyguide_sv.nutrition.service.NutritionAnalysisService;
-import org.bodyguide_sv.nutrition.service.SourceRecommendService;
+import org.bodyguide_sv.recommend.service.RecommendSourceService;
 import org.bodyguide_sv.coupang.dto.CoupangProductDTO;
 import org.bodyguide_sv.coupang.service.CoupangProductRecommendService;
 import org.bodyguide_sv.web.dto.nutrition.WebNutrientRequest;
@@ -31,7 +31,7 @@ public class WebNutritionService {
 
     private final ClientIpExtraction clientIpExtraction;
     private final NutritionAnalysisService nutrientAnalysisService;
-    private final SourceRecommendService sourceRecommendService;
+    private final RecommendSourceService recommendSourceService;
     private final CoupangProductRecommendService coupangProductRecommendService;
     private final WebNutriInputDataRepository webNutriInputDataRepository;
     private final WebNutriAnalysisDataRepository webNutriAnalysisDataRepository;
@@ -70,27 +70,33 @@ public class WebNutritionService {
 
         webNutriAnalysisDataRepository.save(analysisData);
     }
-    
+
     // TDEE 계산
-    public double getTDEE(double BMR, String PA){
+    public double getTDEE(double BMR, String PA) {
         // String -> pa_type 변환
         PAType pa = PAType.fromDescription(PA);
 
         return nutrientAnalysisService.calculateTDEE(BMR, pa);
-    } 
+    }
 
     // 식단 영양 성분 가져오기
     public MealNutrientComposition getMealNutrientComposition(Double targetCalory, String dietType) {
-        
+
         int dietTypeId = 1;
 
         switch (dietType) {
-            case "일반적" -> dietTypeId = 1;
-            case "저탄수화물" -> dietTypeId = 2;
-            case "고탄수화물" -> dietTypeId = 3;
-            case "저지방" -> dietTypeId = 4;
-            case "비건" -> dietTypeId = 5;
-            default -> dietTypeId = 1;
+            case "일반적" ->
+                dietTypeId = 1;
+            case "저탄수화물" ->
+                dietTypeId = 2;
+            case "고탄수화물" ->
+                dietTypeId = 3;
+            case "저지방" ->
+                dietTypeId = 4;
+            case "비건" ->
+                dietTypeId = 5;
+            default ->
+                dietTypeId = 1;
         }
 
         MealNutrientComposition mealNutrientComposition = nutrientAnalysisService.getMealNutrientComposition(targetCalory, dietTypeId);
@@ -103,9 +109,9 @@ public class WebNutritionService {
 
         int dietTypeId = dietType.equals("비건") ? 5 : 1;
 
-        List<String> carbohydrate = sourceRecommendService.getRecommendSource(1, dietTypeId);
-        List<String> protein = sourceRecommendService.getRecommendSource(2, dietTypeId);
-        List<String> fat = sourceRecommendService.getRecommendSource(3, dietTypeId);
+        List<String> carbohydrate = recommendSourceService.getRecommendSource(1, dietTypeId);
+        List<String> protein = recommendSourceService.getRecommendSource(2, dietTypeId);
+        List<String> fat = recommendSourceService.getRecommendSource(3, dietTypeId);
 
         return new RecommendSource(carbohydrate, protein, fat);
     }
@@ -162,5 +168,5 @@ public class WebNutritionService {
 
         return result;
     }
-    
+
 }

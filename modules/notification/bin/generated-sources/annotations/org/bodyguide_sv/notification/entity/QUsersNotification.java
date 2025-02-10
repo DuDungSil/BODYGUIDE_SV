@@ -25,9 +25,9 @@ public class QUsersNotification extends EntityPathBase<UsersNotification> {
 
     public final DateTimePath<java.time.LocalDateTime> expiresAt = createDateTime("expiresAt", java.time.LocalDateTime.class);
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final BooleanPath isRead = createBoolean("isRead");
+
+    public final NumberPath<Long> notificationId = createNumber("notificationId", Long.class);
 
     public final DateTimePath<java.time.LocalDateTime> readAt = createDateTime("readAt", java.time.LocalDateTime.class);
 

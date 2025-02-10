@@ -1,4 +1,4 @@
-package org.bodyguide_sv.nutrition.entity;
+package org.bodyguide_sv.recommend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "RECOMMEND_SOURCE")
 public class RecommendSource {
-    
+
     @Id
     @Column(name = "recommend_id")
     private int id;
