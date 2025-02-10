@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bodyguide_sv.exercise.dto.UpdatedBigThreeWeightDTO;
+import org.bodyguide_sv.exercise.dto.UpdatedExersiseIds;
 import org.bodyguide_sv.exercise.dto.UpdatedMuscleScoreDTO;
-import org.bodyguide_sv.exercise.event.ExerciseBestScoreChangedEvent;
 import org.bodyguide_sv.exercise.event.ExerciseRecordChangedWithIdsEvent;
 import org.bodyguide_sv.exercise.service.ExerciseBestScoreService;
 import org.bodyguide_sv.exercise.service.UserBigThreeProfileService;
@@ -26,10 +26,11 @@ public class ExerciseBestScoreUpdateListener {
     private final UserExerciseMuscleScoreProfileService userExerciseMuscleScoreProfileService;
     private final UserExerciseTotalPerformanceService userExerciseTotalPerformanceService;
 
-    @Async 
+    @Async
     @EventListener
     public void handleExerciseRecordChangedEvent(ExerciseRecordChangedWithIdsEvent event) {
         UUID userId = event.getUserId();
+
         List<Integer> changedExerciseIdList = event.getChangedExerciseIdList();
 
         // 비동기 갱신 작업 처리
@@ -37,19 +38,10 @@ public class ExerciseBestScoreUpdateListener {
         System.out.println("Changed Exercise IDs: " + changedExerciseIdList);
 
         // BestScore 갱신 
-        exerciseBestScoreService.updateBestScore(userId, changedExerciseIdList);
-    }
+        UpdatedExersiseIds updatedExersiseIds = exerciseBestScoreService.updateBestScore(userId, changedExerciseIdList);
 
-    @EventListener
-    public void handleExerciseBestScoreChangedEvent(ExerciseBestScoreChangedEvent event) {
-        UUID userId = event.getUserId();
-        List<Integer> updatedWeightAndScoreExerIds = event.getUpdatedWeightAndScoreExerIds();
-        List<Integer> updatedScoreIds = event.getUpdatedScoreIds();
-
-        // 비동기 갱신 작업 처리
-        System.out.println("베스트 점수 변경 이벤트 for userId: " + userId);
-        System.out.println("Changed Exercise IDs: " + updatedWeightAndScoreExerIds);
-        System.out.println("Changed Exercise IDs: " + updatedScoreIds);
+        List<Integer> updatedWeightAndScoreExerIds = updatedExersiseIds.updatedWeightAndScoreExerIds();
+        List<Integer> updatedScoreIds = updatedExersiseIds.updatedScoreIds();
 
         // UsersBigThreeProfile 갱신
         UpdatedBigThreeWeightDTO updatedBigThreeWeightDTO = userBigThreeProfileService.updateBigThreeProfile(userId, updatedWeightAndScoreExerIds);
@@ -59,7 +51,6 @@ public class ExerciseBestScoreUpdateListener {
 
         // UsersExerciseTotalPerformance 갱신
         userExerciseTotalPerformanceService.updateTotalPerformance(userId, updatedBigThreeWeightDTO, updatedMuscleScoreDTO);
-
     }
 
 }

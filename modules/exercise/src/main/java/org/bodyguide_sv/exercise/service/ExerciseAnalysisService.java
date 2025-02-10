@@ -31,7 +31,7 @@ public class ExerciseAnalysisService {
                 return level;
             }
         }
-        
+
         return ExerciseLevel.ATHLETE;
     }
 
@@ -94,6 +94,5 @@ public class ExerciseAnalysisService {
 
         return profile;
     }
-
 
 }

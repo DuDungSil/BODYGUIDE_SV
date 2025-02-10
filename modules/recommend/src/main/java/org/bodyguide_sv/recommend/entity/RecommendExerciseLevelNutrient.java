@@ -1,4 +1,4 @@
-package org.bodyguide_sv.nutrition.entity;
+package org.bodyguide_sv.recommend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,17 +12,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RECOMMEND_EXERCISE_PURPOSE_NUTRIENT")
-public class RecommendExercisePurposeNutrient {
-    
+@Table(name = "RECOMMEND_EXERCISE_LEVEL_NUTRIENT")
+public class RecommendExerciseLevelNutrient {
+
     @Id
     @Column(name = "recommend_id")
     private int id;
 
-    @Column(name = "purpose_id", columnDefinition = "SMALLINT")
-    private int purposeId;
-
     @Column(name = "nutrient_id")
     private int nutrientId;
+
+    @Column(name = "lvl")
+    private int lvl;
+
+    @Column(name = "mention")
+    private String mention;
 
 }

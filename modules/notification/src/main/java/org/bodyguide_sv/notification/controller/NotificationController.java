@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/notification")
@@ -36,34 +35,33 @@ public class NotificationController {
 
     @GetMapping("/test")
     public ResponseEntity<String> getMethodName(@AuthenticationPrincipal UserDetails userDetails) {
-        
+
         UUID userId = UUID.fromString(userDetails.getUsername());
 
         NotificationSendEvent event = new NotificationSendEvent(userId, userId, MESSAGE, WEIGHT_COTINUOUS_RECORD,
                 Map.of("date", "6"));
         eventPublisher.publishEvent(event);
-        
+
         return ResponseEntity.ok("성공");
     }
-    
+
     // 유저 알림 리스트 가져오기
     @GetMapping("/user")
     public ResponseEntity<UserNotificationResponse> getUserNotification(
             @AuthenticationPrincipal UserDetails userDetails) {
-        
-        UserNotificationResponse response = userNotificationService
-                .getActiveNotifications(UUID.fromString(userDetails.getUsername()));
-        
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        UserNotificationResponse response = userNotificationService.getActiveNotifications(userId);
+
         return ResponseEntity.ok(response);
     }
-    
+
     // 유저 알림 삭제
     @DeleteMapping("/user/{notificationId}")
     public ResponseEntity<String> deleteUserNotification(
             @AuthenticationPrincipal UserDetails userDetails, @PathVariable Long notificationId) {
-        
-        userNotificationService.deleteNotification(notificationId);
-        
+        UUID userId = UUID.fromString(userDetails.getUsername());
+        userNotificationService.deleteNotification(userId, notificationId);
+
         return ResponseEntity.ok("삭제 성공");
     }
 
@@ -75,5 +73,5 @@ public class NotificationController {
 
         return ResponseEntity.ok(response);
     }
-    
+
 }

@@ -8,13 +8,11 @@ import java.util.UUID;
 
 import org.bodyguide_sv.exercise.dto.MaxScoreAndWeightAndRepsDTO;
 import org.bodyguide_sv.exercise.dto.MaxWeightAndRepsDTO;
+import org.bodyguide_sv.exercise.dto.UpdatedExersiseIds;
 import org.bodyguide_sv.exercise.entity.UsersExerciseBestScore;
 import org.bodyguide_sv.exercise.entity.UsersExerciseBestScore.UsersExerciseBestScoreId;
-import org.bodyguide_sv.exercise.event.ExerciseBestScoreChangedEvent;
 import org.bodyguide_sv.exercise.repository.UsersExerciseBestScoreRepository;
-import org.bodyguide_sv.exercise.repository.UsersExerciseSetHistoryRepository;
 import org.bodyguide_sv.exercise.repository.custom.UsersExerciseSetHistoryCustomRepository;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -23,14 +21,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class ExerciseBestScoreService {
-    
-    private final ApplicationEventPublisher eventPublisher;
+
     private final UsersExerciseSetHistoryCustomRepository usersExerciseSetHistoryCustomRepository;
     private final UsersExerciseBestScoreRepository usersExerciseBestScoreRepository;
 
     // BestScore 갱신
     @Transactional
-    public void updateBestScore(UUID userId, List<Integer> changedExerciseIdList) {
+    public UpdatedExersiseIds updateBestScore(UUID userId, List<Integer> changedExerciseIdList) {
         List<Integer> updatedWeightAndRepsIds = new ArrayList<>();
         List<Integer> updatedScoreExerIds = new ArrayList<>();
 
@@ -54,8 +51,7 @@ public class ExerciseBestScoreService {
         // Set을 List로 변환 
         List<Integer> updatedWeightAndScoreExerIds = new ArrayList<>(combinedSet);
 
-        // 이벤트 발행
-        eventPublisher.publishEvent(new ExerciseBestScoreChangedEvent(userId, updatedWeightAndScoreExerIds, updatedScoreExerIds));
+        return new UpdatedExersiseIds(updatedWeightAndScoreExerIds, updatedScoreExerIds);
 
     }
 
@@ -98,7 +94,7 @@ public class ExerciseBestScoreService {
         // Best Score 엔티티 조회
         UsersExerciseBestScoreId bestScoreId = new UsersExerciseBestScoreId(userId, exerciseId);
         UsersExerciseBestScore bestScore = usersExerciseBestScoreRepository.findById(bestScoreId)
-            .orElse(UsersExerciseBestScore.createNew(userId, exerciseId));
+                .orElse(UsersExerciseBestScore.createNew(userId, exerciseId));
 
         // 기존 값과 비교
         boolean updated = false;
