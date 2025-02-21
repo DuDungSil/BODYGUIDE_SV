@@ -33,11 +33,7 @@ public class RedisConfig {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(host);
         redisStandaloneConfiguration.setPort(Integer.parseInt(port));
-
-        // 비밀번호 설정
-        if (password != null && !password.isEmpty()) {
-            redisStandaloneConfiguration.setPassword(password);
-        }
+        redisStandaloneConfiguration.setPassword(password);
 
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
