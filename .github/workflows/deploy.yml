@@ -71,19 +71,18 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
-        script: |
-          PROJECT_DIR="/home/${{ secrets.SERVER_USER }}/bodyguide"
-
-          echo "Navigating to project directory..."
-          cd $PROJECT_DIR || exit 1
-
-          echo "Pulling latest Docker image..."
-          docker pull dudungsil540/bodyguide-sv:latest
-
-          echo "Rebuilding and restarting API service..."
-          docker-compose -f $PROJECT_DIR/docker-compose.yml up -d --no-deps --build api
-
-          echo "Cleaning up unused images..."
-          docker image prune -f
-
-          echo "API service deployment completed successfully."
+      script: |
+        PROJECT_DIR="/home/${{ secrets.SERVER_USER }}/bodyguide"
+        echo "Navigating to project directory..."
+        cd $PROJECT_DIR || exit 1
+      
+        echo "Pulling latest Docker image..."
+        sudo docker pull dudungsil540/bodyguide-sv:latest
+      
+        echo "Rebuilding and restarting API service..."
+        sudo docker-compose -f $PROJECT_DIR/docker-compose.yml up -d --no-deps --build api
+      
+        echo "Cleaning up unused images..."
+        sudo docker image prune -f
+      
+        echo "API service deployment completed successfully."
