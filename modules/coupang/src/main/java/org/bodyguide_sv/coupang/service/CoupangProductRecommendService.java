@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class CoupangProductRecommendService {
-    
+
     private final CoupangProductQueryRepository coupangProductQueryRepository;
 
     // 3대영양소에 따른 음식 추천
@@ -23,12 +23,8 @@ public class CoupangProductRecommendService {
     }
 
     // 영양성분에 따른 보충제 추천 ( 로직 고도화 필요 )
-    public List<CoupangProductDTO> getRecommendSupplementByNutrition(int nutrientId) {
-
-        List<CoupangProductDTO> coupangProducts = coupangProductQueryRepository.selectSupplementsByNutrientName(nutrientId);
-
-        return coupangProducts;
+    public List<CoupangProductDTO> getRecommendSupplementsByNutritionIds(List<Integer> nutrientIds) {
+        return coupangProductQueryRepository.selectSupplementsByNutrientIds(nutrientIds);
     }
 
-    
 }
