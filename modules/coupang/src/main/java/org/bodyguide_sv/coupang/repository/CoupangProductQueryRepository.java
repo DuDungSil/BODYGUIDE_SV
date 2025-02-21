@@ -16,9 +16,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Repository
 public class CoupangProductQueryRepository {
-    
+
     private final JPAQueryFactory queryFactory;
-    
+
     public List<CoupangProductDTO> selectFoodsByNutrientTypeAndDietType(int nutrientTypeId, int dietTypeId) {
         QCoupangProduct coupangProduct = QCoupangProduct.coupangProduct;
         QCoupangRecommendFood coupangRecommendFood = QCoupangRecommendFood.coupangRecommendFood;
@@ -50,13 +50,13 @@ public class CoupangProductQueryRepository {
                 .fetch();
     }
 
-    public List<CoupangProductDTO> selectSupplementsByNutrientName(int nutrientId) {
+    public List<CoupangProductDTO> selectSupplementsByNutrientIds(List<Integer> nutrientIds) {
         QCoupangProduct coupangProduct = QCoupangProduct.coupangProduct;
         QCoupangRecommendSupplements coupangRecommendSupplements = QCoupangRecommendSupplements.coupangRecommendSupplements;
 
         return queryFactory
                 .select(Projections.constructor(
-                        CoupangProductDTO.class, // DTO 매핑
+                        CoupangProductDTO.class,
                         coupangProduct.productId,
                         coupangProduct.name,
                         coupangProduct.url,
@@ -75,10 +75,9 @@ public class CoupangProductQueryRepository {
                 .from(coupangProduct)
                 .innerJoin(coupangRecommendSupplements)
                 .on(coupangProduct.productId.eq(coupangRecommendSupplements.productId))
-                .where(
-                        coupangRecommendSupplements.relatedNutrientId.eq(nutrientId)
-                )
+                .where(coupangRecommendSupplements.relatedNutrientId.in(nutrientIds)) // IN 절 사용
                 .fetch();
     }
+
 
 }

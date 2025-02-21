@@ -66,54 +66,23 @@ public class RecommendSupplementService {
 
     // 운동 수준에 따른 상품 추천
     private List<CoupangProductDTO> getRecommendSupplementByNutrientProfiles(List<NutrientProfile> profiles) {
+        List<Integer> nutrientIds = profiles.stream()
+                .map(NutrientProfile::getId)
+                .distinct()
+                .collect(Collectors.toList());
 
-        List<CoupangProductDTO> list = new ArrayList<>();
-
-        List<Integer> nutritientId_list = new ArrayList<>();
-        for (NutrientProfile profile : profiles) {
-            nutritientId_list.add(profile.getId());
-        }
-
-        nutritientId_list.stream().distinct().collect(Collectors.toList());
-
-        for (int nutritionId : nutritientId_list) {
-
-            List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementByNutrition(nutritionId);
-
-            for (CoupangProductDTO shopProduct : shopProducts) {
-                list.add(shopProduct);
-            }
-        }
-
-        Collections.shuffle(list);
-
-        return list;
+        return coupangProductRecommendService.getRecommendSupplementsByNutritionIds(nutrientIds);
     }
 
     // 운동 목적에 따른 상품 추천
     private List<CoupangProductDTO> getRecommendSupplementByPurposeRecommends(List<PurposeNutrientProfiles> purposeProfiles) {
+        List<Integer> nutrientIds = purposeProfiles.stream()
+                .flatMap(purposeProfile -> purposeProfile.profiles().stream())
+                .map(NutrientProfile::getId)
+                .distinct()
+                .collect(Collectors.toList());
 
-        List<CoupangProductDTO> list = new ArrayList<>();
-
-        List<Integer> nutrient_list = new ArrayList<>();
-        for (PurposeNutrientProfiles purposeProfile : purposeProfiles) {
-            for (NutrientProfile profile : purposeProfile.profiles()) {
-                nutrient_list.add(profile.getId());
-            }
-        }
-
-        nutrient_list.stream().distinct().collect(Collectors.toList());
-
-        for (int nutrient : nutrient_list) {
-            List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementByNutrition(nutrient);
-            for (CoupangProductDTO shopProduct : shopProducts) {
-                list.add(shopProduct);
-            }
-        }
-
-        Collections.shuffle(list);
-
-        return list;
+        return coupangProductRecommendService.getRecommendSupplementsByNutritionIds(nutrientIds);
     }
 
 }

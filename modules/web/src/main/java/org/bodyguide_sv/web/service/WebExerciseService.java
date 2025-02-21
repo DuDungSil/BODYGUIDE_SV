@@ -167,53 +167,38 @@ public class WebExerciseService {
     // 운동 수준에 따른 상품 추천
     private List<CoupangProductDTO> getRecommendSupplementByNutrientProfiles(List<NutrientProfile> profiles) {
 
-        List<CoupangProductDTO> list = new ArrayList<>();
+        // 1. Nutrient ID 추출 및 중복 제거
+        List<Integer> nutrientIdList = profiles.stream()
+                .map(NutrientProfile::getId)
+                .distinct()
+                .collect(Collectors.toList());
 
-        List<Integer> nutritientId_list = new ArrayList<>();
-        for (NutrientProfile profile : profiles) {
-            nutritientId_list.add(profile.getId());
-        }
+        // 2. 한 번의 쿼리로 모든 보충제 조회
+        List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementsByNutritionIds(nutrientIdList);
 
-        nutritientId_list.stream().distinct().collect(Collectors.toList());
+        // 3. 무작위로 섞기
+        Collections.shuffle(shopProducts);
 
-        for (int nutritionId : nutritientId_list) {
-
-            List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementByNutrition(nutritionId);
-
-            for (CoupangProductDTO shopProduct : shopProducts) {
-                list.add(shopProduct);
-            }
-        }
-
-        Collections.shuffle(list);
-
-        return list;
+        return shopProducts;
     }
 
     // 운동 목적에 따른 상품 추천
     private List<CoupangProductDTO> getRecommendSupplementByPurposeRecommends(List<WebPurposeRecommend> recommends) {
 
-        List<CoupangProductDTO> list = new ArrayList<>();
+        // 1. 모든 NutrientProfile의 ID 추출 및 중복 제거
+        List<Integer> nutrientIdList = recommends.stream()
+                .flatMap(recommend -> recommend.getProfiles().stream())
+                .map(NutrientProfile::getId)
+                .distinct()
+                .collect(Collectors.toList());
 
-        List<Integer> nutrient_list = new ArrayList<>();
-        for (WebPurposeRecommend recommend : recommends) {
-            for (NutrientProfile profile : recommend.getProfiles()) {
-                nutrient_list.add(profile.getId());
-            }
-        }
+        // 2. 한 번의 쿼리로 모든 보충제 조회
+        List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementsByNutritionIds(nutrientIdList);
 
-        nutrient_list.stream().distinct().collect(Collectors.toList());
+        // 3. 무작위로 섞기
+        Collections.shuffle(shopProducts);
 
-        for (int nutrient : nutrient_list) {
-            List<CoupangProductDTO> shopProducts = coupangProductRecommendService.getRecommendSupplementByNutrition(nutrient);
-            for (CoupangProductDTO shopProduct : shopProducts) {
-                list.add(shopProduct);
-            }
-        }
-
-        Collections.shuffle(list);
-
-        return list;
+        return shopProducts;
     }
 
     public WebExerciseResult getExerciseAnalysis(WebExerciseRequest request, HttpServletRequest servletRequest) {
