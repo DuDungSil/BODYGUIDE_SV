@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class UserExerciseTotalPerformanceService {
-    
+
     private final ExerciseAnalysisService exerciseAnalysisService;
     private final UsersExerciseTotalPerformanceRepository usersExerciseTotalPerformanceRepository;
 
@@ -44,19 +44,19 @@ public class UserExerciseTotalPerformanceService {
                             UsersExerciseTotalPerformance newProfile = UsersExerciseTotalPerformance.createNewPerformance(userId);
                             return usersExerciseTotalPerformanceRepository.save(newProfile);
                         });
-        
+
         return new ExerciseTotalPerformanceResponse(
-                        profile.getTotalScore(),
-                        profile.getScoreUpdatedAt(),
-                        ExerciseLevel.fromId(profile.getExerciseLevel()).getName(),
-                        profile.getLevelUpdatedAt(),
-                        profile.getBigThree(),
-                        profile.getBigThreeUpdatedAt() );
+                profile.getTotalScore(),
+                profile.getScoreUpdatedAt(),
+                ExerciseLevel.fromId(profile.getExerciseLevel()).getName(),
+                profile.getLevelUpdatedAt(),
+                profile.getBigThree(),
+                profile.getBigThreeUpdatedAt());
     }
 
     public void updateTotalPerformance(UUID userId, UpdatedBigThreeWeightDTO updatedBigThreeWeightDTO,
             UpdatedMuscleScoreDTO updatedMuscleScoreDTO) {
-        
+
         // ExerciseTotalPerformance 가져오기
         UsersExerciseTotalPerformance profile = usersExerciseTotalPerformanceRepository.findByUserId(userId)
                 .orElseGet(
@@ -73,18 +73,18 @@ public class UserExerciseTotalPerformanceService {
         }
 
         // 총 운동 점수 업데이트
-        double newTotalScore = (updatedMuscleScoreDTO.coreScore() +
-                                updatedMuscleScoreDTO.lowerBodyScore() +
-                                updatedMuscleScoreDTO.backScore() +
-                                updatedMuscleScoreDTO.chestScore() + 
-                                updatedMuscleScoreDTO.shoulderScore() +
-                                updatedMuscleScoreDTO.armScore()
-                                ) / 6;
+        double newTotalScore = (updatedMuscleScoreDTO.coreScore()
+                + updatedMuscleScoreDTO.lowerBodyScore()
+                + updatedMuscleScoreDTO.backScore()
+                + updatedMuscleScoreDTO.chestScore()
+                + updatedMuscleScoreDTO.shoulderScore()
+                + updatedMuscleScoreDTO.armScore()) / 6;
         profile.updateTotalScore(newTotalScore);
 
         // 운동 수준 업데이트
         profile.updateExerciseLevel(exerciseAnalysisService.getLevel(newTotalScore).getId());
 
+        usersExerciseTotalPerformanceRepository.save(profile);
     }
 
 }
