@@ -1,5 +1,6 @@
 package org.bodyguide_sv.user.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserProfileService {
-    
+
     private final UsersProfileRepository usersProfileRepository;
     private final UserMetaService userMetaService;
 
@@ -77,9 +78,15 @@ public class UserProfileService {
         UsersProfile usersProfile = usersProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User profile not found with user_id: " + userId));
 
-        return convertToResponse(usersProfile);
+        // 유저 가입 일자 가져오기
+        LocalDateTime registerDateTime = userMetaService.getUserRegisterDateTime(userId);
+
+        // LocalDateTime -> LocalDate 변환
+        LocalDate registerDate = registerDateTime.toLocalDate();
+
+        return convertToResponse(usersProfile, registerDate);
     }
-    
+
     // 프로필 초기화 ( 온보딩 )
     public void initializeUserProfile(UUID userId, InitializeProfileDTO profileDTO) {
 
@@ -101,22 +108,23 @@ public class UserProfileService {
         userMetaService.updateSource(userId, profileDTO.source());
 
     }
-    
+
     // 레포트 분석용 DTO 객체 가져오기
     public UserProfileDTO getUserProfileDTO(UUID userId) {
         UsersProfile usersProfile = usersProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User profile not found with user_id: " + userId));
-        
+
         return convertToDTO(usersProfile);
     }
 
-    private UserProfileResponse convertToResponse(UsersProfile usersProfile) {
+    private UserProfileResponse convertToResponse(UsersProfile usersProfile, LocalDate registerDate) {
         return new UserProfileResponse(
                 usersProfile.getNickname(),
                 usersProfile.getGender(),
                 usersProfile.getHeight(),
                 usersProfile.getWeight(),
                 usersProfile.getBirthDate(),
+                registerDate,
                 usersProfile.getProfileImg(),
                 usersProfile.getIntroText());
     }
@@ -128,6 +136,5 @@ public class UserProfileService {
                 usersProfile.getWeight(),
                 usersProfile.getBirthDate());
     }
-
 
 }

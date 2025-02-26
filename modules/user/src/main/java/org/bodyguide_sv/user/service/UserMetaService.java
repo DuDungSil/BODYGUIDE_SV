@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserMetaService {
-    
+
     private final UsersMetaRepository usersMetaRepository;
 
     // 생성
@@ -25,6 +25,18 @@ public class UserMetaService {
         UsersMeta usersMeta = UsersMeta.create(userId);
 
         usersMetaRepository.save(usersMeta);
+    }
+
+    // 유저 가입일자 가져오기
+    public LocalDateTime getUserRegisterDateTime(UUID userId) {
+
+        // 1. 기존 메타 조회
+        UsersMeta usersMeta = usersMetaRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User profile not found with user_id: " + userId));
+
+        LocalDateTime registerDateTime = usersMeta.getCreatedAt();
+
+        return registerDateTime;
     }
 
     // 추천 경로 업데이트
@@ -41,10 +53,10 @@ public class UserMetaService {
         usersMetaRepository.save(usersMeta);
 
     }
-    
+
     // 마지막 로그인 시간 업데이트
     public void updateLastLoginAt(UUID userId) {
-        
+
         // 1. 기존 메타 조회
         UsersMeta usersMeta = usersMetaRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User profile not found with user_id: " + userId));

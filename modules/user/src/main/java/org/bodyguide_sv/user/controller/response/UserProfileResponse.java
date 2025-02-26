@@ -6,13 +6,13 @@ import lombok.Builder;
 
 @Builder
 public record UserProfileResponse(
-    String nickname,
-    String gender,
-    double height,
-    double weight,
-    LocalDate birthDate,
-    String profileImg,
-    String introText
-) {
+        String nickname,
+        String gender,
+        double height,
+        double weight,
+        LocalDate birthDate,
+        LocalDate registerDate,
+        String profileImg,
+        String introText) {
 
 }
