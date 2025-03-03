@@ -57,10 +57,9 @@ public class ExerciseAnalysisService {
     }
 
     // 운동 점수 분석
-    public ExerciseAnalysisProfile analyzeExercise(int exerciseId, String gender, double bodyWeight,
-            double liftingWeight, int reps) {
+    public ExerciseAnalysisProfile analyzeExercise(int exerciseId, String gender, Double bodyWeight,
+            Double liftingWeight, int reps) {
 
-        // redis 처리 필요
         ExerciseAnalysisData exerciseData = exerciseInfoService.getExerciseAnalysisData(exerciseId, gender);
         List<Double> thresholds = exerciseData.thresholds();
         MuscleGroupType muscleGroupType = exerciseData.muscleGroupType();
@@ -71,7 +70,7 @@ public class ExerciseAnalysisService {
             SP = reps;
             strength = reps;
         } else {
-            double RM1 = (reps == 1) ? liftingWeight : getRM1(liftingWeight, reps);
+            Double RM1 = (reps == 1) ? liftingWeight : getRM1(liftingWeight, reps);
             SP = RM1 / bodyWeight;
             strength = RM1;
         }
