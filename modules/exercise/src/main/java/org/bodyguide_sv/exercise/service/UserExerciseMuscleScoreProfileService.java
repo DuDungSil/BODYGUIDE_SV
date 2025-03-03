@@ -20,13 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class UserExerciseMuscleScoreProfileService {
-    
+
     private final ExerciseQueryRepository exerciseQueryRepository;
     private final UsersMuscleScoreProfileRepository usersMuscleScoreProfileRepository;
 
     // 가져오기
     public UserMuscleScoreProfileDTO getUserMuscleScoreProfileDTO(UUID userId) {
-        
+
         // UsersMuscleScoreProfile 가져오기
         UsersMuscleScoreProfile profile = usersMuscleScoreProfileRepository.findByUserId(userId)
                 .orElseGet(
@@ -34,47 +34,47 @@ public class UserExerciseMuscleScoreProfileService {
                             UsersMuscleScoreProfile newProfile = UsersMuscleScoreProfile.createDefaultProfile(userId);
                             return usersMuscleScoreProfileRepository.save(newProfile);
                         });
-        
+
         MuscleScore core = new MuscleScore(
-            profile.getCore().getExerciseId(),
-            profile.getCore().getWeight(),
-            profile.getCore().getReps(),
-            profile.getCore().getScore()
+                profile.getCore().getExerciseId(),
+                profile.getCore().getWeight(),
+                profile.getCore().getReps(),
+                profile.getCore().getScore()
         );
-        
+
         MuscleScore lowerBody = new MuscleScore(
-            profile.getLowerBody().getExerciseId(),
-            profile.getLowerBody().getWeight(),
-            profile.getLowerBody().getReps(),
-            profile.getLowerBody().getScore()
+                profile.getLowerBody().getExerciseId(),
+                profile.getLowerBody().getWeight(),
+                profile.getLowerBody().getReps(),
+                profile.getLowerBody().getScore()
         );
 
         MuscleScore back = new MuscleScore(
-            profile.getBack().getExerciseId(),
-            profile.getBack().getWeight(),
-            profile.getBack().getReps(),
-            profile.getBack().getScore()
+                profile.getBack().getExerciseId(),
+                profile.getBack().getWeight(),
+                profile.getBack().getReps(),
+                profile.getBack().getScore()
         );
 
         MuscleScore chest = new MuscleScore(
-            profile.getChest().getExerciseId(),
-            profile.getChest().getWeight(),
-            profile.getChest().getReps(),
-            profile.getChest().getScore()
+                profile.getChest().getExerciseId(),
+                profile.getChest().getWeight(),
+                profile.getChest().getReps(),
+                profile.getChest().getScore()
         );
 
         MuscleScore shoulder = new MuscleScore(
-            profile.getShoulder().getExerciseId(),
-            profile.getShoulder().getWeight(),
-            profile.getShoulder().getReps(),
-            profile.getShoulder().getScore()
+                profile.getShoulder().getExerciseId(),
+                profile.getShoulder().getWeight(),
+                profile.getShoulder().getReps(),
+                profile.getShoulder().getScore()
         );
 
         MuscleScore arm = new MuscleScore(
-            profile.getArm().getExerciseId(),
-            profile.getArm().getWeight(),
-            profile.getArm().getReps(),
-            profile.getArm().getScore()
+                profile.getArm().getExerciseId(),
+                profile.getArm().getWeight(),
+                profile.getArm().getReps(),
+                profile.getArm().getScore()
         );
 
         return new UserMuscleScoreProfileDTO(core, lowerBody, back, chest, shoulder, arm);
@@ -112,26 +112,28 @@ public class UserExerciseMuscleScoreProfileService {
         for (MuscleGroupScoreDto muscleGroupScoreDto : muscleGroupScoreList) {
             log.debug(muscleGroupScoreDto.toString());
             switch (muscleGroupScoreDto.muscleGroupType()) {
-                case CORE -> profile.updateCore(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.maxScore());
+                case CORE ->
+                    profile.updateCore(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.weight(), muscleGroupScoreDto.reps(), muscleGroupScoreDto.maxScore());
                 case LOWER_BODY ->
-                    profile.updateLowerBody(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.maxScore());
+                    profile.updateLowerBody(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.weight(), muscleGroupScoreDto.reps(), muscleGroupScoreDto.maxScore());
                 case BACK ->
-                    profile.updateBack(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.maxScore());
+                    profile.updateBack(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.weight(), muscleGroupScoreDto.reps(), muscleGroupScoreDto.maxScore());
                 case CHEST ->
-                    profile.updateChest(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.maxScore());
+                    profile.updateChest(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.weight(), muscleGroupScoreDto.reps(), muscleGroupScoreDto.maxScore());
                 case SHOULDER ->
-                    profile.updateShoulder(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.maxScore());
-                case ARM -> profile.updateArm(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.maxScore());
+                    profile.updateShoulder(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.weight(), muscleGroupScoreDto.reps(), muscleGroupScoreDto.maxScore());
+                case ARM ->
+                    profile.updateArm(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.weight(), muscleGroupScoreDto.reps(), muscleGroupScoreDto.maxScore());
             }
         }
 
         UpdatedMuscleScoreDTO updatedMuscleScoreDTO = new UpdatedMuscleScoreDTO(
-                                                                profile.getCore().getScore(), 
-                                                                profile.getLowerBody().getScore(), 
-                                                                profile.getBack().getScore(), 
-                                                                profile.getChest().getScore(), 
-                                                                profile.getShoulder().getScore(), 
-                                                                profile.getArm().getScore() );
+                profile.getCore().getScore(),
+                profile.getLowerBody().getScore(),
+                profile.getBack().getScore(),
+                profile.getChest().getScore(),
+                profile.getShoulder().getScore(),
+                profile.getArm().getScore());
 
         usersMuscleScoreProfileRepository.save(profile);
 

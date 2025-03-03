@@ -28,7 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "USERS_MUSCLE_SCORE_PROFILE")
 public class UsersMuscleScoreProfile {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -95,58 +95,70 @@ public class UsersMuscleScoreProfile {
         @AttributeOverride(name = "updatedAt", column = @Column(name = "arm_last_updated"))
     })
     private MuscleScoreProfile arm;
-    
+
     // 업데이트 로직
-    public void updateCore(int exerciseId, double score) {
+    public void updateCore(int exerciseId, double weight, int reps, double score) {
         if (core == null) {
             core = MuscleScoreProfile.createDefault();
         }
         core.setExerciseId(exerciseId);
+        core.setWeight(weight);
+        core.setReps(reps);
         core.setScore(score);
         core.setUpdatedAt(LocalDateTime.now());
     }
 
-    public void updateLowerBody(int exerciseId, double score) {
+    public void updateLowerBody(int exerciseId, double weight, int reps, double score) {
         if (lowerBody == null) {
             lowerBody = MuscleScoreProfile.createDefault();
         }
         lowerBody.setExerciseId(exerciseId);
+        lowerBody.setWeight(weight);
+        lowerBody.setReps(reps);
         lowerBody.setScore(score);
         lowerBody.setUpdatedAt(LocalDateTime.now());
     }
 
-    public void updateBack(int exerciseId, double score) {
+    public void updateBack(int exerciseId, double weight, int reps, double score) {
         if (back == null) {
             back = MuscleScoreProfile.createDefault();
         }
         back.setExerciseId(exerciseId);
+        back.setWeight(weight);
+        back.setReps(reps);
         back.setScore(score);
         back.setUpdatedAt(LocalDateTime.now());
     }
 
-    public void updateChest(int exerciseId, double score) {
+    public void updateChest(int exerciseId, double weight, int reps, double score) {
         if (chest == null) {
             chest = MuscleScoreProfile.createDefault();
         }
         chest.setExerciseId(exerciseId);
+        chest.setWeight(weight);
+        chest.setReps(reps);
         chest.setScore(score);
         chest.setUpdatedAt(LocalDateTime.now());
     }
 
-    public void updateShoulder(int exerciseId, double score) {
+    public void updateShoulder(int exerciseId, double weight, int reps, double score) {
         if (shoulder == null) {
             shoulder = MuscleScoreProfile.createDefault();
         }
         shoulder.setExerciseId(exerciseId);
+        shoulder.setWeight(weight);
+        shoulder.setReps(reps);
         shoulder.setScore(score);
         shoulder.setUpdatedAt(LocalDateTime.now());
     }
 
-    public void updateArm(int exerciseId, double score) {
+    public void updateArm(int exerciseId, double weight, int reps, double score) {
         if (arm == null) {
             arm = MuscleScoreProfile.createDefault();
         }
         arm.setExerciseId(exerciseId);
+        arm.setWeight(weight);
+        arm.setReps(reps);
         arm.setScore(score);
         arm.setUpdatedAt(LocalDateTime.now());
     }
@@ -154,14 +166,14 @@ public class UsersMuscleScoreProfile {
     // 디폴트 프로필 생성 로직
     public static UsersMuscleScoreProfile createDefaultProfile(UUID userId) {
         return UsersMuscleScoreProfile.builder()
-            .userId(userId)
-            .core(MuscleScoreProfile.createDefault())
-            .lowerBody(MuscleScoreProfile.createDefault())
-            .back(MuscleScoreProfile.createDefault())
-            .chest(MuscleScoreProfile.createDefault())
-            .shoulder(MuscleScoreProfile.createDefault())
-            .arm(MuscleScoreProfile.createDefault())
-            .build();
+                .userId(userId)
+                .core(MuscleScoreProfile.createDefault())
+                .lowerBody(MuscleScoreProfile.createDefault())
+                .back(MuscleScoreProfile.createDefault())
+                .chest(MuscleScoreProfile.createDefault())
+                .shoulder(MuscleScoreProfile.createDefault())
+                .arm(MuscleScoreProfile.createDefault())
+                .build();
     }
 
 }
