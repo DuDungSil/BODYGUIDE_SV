@@ -26,5 +26,6 @@
 |<img width="200" alt="image" src="" />|
 |:--:|
 |[오민석(DuDungSil)](https://github.com/DuDungSil)|
+|mvp ~ |
 
 <br/><br/>
