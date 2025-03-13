@@ -23,4 +23,8 @@
 
 ## Server Developer
 
+|<img width="200" alt="image" src="https://avatars.githubusercontent.com/u/55437339?v=4" />|
+|:--:|
+|[오민석(DuDungSil)](https://github.com/DuDungSil)|
+
 <br/><br/>
