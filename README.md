@@ -12,6 +12,6 @@
 
 <br/><br/>
 
-## DDD context
+## Tech Stack
 
 <br/><br/>
