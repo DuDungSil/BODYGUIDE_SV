@@ -9,7 +9,9 @@
 <br/><br/>
 
 ## Architecture
-(https://github.com/user-attachments/assets/db496e61-8c3a-456a-9219-fed31fbadd28)
+
+<img width="900" alt="image" src="(https://github.com/user-attachments/assets/db496e61-8c3a-456a-9219-fed31fbadd28)">
+
 <br/><br/>
 
 ## Tech Stack
