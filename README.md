@@ -29,10 +29,11 @@
  
 [Swagger](https://api.bodyguide.co.kr/swagger-ui/index.html#/)
 
+## API specification
 
 <br/><br/>
 
-## Server Developer
+## 기술적 고민
 
 |<img width="200" alt="image" src="" />|
 |:--:|
