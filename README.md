@@ -6,6 +6,8 @@
 
 ## ERD
 
+<img width="900" alt="image" src="https://github.com/user-attachments/assets/0ad9f658-bf1a-434c-b941-dd5281fb85dc">
+
 <br/><br/>
 
 ## Architecture
