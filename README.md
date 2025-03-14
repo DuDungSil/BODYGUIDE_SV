@@ -25,7 +25,7 @@
 
 ## API specification
  
-[Swagger]https://api.bodyguide.co.kr/swagger-ui/index.html#/
+[Swagger](https://api.bodyguide.co.kr/swagger-ui/index.html#/)
 
 
 <br/><br/>
