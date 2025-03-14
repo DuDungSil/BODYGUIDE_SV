@@ -16,7 +16,7 @@
 
 ## Tech Stack
 - Java 17, SpringBoot 3.4.2, Spring Data JPA, QueryDSL
-- mySQL, Redis
+- mySQL, Redis ( cache )
 - AWS ( EC2 ), Docker, Nginx
 - Swagger
 - Spring Security, Kakao/Google Oauth, JWT
