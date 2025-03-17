@@ -1,6 +1,6 @@
 # 바디가이드 앱 서버 ( MVP ) 
 
-### 주 기능 : 운동 기록, 운동 분석, 유저 활동 통계 
+### 주 기능 : 운동 기록, 체중 기록, 운동 분석, 유저 활동 통계 ( 기록시 갱신됨 )
 
 <img width="900" alt="image" src="https://github.com/user-attachments/assets/1ef6826f-f002-4ad5-9ec0-760989125edc">
 
