@@ -110,7 +110,6 @@ public class UserExerciseMuscleScoreProfileService {
                         });
 
         for (MuscleGroupScoreDto muscleGroupScoreDto : muscleGroupScoreList) {
-            log.debug(muscleGroupScoreDto.toString());
             switch (muscleGroupScoreDto.muscleGroupType()) {
                 case CORE ->
                     profile.updateCore(muscleGroupScoreDto.exerciseId(), muscleGroupScoreDto.weight(), muscleGroupScoreDto.reps(), muscleGroupScoreDto.maxScore());
