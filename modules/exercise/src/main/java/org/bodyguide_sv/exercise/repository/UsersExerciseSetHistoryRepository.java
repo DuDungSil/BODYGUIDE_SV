@@ -24,10 +24,9 @@ public interface UsersExerciseSetHistoryRepository extends JpaRepository<UsersEx
     );
 
     @Query("SELECT MAX(u.groupId) FROM UsersExerciseSetHistory u "
-            + "WHERE u.userId = :userId AND FUNCTION('DATE', u.exerciseDate) = FUNCTION('DATE', :exerciseDate)")
-    Integer findMaxGroupIdByUserIdAndExerciseDate(
-            @Param("userId") UUID userId,
-            @Param("exerciseDate") LocalDateTime exerciseDate
+            + "WHERE u.userId = :userId")
+    Integer findMaxGroupIdByUserId(
+            @Param("userId") UUID userId
     );
 
     @Query("SELECT DISTINCT u.exerciseId FROM UsersExerciseSetHistory u "

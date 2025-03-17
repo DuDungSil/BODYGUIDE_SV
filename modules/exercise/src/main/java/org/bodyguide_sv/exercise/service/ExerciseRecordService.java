@@ -35,10 +35,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ExerciseRecordService {
-    
+
     private final ApplicationEventPublisher eventPublisher;
     private final UsersExerciseSetHistoryCustomRepository usersExerciseSetHistoryCustomRepository;
-    private final UsersExerciseSetHistoryRepository usersExerciseSetHistoryRepository; 
+    private final UsersExerciseSetHistoryRepository usersExerciseSetHistoryRepository;
     private final ExerciseAnalysisService exerciseAnalysisService;
     private final UserProfileService userProfileService;
 
@@ -50,7 +50,6 @@ public class ExerciseRecordService {
         return new ExerciseRecordGroupSliceResponse(page, size, listWithHasNext.hasNext(), toGroupRecords(listWithHasNext.recordGroupList()));
     }
 
-    
     // 특정 yyyy년 mm월 조회 
     public ExerciseRecordGroupSliceResponse fetchMonthlyExerciseRecords(UUID userId, int year, int month, int page, int size) {
 
@@ -66,7 +65,7 @@ public class ExerciseRecordService {
         LocalDateTime exerciseDate = request.exerciseDate();
 
         // 마지막 그룹 id + 1
-        int groupId = getMaxGroupId(userId, exerciseDate) + 1;
+        int groupId = getMaxGroupId(userId) + 1;
 
         // 각 ExerciseRecrodDTO 의 set에 대해 분석 서비스
         ExerciseRecordGroupDTO exerciseRecordGroupDTO = analyzeRequestToExerciseRecordGroupDTO(userId, groupId,
@@ -140,8 +139,8 @@ public class ExerciseRecordService {
     }
 
     // date 같은 max 그룹id 반환
-    private int getMaxGroupId(UUID userId, LocalDateTime exerciseDate) {
-        Integer maxGroupId = usersExerciseSetHistoryRepository.findMaxGroupIdByUserIdAndExerciseDate(userId, exerciseDate);
+    private int getMaxGroupId(UUID userId) {
+        Integer maxGroupId = usersExerciseSetHistoryRepository.findMaxGroupIdByUserId(userId);
         return maxGroupId != null ? maxGroupId : 0;
     }
 
@@ -177,7 +176,7 @@ public class ExerciseRecordService {
 
                                                 double score = analysisProfile.getScore();
                                                 double strength = analysisProfile.getStrength();
-                                                
+
                                                 return new ExerciseRecordGroupDTO.ExerciseSet(
                                                         setRequest.set(),
                                                         weight,
@@ -189,23 +188,23 @@ public class ExerciseRecordService {
                         })
                         .toList());
     }
-    
+
     // DTO -> 엔티티 저장
     private void createExerciseRecords(UUID userId, ExerciseRecordGroupDTO exerciseRecordGroupDTO) {
         List<UsersExerciseSetHistory> histories = exerciseRecordGroupDTO.recordGroup().stream()
                 .flatMap(exerciseRecord -> exerciseRecord.set().stream()
-                        .map(set -> UsersExerciseSetHistory.builder()
-                                .userId(userId)
-                                .groupId(exerciseRecordGroupDTO.groupId())
-                                .exerciseDate(exerciseRecordGroupDTO.exerciseDate())
-                                .exerciseId(exerciseRecord.exerciseId())
-                                .set(set.set())
-                                .weight(set.weight())
-                                .reps(set.reps())
-                                .score(set.score())
-                                .strength(set.strength())
-                                .updatedAt(LocalDateTime.now())
-                                .build()))
+                .map(set -> UsersExerciseSetHistory.builder()
+                .userId(userId)
+                .groupId(exerciseRecordGroupDTO.groupId())
+                .exerciseDate(exerciseRecordGroupDTO.exerciseDate())
+                .exerciseId(exerciseRecord.exerciseId())
+                .set(set.set())
+                .weight(set.weight())
+                .reps(set.reps())
+                .score(set.score())
+                .strength(set.strength())
+                .updatedAt(LocalDateTime.now())
+                .build()))
                 .toList();
 
         usersExerciseSetHistoryRepository.saveAll(histories);
@@ -217,28 +216,28 @@ public class ExerciseRecordService {
                 .collect(Collectors.groupingBy(UsersExerciseSetHistory::getGroupId))
                 .entrySet().stream()
                 .map(entry -> new ExerciseRecordGroupDTO(
-                        entry.getKey(),
-                        entry.getValue().get(0).getExerciseDate(),
-                        entry.getValue().stream().collect(Collectors.groupingBy(UsersExerciseSetHistory::getExerciseId))
-                                .entrySet().stream()
-                                .map(exerciseEntry -> new ExerciseRecordGroupDTO.ExerciseRecrod(
-                                        exerciseEntry.getKey(),
-                                        exerciseEntry.getValue().stream()
-                                                .map(history -> new ExerciseRecordGroupDTO.ExerciseSet(
-                                                        history.getSet(),
-                                                        history.getWeight(),
-                                                        history.getReps(),
-                                                        history.getScore(),
-                                                        history.getStrength()))
-                                                .toList()))
+                entry.getKey(),
+                entry.getValue().get(0).getExerciseDate(),
+                entry.getValue().stream().collect(Collectors.groupingBy(UsersExerciseSetHistory::getExerciseId))
+                        .entrySet().stream()
+                        .map(exerciseEntry -> new ExerciseRecordGroupDTO.ExerciseRecrod(
+                        exerciseEntry.getKey(),
+                        exerciseEntry.getValue().stream()
+                                .map(history -> new ExerciseRecordGroupDTO.ExerciseSet(
+                                history.getSet(),
+                                history.getWeight(),
+                                history.getReps(),
+                                history.getScore(),
+                                history.getStrength()))
                                 .toList()))
+                        .toList()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No records found"));
     }
 
     // ExerciseRecordGroupResponse 그룹화
     public List<ExerciseRecordGroupResponse> toGroupRecords(List<ExerciseRecordGroupResponse> originalResponseList) {
-        
+
         // Map to hold grouped exercises
         Map<Integer, Map<LocalDateTime, Map<Integer, List<ExerciseRecordGroupSliceResponse.ExerciseRecordResponse>>>> groupedMap = new HashMap<>();
 
@@ -261,24 +260,24 @@ public class ExerciseRecordService {
 
         // Convert the grouped map back into the response structure
         List<ExerciseRecordGroupResponse> groupedResponseList = groupedMap.entrySet().stream()
-            .flatMap(groupEntry -> groupEntry.getValue().entrySet().stream()
+                .flatMap(groupEntry -> groupEntry.getValue().entrySet().stream()
                 .map(dateEntry -> new ExerciseRecordGroupSliceResponse.ExerciseRecordGroupResponse(
-                    groupEntry.getKey(),
-                    dateEntry.getKey(),
-                    dateEntry.getValue().entrySet().stream()
+                groupEntry.getKey(),
+                dateEntry.getKey(),
+                dateEntry.getValue().entrySet().stream()
                         .map(exerciseEntry -> new ExerciseRecordGroupSliceResponse.ExerciseRecordResponse(
-                            exerciseEntry.getKey(),
-                            exerciseEntry.getValue().stream()
+                        exerciseEntry.getKey(),
+                        exerciseEntry.getValue().stream()
                                 .flatMap(exercise -> exercise.sets().stream())
                                 .sorted(Comparator.comparingInt(ExerciseSetResponse::set))
                                 .collect(Collectors.toList()),
-                            exerciseEntry.getValue().get(0).prevBestWeight(),
-                            exerciseEntry.getValue().get(0).prevBestReps()
-                        ))
-                        .collect(Collectors.toList())
+                        exerciseEntry.getValue().get(0).prevBestWeight(),
+                        exerciseEntry.getValue().get(0).prevBestReps()
                 ))
-            )
-            .collect(Collectors.toList());
+                        .collect(Collectors.toList())
+        ))
+                )
+                .collect(Collectors.toList());
 
         return groupedResponseList;
     }
