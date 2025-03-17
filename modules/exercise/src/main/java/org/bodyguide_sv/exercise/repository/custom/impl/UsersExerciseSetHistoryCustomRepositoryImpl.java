@@ -105,24 +105,25 @@ public class UsersExerciseSetHistoryCustomRepositoryImpl implements UsersExercis
         QUsersExerciseSetHistory setHistory = QUsersExerciseSetHistory.usersExerciseSetHistory;
         QUsersExerciseBestScore bestScore = QUsersExerciseBestScore.usersExerciseBestScore;
 
-        // 1. groupId 페이징용 서브쿼리
+        // 1. groupId 페이징용 서브쿼리 (인덱스 최적화 필요)
         List<Integer> groupIds = queryFactory.select(setHistory.groupId)
                 .from(setHistory)
                 .where(setHistory.userId.eq(userId)
-                        .and(setHistory.exerciseDate.after(LocalDateTime.now().minusDays(days))))
-                .distinct() // 중복 제거
-                .orderBy(setHistory.groupId.asc()) // groupId 기준 정렬
-                .offset(page * size) // 페이징 시작 위치
-                .limit(size + 1) // size + 1개로 다음 페이지 여부 확인
+                        .and(setHistory.exerciseDate.between(
+                                LocalDateTime.now().minusDays(days), LocalDateTime.now())))
+                .distinct()
+                .orderBy(setHistory.groupId.asc())
+                .offset(page * size)
+                .limit(size + 1) // hasNext 체크를 위한 +1
                 .fetch();
 
         // 다음 페이지 여부 판단
         boolean hasNext = groupIds.size() > size;
         if (hasNext) {
-            groupIds = groupIds.subList(0, size); // 필요한 만큼만 잘라냄
+            groupIds = groupIds.subList(0, size);
         }
 
-        // 2. 해당 groupId에 속한 데이터만 조회
+        // 2. 해당 groupId에 속한 데이터만 조회 (불필요한 중복 제거)
         List<ExerciseRecordGroupResponse> results = queryFactory.select(
                 Projections.constructor(
                         ExerciseRecordGroupResponse.class,
@@ -143,14 +144,12 @@ public class UsersExerciseSetHistoryCustomRepositoryImpl implements UsersExercis
                                         bestScore.weight,
                                         bestScore.reps))))
                 .from(setHistory)
-                .where(setHistory.userId.eq(userId))
                 .leftJoin(bestScore)
                 .on(setHistory.userId.eq(bestScore.id.userId)
                         .and(setHistory.exerciseId.eq(bestScore.id.exerciseId)))
                 .where(setHistory.userId.eq(userId)
-                        .and(setHistory.groupId.in(groupIds)) // 가져온 groupId로 필터링
-                        .and(setHistory.exerciseDate.after(LocalDateTime.now().minusDays(days))))
-                .orderBy(setHistory.groupId.asc(), setHistory.exerciseDate.desc()) // 정렬
+                        .and(setHistory.groupId.in(groupIds))) // 가져온 groupId만 필터링
+                .orderBy(setHistory.groupId.asc(), setHistory.exerciseDate.desc()) // 정렬 최적화
                 .fetch();
 
         // 3. 결과 반환

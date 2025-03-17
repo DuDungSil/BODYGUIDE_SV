@@ -22,16 +22,17 @@ public class TestTokenService {
     public String getTestAccessToken() {
 
         // 테스트 유저 조회
-        String _testUser = userService.getTestUserUUID();
+        // String _testUser = userService.getTestUserUUID();
+        String _testUser = "532e891d-c4da-484f-a48d-8d29b7821a5d";
 
         // 액세스 토큰 반환
         return generateTestAccessToken(_testUser, "ROLE_USER");
-        
+
     }
 
     /**
      * Generate a test access token.
-     * 
+     *
      * @param username the username for the token
      * @param role the role for the token
      * @return the generated access token
@@ -44,7 +45,7 @@ public class TestTokenService {
 
     /**
      * Generate a test refresh token.
-     * 
+     *
      * @param username the username for the token
      * @param role the role for the token
      * @return the generated refresh token
