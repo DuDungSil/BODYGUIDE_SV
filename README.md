@@ -55,7 +55,7 @@
 
 ## Developer
 
-|<img width="200" alt="image" src="" />|
+|<img width="200" alt="image" src="https://github.com/user-attachments/assets/9e9c8e31-e71e-4805-a50d-0d4f7a8a81fe" />|
 |:--:|
 |[오민석(DuDungSil)](https://github.com/DuDungSil)|
 |mvp|
